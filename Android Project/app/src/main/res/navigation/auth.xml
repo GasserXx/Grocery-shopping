@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/auth"
+    app:startDestination="@id/loginFragment2">
+    <fragment
+
+        android:id="@+id/loginFragment2"
+        android:name="com.umega.grocery.auth.fragments.LoginFragment"
+        android:label="LoginFragment" />
+</navigation>
