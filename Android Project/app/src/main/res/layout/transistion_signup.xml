@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/transition_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#28C17E">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="178dp"
+            android:layout_height="174dp"
+            android:layout_marginStart="116dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="117dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/group_2778"
+            android:contentDescription="@string/logo_Description" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="414dp"
+            android:layout_height="237dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:background="@drawable/upper_rounded_corners"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="96dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView4">
+
+                    <TextView
+                        android:id="@+id/congratulation_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/Congratulations"
+                        android:textColor="@color/black"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/verified_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:text="@string/verification_text"
+                        android:textColor="@color/light_grey"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/signup_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background=""
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/later"
+                    android:textColor="@color/primary_green"
+                    app:layout_constraintEnd_toStartOf="@+id/signIn_button"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+                <Button
+                    android:id="@+id/signIn_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="28dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/sign_In"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/signup_button"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="57dp"
+                    android:layout_height="51dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/correct_sign_description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/group_2781" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

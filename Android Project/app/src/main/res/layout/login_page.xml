@@ -9,18 +9,22 @@
         android:layout_height="match_parent"
         android:background="#28C17E">
 
-        <!--TODO FIX the buttons colors and add the reset of the design-->
         <Button
             android:id="@+id/signIn_button"
             android:layout_width="163dp"
             android:layout_height="49dp"
-            android:layout_marginTop="596dp"
+            android:layout_marginTop="44dp"
             android:text="@string/sign_In"
             android:textAllCaps="true"
-            android:theme="@style/Button.White"
+            android:textSize="16sp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/primary_green"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/shopping_text"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/signup_button"
@@ -30,11 +34,62 @@
             android:fontFamily="@font/roboto_medium"
             android:text="@string/sign_up"
             android:textAllCaps="true"
+            android:textSize="16sp"
+            android:background=""
             android:theme="@style/Button.Transparent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signIn_button" />
+
+        <ImageView
+            android:id="@+id/logoImage"
+            android:layout_width="178dp"
+            android:layout_height="174dp"
+            android:layout_marginStart="116dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="117dp"
+            android:contentDescription="@string/logo_Description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/group_2778" />
+
+        <TextView
+            android:id="@+id/welcome_toText"
+            style="@style/Text_White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="176dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/welcome_to"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signIn_button"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/logoImage" />
+
+        <TextView
+            android:id="@+id/grocery_text"
+            style="@style/Text_White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/Grocery"
+            app:layout_constraintBaseline_toBaselineOf="@+id/shopping_text"
+            app:layout_constraintEnd_toStartOf="@+id/shopping_text"
+            app:layout_constraintHorizontal_bias="0.876"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/shopping_text"
+            style="@style/Text_White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="68dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/shopping"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/welcome_toText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
