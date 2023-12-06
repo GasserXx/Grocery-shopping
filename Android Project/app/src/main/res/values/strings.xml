@@ -2,10 +2,10 @@
     <string name="app_name">Grocery</string>
     <string name="sign_In">Sign In</string>
     <string name="sign_up">Sign Up</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="signupFragment_signIn_text">Sign in</string>
-    <string name="signupFragment_signUp_text">Sign up</string>
-    <string name="signupFragment_welcome_text">Welcome to Grocery App</string>
-    <string name="signupFragment_getStarted_text">Let\'s get started</string>
+    <string name="welcome_text">Welcome to Grocery App</string>
+    <string name="getStarted_text">Let\'s get started</string>
+    <string name="email_address">Email address</string>
+    <string name="password">Password</string>
+    <string name="username">UserName</string>
 </resources>
