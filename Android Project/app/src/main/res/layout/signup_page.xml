@@ -34,14 +34,14 @@
             android:text="@string/sign_up"
             android:textColor="#43A047"
             android:textSize="22sp"
-            app:layout_constraintBottom_toTopOf="@+id/welcome_text"
+            app:layout_constraintBottom_toTopOf="@+id/signInToGrocery_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/signIn_text"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextSizeCheck" />
 
         <TextView
-            android:id="@+id/welcome_text"
+            android:id="@+id/signInToGrocery_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -54,7 +54,7 @@
             app:layout_constraintTop_toBottomOf="@+id/signIn_text" />
 
         <TextView
-            android:id="@+id/starting_text"
+            android:id="@+id/enterEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/getStarted_text"
@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.063"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/welcome_text" />
+            app:layout_constraintTop_toBottomOf="@+id/signInToGrocery_text" />
 
         <EditText
             android:id="@+id/userName_edit"
@@ -84,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.089"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/starting_text" />
+            app:layout_constraintTop_toBottomOf="@+id/enterEmail" />
 
         <EditText
             android:id="@+id/emailAddress_edit"
@@ -128,11 +128,12 @@
             android:autofillHints="" />
 
         <Button
-            android:id="@+id/signup_button"
+            android:id="@+id/signin_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/sign_up"
+            android:textSize="20sp"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
