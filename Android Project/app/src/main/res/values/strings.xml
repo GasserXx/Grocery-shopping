@@ -8,4 +8,14 @@
     <string name="email_address">Email address</string>
     <string name="password">Password</string>
     <string name="username">UserName</string>
+    <string name="one_kilo">1KG</string>
+    <string name="itemNameExample">Bell Pepper Red</string>
+    <string name="itemPriceExample">90.00 EGP</string>
+    <string name="quantity">Quantity</string>
+    <string name="number">2</string>
+    <string name="item_image">item image</string>
+    <string name="plus_description">plus image to increase amount</string>
+    <string name="minus_description">minus image to decrease amount</string>
+    <string name="buy_now">BUY NOW</string>
+    <string name="add_to_cart">ADD TO CART</string>
 </resources>
