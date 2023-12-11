@@ -1,5 +1,4 @@
 package com.umega.grocery.auth.fragments
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.umega.grocery.R
-import com.umega.grocery.databinding.LoginPageBinding
+import com.umega.grocery.databinding.SignupPageBinding
 
 class SignUpFragment : Fragment() {
-    lateinit var binding : LoginPageBinding
+    lateinit var binding : SignupPageBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
