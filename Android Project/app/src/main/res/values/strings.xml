@@ -30,4 +30,7 @@
     <string name="correct_sign_description">white Correct Sign with circular green background</string>
     <string name="verification_text">You\'ve signed up successfully!\nYou can Now continue using Grocery Shopping Store.</string>
     <string name="later">Later</string>
+    <string name="sign_in_to_grocery_app">Sign In to Grocery App</string>
+    <string name="enter_email"><![CDATA[Enter email & password to continue]]></string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>
