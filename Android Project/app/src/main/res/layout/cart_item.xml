@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp">
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="118dp"
+            android:layout_height="108dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="11dp"
+            android:src="@drawable/rectangle1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/item_image" />
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/sample_item_name"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/item_unit_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/sample_unit_price"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toBottomOf="@+id/itemName" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/sample_price"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toBottomOf="@+id/item_unit_price" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="11dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_count"
+            app:layout_constraintTop_toBottomOf="@+id/trash"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/group_2782"
+            android:contentDescription="@string/plus_rectangle_description"/>
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="168dp"
+            android:layout_marginTop="94dp"
+            android:layout_marginBottom="11dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/group_2783"
+            android:contentDescription="@string/minus_rectangle_description"/>
+
+        <TextView
+            android:id="@+id/item_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/sample_number"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.855" />
+
+        <ImageView
+            android:id="@+id/trash"
+            android:layout_width="17dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="240dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rubbish_bin"
+            android:contentDescription="@string/trash_description"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
