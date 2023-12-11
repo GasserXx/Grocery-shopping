@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:background=""
+                    android:background="@color/transparent"
                     android:fontFamily="@font/roboto_bold"
                     android:text="@string/later"
                     android:textColor="@color/primary_green"
