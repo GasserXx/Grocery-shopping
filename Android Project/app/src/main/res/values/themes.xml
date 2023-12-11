@@ -14,31 +14,21 @@
 
         <!-- Customize your theme here. -->
     </style>
-    <style name="Button.White" parent="ThemeOverlay.AppCompat">
-        <item name="colorAccent">@color/white</item>
+    <style name="Button_White">
+        <item name="android:color">@color/white</item>
         <item name="android:textColor">@color/primary_green</item>
         <item name="android:fontFamily">@font/roboto_medium </item>
-
     </style>
 
-    <style name="Button.Transparent" parent="ThemeOverlay.AppCompat">
+    <style name="Button.Transparent" parent="ShapeAppearanceOverlay.Material3.Button">
         <item name="colorAccent">@android:color/transparent</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/roboto_medium </item>
-
     </style>
 
-    <style name="Theme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#28C17E</item>
-        <item name="colorPrimaryVariant">#54CD98</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here -->
+    <style name="Text_White" >
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">36sp</item>
     </style>
+
 </resources>

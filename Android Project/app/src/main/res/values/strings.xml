@@ -21,4 +21,13 @@
     <string name="back_image">back image act as button to go back</string>
     <string name="grocery_app_deals">Grocery App Deals</string>
     <string name="love_image">love image act as button to add item to love list</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="Grocery">Grocery</string>
+    <string name="Shopping">Shopping</string>
+    <string name="shopping">shopping</string>
+    <string name="logo_Description">A big green K in the middle surrounded by white background.</string>
+    <string name="Congratulations">Congratulations!</string>
+    <string name="correct_sign_description">white Correct Sign with circular green background</string>
+    <string name="verification_text">You\'ve signed up successfully!\nYou can Now continue using Grocery Shopping Store.</string>
+    <string name="later">Later</string>
 </resources>
