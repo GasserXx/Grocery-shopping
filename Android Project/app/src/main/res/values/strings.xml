@@ -18,4 +18,7 @@
     <string name="minus_description">minus image to decrease amount</string>
     <string name="buy_now">BUY NOW</string>
     <string name="add_to_cart">ADD TO CART</string>
+    <string name="back_image">back image act as button to go back</string>
+    <string name="grocery_app_deals">Grocery App Deals</string>
+    <string name="love_image">love image act as button to add item to love list</string>
 </resources>
