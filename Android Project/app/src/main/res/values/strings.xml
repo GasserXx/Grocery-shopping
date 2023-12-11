@@ -17,4 +17,15 @@
     <string name="correct_sign_description">white Correct Sign with circular green background</string>
     <string name="verification_text">You\'ve signed up successfully!\nYou can Now continue using Grocery Shopping Store.</string>
     <string name="later">Later</string>
+    <string name="pin_description">grey map pin</string>
+    <string name="sample_address">23111 Borg Alarab, Alexandria</string>
+    <string name="change_address">Change Address</string>
+    <string name="sample_item_name">Bell Pepper Red</string>
+    <string name="sample_unit_price">90.00 EGP /kg</string>
+    <string name="sample_price">180.00 EGP</string>
+    <string name="sample_number">1</string>
+    <string name="item_image">Item Image</string>
+    <string name="plus_rectangle_description">plus sign in a rectangle</string>
+    <string name="minus_rectangle_description">minus sign in a rectangle</string>
+    <string name="trash_description">grey trash icon</string>
 </resources>
