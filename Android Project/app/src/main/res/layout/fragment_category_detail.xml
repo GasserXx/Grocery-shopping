@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shopping.fragments.CategoryDetailFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/off_white">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/rectangle19"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/coca_drinks_image"
+        android:foreground="#74272A3F"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_arrow"
+                android:background="@color/transparent"
+                android:padding="30dp"
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/back_arrow"/>
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/sample_category_title"
+                android:textColor="@color/white"
+                android:layout_toEndOf="@id/back_button"
+                android:paddingHorizontal="10dp"
+                android:textSize="20sp"
+                android:fontFamily="@font/roboto_medium"
+                tools:ignore="RelativeOverlap" />
+            <ImageButton
+                android:id="@+id/search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_2"
+                android:background="@color/transparent"
+                android:layout_alignParentEnd="true"
+                android:paddingHorizontal="20dp"
+                android:contentDescription="@string/search_button_description"/>
+        </RelativeLayout>
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="140dp">
+            </ListView>
+
+    </RelativeLayout>
+</FrameLayout>
