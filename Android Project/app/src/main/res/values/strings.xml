@@ -20,6 +20,7 @@
     <string name="back_image">back image act as button to go back</string>
     <string name="grocery_app_deals">Grocery App Deals</string>
     <string name="love_image">love image act as button to add item to love list</string>
+    <string name="search_image">search image act as button to navigate to search page</string>
     <string name="welcome_to">Welcome to</string>
     <string name="Grocery">Grocery</string>
     <string name="Shopping">Shopping</string>
@@ -43,4 +44,7 @@
     <string name="sign_in_to_grocery_app">Sign In to Grocery App</string>
     <string name="enter_email"><![CDATA[Enter email & password to continue]]></string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="coffee">Coffee</string>
+    <string name="nescafe_gold">Nescafe Gold</string>
+    <string name="_47_00_egp">47.00 EGP</string>
 </resources>
