@@ -37,6 +37,8 @@
     <string name="sample_unit_price">90.00 EGP /kg</string>
     <string name="sample_price">180.00 EGP</string>
     <string name="sample_number">1</string>
+    <string name="sample_category_title">Beverages</string>
+    <string name="sample_category">Chocolate Drink</string>
     <string name="item_image">Item Image</string>
     <string name="plus_rectangle_description">plus sign in a rectangle</string>
     <string name="minus_rectangle_description">minus sign in a rectangle</string>
@@ -47,4 +49,13 @@
     <string name="coffee">Coffee</string>
     <string name="nescafe_gold">Nescafe Gold</string>
     <string name="_47_00_egp">47.00 EGP</string>
+    <string name="your_shopping_cart">Your shopping Cart</string>
+    <string name="total">Total-</string>
+    <string name="place_order">Place Order</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="back_arrow">Back Arrow button</string>
+    <string name="search_button_description">White search Icon</string>
+    <string name="coca_drinks_image">Fazy Drinks of cola, sprite, coke,...etc</string>
+    <string name="arrow">arrow</string>
 </resources>
