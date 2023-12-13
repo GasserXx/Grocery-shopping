@@ -1,4 +1,4 @@
-package com.umega.grocery.auth.fragments
+package com.umega.grocery.shopping.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
