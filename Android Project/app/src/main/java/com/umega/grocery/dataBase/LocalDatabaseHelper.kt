@@ -1,15 +1,16 @@
 package com.umega.grocery.dataBase
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.umega.grocery.utill.DailyDealsItem
 
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
         const val DATABASE_NAME = "GroceryShopping"
         const val DATABASE_VERSION = 1
         //define table names
-        const val user_table = "Users"
         const val shoppingCart_table = "ShoppingCart"
         const val cartItems_table = "Cart_Items"
         const val products_table = "Products"
@@ -37,6 +38,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         const val  Products_table_brandNationality ="BrandNationality"
         const val  Products_table_price ="Price"
         const val  Products_table_stockQuantity ="StockQuantity"
+        const val Products_table_quantity ="Quantity"
         //define Brands_table
         const val  Brands_table_brandID ="BrandID"
         const val Brands_table_name  ="Name"
@@ -49,20 +51,12 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     }
     //create tables
-    private val  createTableUsers= """
-            CREATE TABLE IF NOT EXISTS $user_table (
-                $user_table_userID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $user_table_username TEXT NOT NULL,
-                $user_table_password TEXT NOT NULL,
-                $user_table_email TEXT NOT NULL
-            );
-        """
+
     private val  createTableShoppingCart= """
             CREATE TABLE IF NOT EXISTS $shoppingCart_table (
                 $shoppingCart_table_cartID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $shoppingCart_table_userID INTEGER NOT NULL,
-                $shoppingCart_table_totalPrice REAL,
-                FOREIGN KEY($shoppingCart_table_userID) REFERENCES $user_table($user_table_userID)
+                $shoppingCart_table_totalPrice REAL
             );
         """
     private val createTableProducts = """
@@ -72,7 +66,8 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                 $Products_table_brandName TEXT,
                 $Products_table_brandNationality TEXT,
                 $Products_table_price REAL NOT NULL,
-                $Products_table_stockQuantity INTEGER NOT NULL
+                $Products_table_stockQuantity INTEGER NOT NULL,
+                $Products_table_quantity TEXT NOT NULL
             );
         """
     private val createTableCartItems = """
@@ -106,7 +101,6 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             );
         """
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL(createTableUsers)
         db?.execSQL(createTableShoppingCart)
         db?.execSQL(createTableCartItems)
         db?.execSQL(createTableProducts)
@@ -116,5 +110,54 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Handle database upgrades if needed
     }
-
+    fun getAllDailyDeals(): List<DailyDealsItem> {
+        val dailyDealsList = mutableListOf<DailyDealsItem>()
+        val isFavourite = 0
+        val query = """
+       SELECT P.$Products_table_name, 
+              P.$Products_table_price, 
+              DD.$dailyDeals_table_discount,
+              P.$Products_table_productID,
+              COUNT(F.$Favourite_table_productID) > 0 as $isFavourite,
+              CI.$cartItems_table_quantity
+       FROM $dailyDeals_table DD
+       INNER JOIN $products_table P ON DD.$dailyDeals_table_productID = P.$Products_table_productID
+       LEFT JOIN $favourite_table F ON P.$Products_table_productID = F.$Favourite_table_productID
+       LEFT JOIN $cartItems_table CI ON P.$Products_table_productID = CI.$cartItems_table_productID
+       GROUP BY P.$Products_table_productID
+    """
+        readableDatabase.use { db ->
+            db.rawQuery(query, null).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
+                    val productPrice = cursor.getDouble(cursor.getColumnIndexOrThrow(Products_table_price))
+                    val discount = cursor.getDouble(cursor.getColumnIndexOrThrow(dailyDeals_table_discount))
+                    val productID = cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
+                    val isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow(isFavourite.toString())) == 1
+                    val quantity = cursor.getString(cursor.getColumnIndexOrThrow(cartItems_table_quantity))
+                    // Calculate discounted price
+                    val discountedPrice = productPrice * discount
+                    // Create DailyDealsItem and add to the list
+                    val dailyDealsItem = DailyDealsItem(
+                        itemName = productName,
+                        priceAfterDiscount = discountedPrice,
+                        itemID = productID,
+                        isFavourite = isFavourite,
+                        quantity = quantity
+                    )
+                    dailyDealsList.add(dailyDealsItem)
+                }
+            }
+        }
+        return dailyDealsList
+    }
+    fun insertDailyDeal(productID: Int, discount: Double) {
+        val values = ContentValues().apply {
+            put(dailyDeals_table_productID, productID)
+            put(dailyDeals_table_discount, discount)
+        }
+        writableDatabase.use { db ->
+            db.insert(dailyDeals_table, null, values)
+        }
+    }
 }
