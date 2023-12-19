@@ -34,7 +34,10 @@
     <string name="sample_address">23111 Borg Alarab, Alexandria</string>
     <string name="change_address">Change Address</string>
     <string name="sample_item_name">Bell Pepper Red</string>
-    <string name="sample_unit_price">90.00 EGP /kg</string>
+    <string name="sample_unit_price">90.00</string>
+    <string name="sample_unit_price2">EGP /</string>
+    <string name="unit_quantity">kg</string>
+
     <string name="sample_price">180.00 EGP</string>
     <string name="sample_number">1</string>
     <string name="sample_category_title">Beverages</string>
@@ -88,5 +91,6 @@
     <string name="search_by">Search By</string>
     <string name="no_result_image">no result image visible when there are no item</string>
     <string name="voice_image">voice image to open voice to search</string>
+    <string name="construction_image_description">A Working man holds a shovel directed to sand indicating undergoing work</string>
 
 </resources>
