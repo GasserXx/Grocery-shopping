@@ -3,6 +3,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -44,6 +45,26 @@
             android:text="@string/sample_unit_price"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/item_image"
+            app:layout_constraintTop_toBottomOf="@+id/itemName" />
+        <TextView
+            android:id="@+id/egp_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/sample_unit_price2"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/item_unit_price"
+            app:layout_constraintTop_toBottomOf="@+id/itemName" />
+        <TextView
+            android:id="@+id/unit_quantity_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/unit_quantity"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/egp_text"
             app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
         <TextView

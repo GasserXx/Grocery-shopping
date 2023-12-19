@@ -34,11 +34,15 @@
     <string name="sample_address">23111 Borg Alarab, Alexandria</string>
     <string name="change_address">Change Address</string>
     <string name="sample_item_name">Bell Pepper Red</string>
-    <string name="sample_unit_price">90.00 EGP /kg</string>
+    <string name="sample_unit_price">90.00</string>
+    <string name="sample_unit_price2">EGP /</string>
+    <string name="unit_quantity">kg</string>
+
     <string name="sample_price">180.00 EGP</string>
     <string name="sample_number">1</string>
     <string name="sample_category_title">Beverages</string>
     <string name="sample_category">Chocolate Drink</string>
+    <string name="sample_main_category">Grocery</string>
     <string name="item_image">Item Image</string>
     <string name="plus_rectangle_description">plus sign in a rectangle</string>
     <string name="minus_rectangle_description">minus sign in a rectangle</string>
@@ -56,8 +60,18 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="back_arrow">Back Arrow button</string>
     <string name="search_button_description">White search Icon</string>
-    <string name="coca_drinks_image">Fazy Drinks of cola, sprite, coke,...etc</string>
+    <string name="coca_drinks_image">Fizzy Drinks of cola, sprite, coke,…etc</string>
     <string name="arrow">arrow</string>
+    <string name="all_category">All Category</string>
+    <string name="member_deals_title">Grocery App Member Deals</string>
+    <string name="view_all">View All</string>
+    <string name="rounded_arrow_description">Small arrow that points to the right</string>
+    <string name="store">Store</string>
+    <string name="list_button_description">list button which about 3 white lines indicating listing</string>
+    <string name="grocery_shopping">Grocery Shopping</string>
+    <string name="x_btn_description">X Button indicating collabsing</string>
+    <string name="selective_item">Selective_item</string>
+    <string name="order_history">Order History</string>
     <string name="exit_image">exit filter go back to result page</string>
     <string name="filter_by">Filter By</string>
     <string name="ascending_order">Ascending Order</string>
@@ -75,6 +89,8 @@
     <string name="max_price_filter">200.00</string>
     <string name="min_price_filter">0.00</string>
     <string name="search_by">Search By</string>
-    <string name="no_result_image">no result image visable when there are no item</string>
+    <string name="no_result_image">no result image visible when there are no item</string>
     <string name="voice_image">voice image to open voice to search</string>
+    <string name="construction_image_description">A Working man holds a shovel directed to sand indicating undergoing work</string>
+
 </resources>
