@@ -58,4 +58,23 @@
     <string name="search_button_description">White search Icon</string>
     <string name="coca_drinks_image">Fazy Drinks of cola, sprite, coke,...etc</string>
     <string name="arrow">arrow</string>
+    <string name="exit_image">exit filter go back to result page</string>
+    <string name="filter_by">Filter By</string>
+    <string name="ascending_order">Ascending Order</string>
+    <string name="descending_order">Descending Order</string>
+    <string name="name">Name</string>
+    <string name="downImage_name">down image to show and hide filter items in name filter</string>
+    <string name="brand">Brand</string>
+    <string name="nescafe">Nescafe</string>
+    <string name="starbucks">Starbucks</string>
+    <string name="mccafe">McCAfe</string>
+    <string name="khao">Khao</string>
+    <string name="price_range">Price Range</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="max_price_filter">200.00</string>
+    <string name="min_price_filter">0.00</string>
+    <string name="search_by">Search By</string>
+    <string name="no_result_image">no result image visable when there are no item</string>
+    <string name="voice_image">voice image to open voice to search</string>
 </resources>
