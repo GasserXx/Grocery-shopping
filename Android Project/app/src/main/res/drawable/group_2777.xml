@@ -5,10 +5,10 @@
     android:height="40dp">
     <group
         android:translateX="-16"
-        android:translateY="-150">
+        android:translateY="-94">
         <group
             android:translateX="16"
-            android:translateY="150">
+            android:translateY="94">
             <path
                 android:pathData="M40 20A20 20 0 0 1 0 20A20 20 0 0 1 40 20Z"
                 android:fillColor="#29C17E"
@@ -17,7 +17,7 @@
         <group
             android:translateY="-1820">
             <path
-                android:pathData="M42 1986a6 6 0 0 0 -12 0c0 4.5 6 11 6 11S42 1990.5 42 1986Zm-8 0a2 2 0 1 1 2 2A2.006 2.006 0 0 1 34 1986Zm-5 12v2H43v-2Z"
+                android:pathData="M43 1927v14H29v-14H43m1.1 -2H27.9a0.9 0.9 0 0 0 -0.9 0.9v16.2a0.967 0.967 0 0 0 0.9 0.9H44.1a1.061 1.061 0 0 0 0.9 -0.9v-16.2A0.967 0.967 0 0 0 44.1 1925Zm-9.1 4h6v2H35Zm0 4h6v2H35Zm0 4h6v2H35Zm-4 -8h2v2H31Zm0 4h2v2H31Zm0 4h2v2H31Z"
                 android:fillColor="#29C17E" />
         </group>
     </group>
