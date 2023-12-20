@@ -1,0 +1,10 @@
+<!-- res/values/arrays.xml -->
+<resources>
+    <array name="drawable_array">
+        <item>@drawable/group_34</item>
+        <item>@drawable/group_35</item>
+        <item>@drawable/group_36</item>
+        <item>@drawable/group_37</item>
+    </array>
+</resources>
+<!--TODO edit the above-->

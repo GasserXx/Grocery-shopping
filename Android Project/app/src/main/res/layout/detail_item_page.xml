@@ -53,13 +53,13 @@
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_width="235dp"
+            android:layout_height="218dp"
+            android:contentDescription="@string/item_image"
             android:src="@drawable/rectangle166"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/item_image" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/quantityValue_text"
@@ -103,12 +103,14 @@
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:stepSize="0.1"
             android:scaleX="0.7"
             android:scaleY="0.6"
+            android:stepSize="0.1"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/itemPrice_text" />
 
@@ -116,10 +118,11 @@
             android:id="@+id/quantity_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:text="@string/quantity"
             android:textColor="#8d9198"
-            android:textStyle="bold"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rating" />
@@ -172,7 +175,7 @@
             android:id="@+id/buyNow_button"
             android:layout_width="130dp"
             android:layout_height="48dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="52dp"
             android:text="@string/buy_now"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
