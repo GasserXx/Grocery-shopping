@@ -135,14 +135,19 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return dailyDealsList
     }
-
-    fun insertDailyDeal(productID: Int, discount: Double) {
-        val values = ContentValues().apply {
-            put(dailyDeals_table_productID, productID)
-            put(dailyDeals_table_discount, discount)
-        }
-        writableDatabase.use { db ->
-            db.insert(dailyDeals_table, null, values)
+    fun insertDailyDeals(dailyDeals: List<Pair<Int, Double>>) {
+        writableDatabase.beginTransaction()
+        try {
+            for ((productID, discount) in dailyDeals) {
+                val values = ContentValues().apply {
+                    put(dailyDeals_table_productID, productID)
+                    put(dailyDeals_table_discount, discount)
+                }
+                writableDatabase.insert(dailyDeals_table, null, values)
+            }
+            writableDatabase.setTransactionSuccessful()
+        } finally {
+            writableDatabase.endTransaction()
         }
     }
     // cartItems table queries
