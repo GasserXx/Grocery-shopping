@@ -4,20 +4,21 @@
     android:width="40dp"
     android:height="40dp">
     <group
-        android:translateX="-20"
-        android:translateY="-545">
+        android:translateX="-16"
+        android:translateY="-318">
         <group
-            android:translateX="20"
-            android:translateY="545">
+            android:translateX="16"
+            android:translateY="318">
             <path
                 android:pathData="M40 20A20 20 0 0 1 0 20A20 20 0 0 1 40 20Z"
-                android:fillColor="#29C17E" />
+                android:fillColor="#29C17E"
+                android:fillAlpha="0.2" />
         </group>
         <group
-            android:translateY="-910">
+            android:translateY="-1820">
             <path
-                android:pathData="M38.081 1480l-4.8 -4.8 1.353 -1.354 3.446 3.436L45.365 1470l1.353 1.363Z"
-                android:fillColor="#FFFFFF" />
+                android:pathData="M36 2148a10 10 0 1 0 10 10A10 10 0 0 0 36 2148Zm1 15H35v-2h2Zm0 -4H35v-6h2Z"
+                android:fillColor="#29C17E" />
         </group>
     </group>
 </vector>
