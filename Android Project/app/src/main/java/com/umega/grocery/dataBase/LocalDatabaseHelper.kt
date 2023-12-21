@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.umega.grocery.utill.CartItem
 import com.umega.grocery.utill.DailyDealsItem
+import com.umega.grocery.utill.ResultItem
+import com.umega.grocery.utill.SearchItem
 
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -17,6 +19,8 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         const val brands_table = "Brands"
         const val favourite_table = "Favourite"
         const val dailyDeals_table = "Daily_Deals"
+        const val categories_table = "Categories"
+        const val subCategories_table = "Sub_Categories"
         //define user_table items
         const val  user_table_userID ="UserID"
         const val user_table_username  ="Username"
@@ -38,12 +42,19 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         const val  Brands_table_brandID ="BrandID"
         const val Brands_table_name  ="Name"
         const val  Brands_table_nationality ="Nationality"
+        const val  Brands_table_subCategoriesId ="SubCategoriesId"
         //define Favourite_table
         const val  Favourite_table_productID ="ProductID"
         //define dailyDeals_table
         const val  dailyDeals_table_productID ="ProductID"
         const val  dailyDeals_table_discount ="Discount"
-
+        //define categories_table
+        const val  categories_table_categoryID ="CategoryID"
+        const val  categories_table_categoryName ="CategoryName"
+        //define subCategories_table
+        const val  subCategories_table_subCategoryID ="SubCategoryID"
+        const val  subCategories_table_categoryID ="CategoryID"
+        const val  subCategories_table_subCategoryName ="SubCategoryName"
     }
     //create tables
     private val createTableProducts = """
@@ -69,7 +80,9 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             CREATE TABLE IF NOT EXISTS $brands_table (
                 $Brands_table_brandID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $Brands_table_name TEXT NOT NULL,
-                $Brands_table_nationality TEXT
+                $Brands_table_nationality TEXT,
+                $Brands_table_subCategoriesId INTEGER NOT NULL,
+                FOREIGN KEY($Brands_table_subCategoriesId) REFERENCES $subCategories_table($subCategories_table_subCategoryID)
             );
         """
     private val createTableFavourite = """
@@ -85,7 +98,23 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                 FOREIGN KEY($dailyDeals_table_productID) REFERENCES $products_table($Products_table_productID)
             );
         """
+    private val createTableCategories = """
+            CREATE TABLE IF NOT EXISTS $categories_table (
+                $categories_table_categoryID INTEGER PRIMARY KEY,
+                $categories_table_categoryName TEXT
+            );
+        """
+    private val createTableSubCategories = """
+            CREATE TABLE IF NOT EXISTS $subCategories_table (
+                $subCategories_table_subCategoryID INTEGER PRIMARY KEY,
+                $subCategories_table_categoryID INTEGER NOT NULL,
+                $subCategories_table_subCategoryName TEXT,
+                FOREIGN KEY($subCategories_table_categoryID) REFERENCES $categories_table($categories_table_categoryID)
+            );
+        """
     override fun onCreate(db: SQLiteDatabase?) {
+        db?.execSQL(createTableCategories)
+        db?.execSQL(createTableSubCategories)
         db?.execSQL(createTableBrands)
         db?.execSQL(createTableProducts)
         db?.execSQL(createTableCartItems)
@@ -234,5 +263,123 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             }
         }
     }
+    //
+    fun getAllSubcategoriesByCategory(categoryName: String): List<String> {
+        val subcategoriesList = mutableListOf<String>()
+        val query = """
+        SELECT $subCategories_table_subCategoryName
+        FROM $subCategories_table SC
+        INNER JOIN $categories_table C ON SC.$subCategories_table_categoryID = C.$categories_table_categoryID
+        WHERE C.$categories_table_categoryName = ?
+    """
+        readableDatabase.use { db ->
+            db.rawQuery(query, arrayOf(categoryName)).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val subcategoryName = cursor.getString(cursor.getColumnIndexOrThrow(subCategories_table_subCategoryName))
+                    subcategoriesList.add(subcategoryName)
+                }
+            }
+        }
+        return subcategoriesList
+    }
+    fun getProductsBySubcategory(subcategoryName: String): List<ResultItem> {
+        val productList = mutableListOf<ResultItem>()
+        val query = """
+        SELECT P.$Products_table_name,
+               P.$Products_table_price,
+               P.$Products_table_quantity,
+               P.$Products_table_productID,
+               COUNT(F.$Favourite_table_productID) > 0 as isFavorite,
+               brands.$Brands_table_name as brandName
+        FROM $products_table P
+        INNER JOIN $subCategories_table SC ON P.$Products_table_quantity = SC.$subCategories_table_subCategoryName
+        LEFT JOIN $favourite_table F ON P.$Products_table_productID = F.$Favourite_table_productID
+        LEFT JOIN $brands_table brands ON P.$Products_table_brandName = brands.$Brands_table_name
+        WHERE SC.$subCategories_table_subCategoryName = ?
+        GROUP BY P.$Products_table_productID
+    """
+        readableDatabase.use { db ->
+            db.rawQuery(query, arrayOf(subcategoryName)).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
+                    val price = cursor.getDouble(cursor.getColumnIndexOrThrow(Products_table_price))
+                    val productQuantity = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_quantity))
+                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
+                    val isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow("isFavorite")) == 1
+                    val brandName = cursor.getString(cursor.getColumnIndexOrThrow("brandName"))
+
+                    val resultItem = ResultItem(productName, price, productQuantity, productId, isFavorite, brandName)
+                    productList.add(resultItem)
+                }
+            }
+        }
+        return productList
+    }
+    fun searchProducts(token: String): List<ResultItem> {
+        val productList = mutableListOf<ResultItem>()
+        val query = """
+        SELECT P.$Products_table_name,
+               P.$Products_table_price,
+               P.$Products_table_quantity,
+               P.$Products_table_productID,
+               COUNT(F.$Favourite_table_productID) > 0 as isFavorite,
+               brands.$Brands_table_name as brandName
+        FROM $products_table P
+        LEFT JOIN $favourite_table F ON P.$Products_table_productID = F.$Favourite_table_productID
+        LEFT JOIN $brands_table brands ON P.$Products_table_brandName = brands.$Brands_table_name
+        WHERE P.$Products_table_name LIKE ? OR brands.$Brands_table_name LIKE ?
+        GROUP BY P.$Products_table_productID
+    """
+        val searchTerm = "%$token%" // Add % to search for partial matches
+        readableDatabase.use { db ->
+            db.rawQuery(query, arrayOf(searchTerm, searchTerm)).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
+                    val price = cursor.getDouble(cursor.getColumnIndexOrThrow(Products_table_price))
+                    val productQuantity = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_quantity))
+                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
+                    val isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow("isFavorite")) == 1
+                    val brandName = cursor.getString(cursor.getColumnIndexOrThrow("brandName"))
+
+                    val resultItem = ResultItem(productName, price, productQuantity, productId, isFavorite, brandName)
+                    productList.add(resultItem)
+                }
+            }
+        }
+        return productList
+    }
+    fun searchProductsResultBar(token: String): List<String> {
+        val resultList = mutableListOf<String>()
+        // Search in product name
+        val productQuery = """
+        SELECT $Products_table_name
+        FROM $products_table
+        WHERE $Products_table_name LIKE ?
+    """
+        // Search in brand name
+        val brandQuery = """
+        SELECT brands.$Brands_table_name
+        FROM $products_table P
+        LEFT JOIN $brands_table brands ON P.$Products_table_brandName = brands.$Brands_table_name
+        WHERE brands.$Brands_table_name LIKE ?
+    """
+        val searchTerm = "%$token%" // Add % to search for partial matches
+        readableDatabase.use { db ->
+            db.rawQuery(productQuery, arrayOf(searchTerm)).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
+                    resultList.add(productName)
+                }
+            }
+            db.rawQuery(brandQuery, arrayOf(searchTerm)).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val brandName = cursor.getString(cursor.getColumnIndexOrThrow(Brands_table_name))
+                    resultList.add(brandName)
+                }
+            }
+        }
+        return resultList
+    }
+
 
 }
