@@ -10,6 +10,18 @@ import com.umega.grocery.utill.ResultItem
 import com.umega.grocery.utill.SearchItem
 
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    /*TODO
+    *  1. Remove BrandName, BrandNationality in products Table, add instead BrandId ForeignKey referenced to PK of Brands Table
+    *  2. add (imgName "STRING", purchaseCount "INT") table products Table
+    *  3. remove quantity column in product table
+    *  4. add subcategoryId fk column in product table referenced to subcategoryID in subcategory Table
+    *  5. remove subcategoryID in brands table
+    *  6. Favorite table not created below, create the table favorite
+    *  7. create StoreDeals table same structure as dailyDeals
+    *  8. create Order Table contains columns (orderId "INT", Voucher "String", date "DATETIME", address "String", totalPrice "REAL")
+    *  9. create orderItem table contains columns (ID "Incremental INT", OrderID "FK to order table", productID "FK to product Table", quantity "INT", discount "Percentage from 0 to 100", fullPrice "REAL")
+    *  10. create Addresses table (address "String", primary "Boolean")
+    *  11. */
     companion object {
         const val DATABASE_NAME = "GroceryShopping"
         const val DATABASE_VERSION = 1
