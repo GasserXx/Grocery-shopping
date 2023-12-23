@@ -4,13 +4,13 @@ import android.util.Log
 import com.umega.grocery.utill.Address
 import com.umega.grocery.utill.Brand
 import com.umega.grocery.utill.Category
-import com.umega.grocery.utill.CategoryType
 import com.umega.grocery.utill.DealsItem
 import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavoriteItem
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.Product
+import com.umega.grocery.utill.SubCategory
 import com.umega.grocery.utill.User
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -154,25 +154,43 @@ class Remote {
         return brands
     }
 
-    suspend fun getCategories(categoryType: CategoryType):MutableList<Category> {
+    suspend fun getCategories():MutableList<Category> {
         val fnTAG = "Categories Fn:"
-        val brands = mutableListOf<Category>()
-        val tableName = if (categoryType == CategoryType.Category) categories_table else subCategories_table
+        val Categories = mutableListOf<Category>()
         val query  = """
            SELECT * 
-           FROM $tableName
+           FROM $categories_table
         """
         val result = executeQuery(query)
 
         //handling incoming resultSet
         try {
             while (result!!.next())
-                brands.add(Category(result.getInt(1), result.getString(2)))
+                Categories.add(Category(result.getInt(1), result.getString(2)))
 
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
         }
-        return brands
+        return Categories
+    }
+    suspend fun getSubCategories():MutableList<SubCategory> {
+        val fnTAG = "SubCategories Fn:"
+        val subCategories = mutableListOf<SubCategory>()
+        val query  = """
+           SELECT * 
+           FROM $subCategories_table
+        """
+        val result = executeQuery(query)
+
+        //handling incoming resultSet
+        try {
+            while (result!!.next())
+                subCategories.add(SubCategory(result.getInt(1), result.getInt(2)))
+
+        }catch (e:Exception) {
+            Log.i(TAG, "$fnTAG $e")
+        }
+        return subCategories
     }
 
     suspend fun getOrders(currUser:Int) :MutableList<Order> {
