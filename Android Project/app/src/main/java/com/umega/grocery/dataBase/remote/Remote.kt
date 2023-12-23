@@ -173,6 +173,7 @@ class Remote {
         }
         return Categories
     }
+    //TODO modify to have subcategory name
     suspend fun getSubCategories():MutableList<SubCategory> {
         val fnTAG = "SubCategories Fn:"
         val subCategories = mutableListOf<SubCategory>()
