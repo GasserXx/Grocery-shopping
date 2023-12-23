@@ -1,8 +1,7 @@
 package com.umega.grocery.utill
-
-data class ResultItem(
+data class DealsItemLocal(
     val productName: String,
-    val price:Double,
+    val productPriceAfterDiscount:Double,
     val imgName:String,
     val isFavourite: Boolean,
     val productId:Int
