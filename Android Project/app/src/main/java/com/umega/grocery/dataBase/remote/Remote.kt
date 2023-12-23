@@ -10,14 +10,12 @@ import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavoriteItem
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
+import com.umega.grocery.utill.Product
 import com.umega.grocery.utill.User
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
@@ -63,8 +61,37 @@ class Remote {
     }
 
     //Data Retrieval first
+    suspend fun getProducts(productsIDs: List<Int>):MutableList<Product> {
+        val fnTAG = "getProducts Fn:"
+        val products = mutableListOf<Product>()
+        val query  = """
+           SELECT * 
+           FROM $products_table
+           WHERE $productID_column_name IN ([${productsIDs.joinToString(", ")}])
+        """
+        val result = executeQuery(query)
 
-    suspend fun getFavorites(currUser: String):MutableList<FavoriteItem> {
+        //handling incoming resultSet
+        try {
+            while (result!!.next())
+                products.add(Product(
+                    result.getInt(1),
+                    result.getString(2),
+                    result.getInt(3),
+                    result.getDouble(4),
+                    result.getInt(5),
+                    result.getInt(6),
+                    result.getInt(7),
+                    result.getString(8)))
+
+        }catch (e:Exception) {
+            Log.i(TAG, "$fnTAG $e")
+        }
+        return products
+    }
+
+
+    suspend fun getFavorites(currUser: Int):MutableList<FavoriteItem> {
         val fnTAG = "Favorite Fn:"
         val favorites = mutableListOf<FavoriteItem>()
         val query  = """
@@ -219,7 +246,7 @@ class Remote {
 
         val fnTAG = "PlaceOrder Fn:"
         val query  = """
-           SELECT $placeOrder_function($userID, ${order.voucher}, ${order.totalPrice}, ${order.address});
+           SELECT $placeOrder_function($userID, '${order.voucher}', ${order.totalPrice}, '${order.address}');
         """
         return functionCall(query, fnTAG)
     }
@@ -256,7 +283,7 @@ class Remote {
 
         val fnTAG = "registerUser Fn:"
         val query  = """
-           SELECT $registerUser_function(${user.email}, ${user.password}, ${user.firstName}, ${user.lastName}, ${user.phoneNumber});
+           SELECT $registerUser_function('${user.email}', '${user.password}', '${user.firstName}', '${user.lastName}', '${user.phoneNumber}');
         """
         return functionCall(query, fnTAG)
     }
@@ -281,7 +308,7 @@ class Remote {
 
         val fnTAG = "registerAddress Fn:"
         val query  = """
-           SELECT $registerAddress_function($userID ,${address.name}, ${address.primary});
+           SELECT $registerAddress_function($userID ,'${address.name}', ${address.primary});
         """
         return functionCall(query, fnTAG)
     }
@@ -295,7 +322,7 @@ class Remote {
 
         val fnTAG = "checkVoucher Fn:"
         val query  = """
-           SELECT $voucher_function($voucher);
+           SELECT $voucher_function('$voucher');
         """
         return functionCall(query, fnTAG)
     }
@@ -341,6 +368,7 @@ class Remote {
         //TABLES NAMES
         const val brands_table = "Brands"
         const val favourite_table = "Favourite"
+        const val products_table = "Products"
         const val dailyDeals_table = "Daily_deals"
         const val storeDeals_table = "Store_deals"
         const val categories_table = "Categories"
@@ -351,6 +379,7 @@ class Remote {
         //Columns
         const val userID_column_name = "user_id"
         const val orderID_column_name = "order_id"
+        const val productID_column_name = "product_id"
 
         //Functions
         const val registerUser_function = "RegisterUser"
