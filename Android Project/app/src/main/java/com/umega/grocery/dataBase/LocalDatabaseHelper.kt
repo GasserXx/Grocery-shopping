@@ -587,6 +587,20 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             }
         }
     }
+    fun insertFavoriteProduct(favoriteItem: FavouriteItemLocal?) {
+        writableDatabase.use { db ->
+            db.beginTransaction()
+            try {
+                val values = ContentValues().apply {
+                    put(Favourite_table_productID, favoriteItem?.productID)
+                }
+                db.insert(favourite_table, null, values)
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
+            }
+        }
+    }
     fun getAllFavoriteProducts(): List<FavouriteItemLocal> {
         val favoriteItemList = mutableListOf<FavouriteItemLocal>()
         val query = """
