@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
 import com.umega.grocery.dataBase.remote.Remote
 import com.umega.grocery.utill.Category
+import com.umega.grocery.utill.DealsItemLocal
+import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavouriteItemLocal
 import com.umega.grocery.utill.SubCategory
 import com.umega.grocery.utill.User
@@ -69,6 +71,19 @@ class Repo(context: Context) {
             localDatabase.insertFavoriteProduct(favourite.value)
             remote.addFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
+    }
+    // Daily and store Deals table
+    suspend fun refreshDailyStoreDeals(){
+        withContext(Dispatchers.IO) {
+            localDatabase.insertDailyDeals(remote.getDeals(DealsType.Daily))
+            localDatabase.insertStoreDeals(remote.getDeals(DealsType.Store))
+        }
+    }
+    fun getDailyDeals(dailyDeals:MutableLiveData<List<DealsItemLocal>>){
+        dailyDeals.value = localDatabase.getAllDailyDeals()
+    }
+    fun getStoreDeals(storeDeals:MutableLiveData<List<DealsItemLocal>>){
+        storeDeals.value = localDatabase.getAllStoreDeals()
     }
 
 }
