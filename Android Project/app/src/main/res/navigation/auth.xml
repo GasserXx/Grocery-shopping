@@ -7,5 +7,49 @@
 
         android:id="@+id/loginFragment2"
         android:name="com.umega.grocery.auth.fragments.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment2_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment2_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.umega.grocery.auth.fragments.SignInFragment"
+        android:label="SignInFragment" >
+        <action
+            android:id="@+id/action_signInFragment_to_underConstructionFragment2"
+            app:destination="@id/underConstructionFragment2" />
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@id/loginFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.umega.grocery.auth.fragments.SignUpFragment"
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_transistionFragment"
+            app:destination="@id/transistionFragment"
+            app:popUpTo="@id/loginFragment2" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/loginFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/transistionFragment"
+        android:name="com.umega.grocery.auth.fragments.TransitionFragment"
+        android:label="TransistionFragment" >
+        <action
+            android:id="@+id/action_transistionFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/underConstructionFragment2"
+        android:name="com.umega.grocery.shopping.fragments.UnderConstructionFragment"
+        android:label="UnderConstructionFragment" />
 </navigation>
