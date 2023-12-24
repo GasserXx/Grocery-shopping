@@ -92,6 +92,12 @@ class Repo(context: Context) {
     fun getStoreDeals(storeDeals:MutableLiveData<List<DealsItemLocal>>){
         storeDeals.value = localDatabase.getAllStoreDeals()
     }
-    //
+    // brands table
+    suspend fun refreshBrands(){
+        withContext(Dispatchers.IO) {
+            localDatabase.insertBrands(remote.getBrands())
+        }
+    }
+
 
 }
