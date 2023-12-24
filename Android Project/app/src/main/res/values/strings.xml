@@ -92,5 +92,6 @@
     <string name="no_result_image">no result image visible when there are no item</string>
     <string name="voice_image">voice image to open voice to search</string>
     <string name="construction_image_description">A Working man holds a shovel directed to sand indicating undergoing work</string>
+    <string name="mobile_phone">Mobile Phone</string>
 
 </resources>
