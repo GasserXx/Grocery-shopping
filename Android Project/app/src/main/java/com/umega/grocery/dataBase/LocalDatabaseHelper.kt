@@ -370,24 +370,28 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
     // categories and subCategories table queries
-    fun getAllSubcategoriesByCategory(categoryName: String): List<String> {
-        val subcategoriesList = mutableListOf<String>()
+    fun getAllSubcategoriesByCategory(categoryId: Int): List<SubCategory> {
+        val subcategoriesList = mutableListOf<SubCategory>()
         val query = """
-        SELECT $subCategories_table_subCategoryName
-        FROM $subCategories_table SC
-        INNER JOIN $categories_table C ON SC.$subCategories_table_categoryID = C.$categories_table_categoryID
-        WHERE C.$categories_table_categoryName = ?
+        SELECT $subCategories_table_subCategoryID, $subCategories_table_categoryID, $subCategories_table_subCategoryName
+        FROM $subCategories_table
+        WHERE $subCategories_table_categoryID = ?
     """
         readableDatabase.use { db ->
-            db.rawQuery(query, arrayOf(categoryName)).use { cursor ->
+            db.rawQuery(query, arrayOf(categoryId.toString())).use { cursor ->
                 while (cursor.moveToNext()) {
+                    val id = cursor.getInt(cursor.getColumnIndexOrThrow(subCategories_table_subCategoryID))
+                    val categoryID = cursor.getInt(cursor.getColumnIndexOrThrow(subCategories_table_categoryID))
                     val subcategoryName = cursor.getString(cursor.getColumnIndexOrThrow(subCategories_table_subCategoryName))
-                    subcategoriesList.add(subcategoryName)
+
+                    val subCategory = SubCategory(id, categoryID, subcategoryName)
+                    subcategoriesList.add(subCategory)
                 }
             }
         }
         return subcategoriesList
     }
+
     fun getAllCategories(): List<String> {
         val categoriesList = mutableListOf<String>()
         val query = """
