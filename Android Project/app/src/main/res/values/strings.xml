@@ -8,6 +8,8 @@
     <string name="email_address">Email address</string>
     <string name="password">Password</string>
     <string name="username">UserName</string>
+    <string name="firstname">FirstName</string>
+    <string name="lastname">LastName</string>
     <string name="one_kilo">1KG</string>
     <string name="itemNameExample">Bell Pepper Red</string>
     <string name="itemPriceExample">90.00 EGP</string>

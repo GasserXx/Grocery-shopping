@@ -10,25 +10,23 @@ import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.utill.User
 
 class LoginViewModel(private val navController: NavController) : ViewModel() {
-    private var userPreference: UserPreference? = null
-
     var email: String = ""
     var password: String = ""
     var firstName: String = ""
     var lastName: String = ""
     var phoneNumber: String = ""
 
-    private var emailError: String? = null
-    private var passwordError: String? = null
-    private var firstNameError: String? = null
-    private var lastNameError: String? = null
-    private var phoneNumberError: String? = null
+    val emailError: MutableLiveData<String?> = MutableLiveData(null)
+    val passwordError: MutableLiveData<String?> = MutableLiveData(null)
+    val firstNameError: MutableLiveData<String?> = MutableLiveData(null)
+    val lastNameError: MutableLiveData<String?> = MutableLiveData(null)
+    val phoneNumberError: MutableLiveData<String?> = MutableLiveData(null)
 
 
     private val hasher = Hasher()
     private var hashedPassword: String? = ""
 
-    private val repo = Repo()
+    private var repo:Repo? = null
 
     private val _response: MutableLiveData<Int> = MutableLiveData(-1)
     val response: LiveData<Int>
@@ -53,63 +51,67 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         firstName  = ""
         lastName  = ""
         phoneNumber  = ""
-        emailError   = null
-        passwordError   = null
-        firstNameError   = null
-        lastNameError   = null
-        phoneNumberError   = null
+        emailError.value  = null
+        passwordError.value= null
+        firstNameError.value = null
+        lastNameError.value= null
+        phoneNumberError.value   = null
+    }
+    //setting repo on launch
+    fun setRepo(repoObject: Repo){
+        repo = repoObject
     }
 
     //Validation
     private fun isEmailValid(signIn: Boolean): Boolean = if (email.isBlank()) {
-        emailError = emailError_invalid_string
+        emailError.value = emailError_invalid_string
         false
     } else if (!signIn && !email.matches(emailRegex)) {
-        emailError = emailError_form_string
+        emailError.value = emailError_form_string
         false
     } else
         true
 
     private fun isPasswordValidSignUp(): Boolean =
         if (password.length < 8) {
-            passwordError = passwordError_largerThan8_string
+            passwordError.value = passwordError_largerThan8_string
             false
         } else if (password.any { it.isUpperCase() }) {
-            passwordError = passwordError_containsUpperLetters_string
+            passwordError.value = passwordError_containsUpperLetters_string
             false
         } else if (password.any { it.isLowerCase() }) {
-            passwordError = passwordError_containsLowerLetters_string
+            passwordError.value = passwordError_containsLowerLetters_string
             false
         } else
             true
 
     private fun isPasswordValidSignIn(): Boolean =
         if (password.isBlank()) {
-            passwordError = passwordError_invalid_string
+            passwordError.value = passwordError_invalid_string
             false
         } else
             true
 
     private fun isFirstNameValid(): Boolean =
-        if (firstName.isBlank() || !firstName.any { it.isDigit() }) {
-            firstNameError = invalidInputError_string
+        if (firstName.isBlank() || firstName.any { it.isDigit() }) {
+            firstNameError.value = invalidInputError_string
             false
         } else
             true
 
     private fun isLastNameValid(): Boolean =
-        if (lastName.isBlank() || !lastName.any { it.isDigit() }) {
-            lastNameError = invalidInputError_string
+        if (lastName.isBlank() || lastName.any { it.isDigit() }) {
+            lastNameError.value = invalidInputError_string
             false
         } else
             true
 
     private fun isPhoneNumberValid(): Boolean =
         if (phoneNumber.isBlank()) {
-            phoneNumberError = invalidInputError_string
+            phoneNumberError.value = invalidInputError_string
             false
         } else if (!phoneNumber.matches(phoneRegex)) {
-            phoneNumberError = if (phoneNumber.length != 11) {
+            phoneNumberError.value = if (phoneNumber.length != 11) {
                 phoneNumberError_shouldBe11_string
             } else {
                 phoneNumberError_invalid_string
@@ -125,10 +127,10 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         if (signIn) {
             result = result && isPasswordValidSignIn()
         } else {
-            result = result && isPasswordValidSignUp()
-            result = result && isFirstNameValid()
-            result = result && isLastNameValid()
-            result = result && isPhoneNumberValid()
+            result = isPasswordValidSignUp() && result
+            result = isFirstNameValid() && result
+            result = isLastNameValid() && result
+            result = isPhoneNumberValid() && result
         }
         return result
     }
@@ -142,7 +144,7 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         //hashPassword
         hashedPassword = hasher.hashPassword(password)
         //authenticate
-        repo.authentication(User(email, hashedPassword!!, null, null, null), _response)
+        repo!!.authentication(User(email, hashedPassword!!, null, null, null), _response)
     }
 
     fun afterLogin() {
@@ -151,15 +153,15 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         when (_response.value) {
             200 -> {
                 //Store userID and flag end activity
-                repo.storeUserID(userPreference!!)
+                repo!!.storeUserID()
                 signInSuccess()
                 clearCache()
                 _authenticated.value = true
                 return
             }
 
-            501 -> emailError = emailError_invalid_string
-            401 -> passwordError = passwordError_invalid_string
+            501 -> emailError.value = emailError_invalid_string
+            401 -> passwordError.value = passwordError_invalid_string
         }
         signInFailed()
         return
@@ -175,7 +177,7 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         //hashPassword
         hashedPassword = hasher.hashPassword(password)
         //registerUser
-        repo.registerUser(User(email,hashedPassword!!,firstName,lastName, phoneNumber),_response)
+        repo!!.registerUser(User(email,hashedPassword!!,firstName,lastName, phoneNumber),_response)
     }
 
     fun afterSignUp() {
@@ -193,10 +195,6 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
             400-> signUpFailed()
         }
         return
-    }
-    //setting userPreference on launch
-    fun setUserPreference(preference: UserPreference){
-        userPreference = preference
     }
     //Loading functions
     private fun showLoading() {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 class Repo(context: Context) {
     private val remote = Remote()
     private val localDatabase = LocalDatabaseHelper(context)
-
+    private val userPreference = UserPreference(context)
     fun authentication(user: User, response:MutableLiveData<Int>){
         runBlocking {
             response.value = remote.authentication(user)
@@ -27,7 +27,7 @@ class Repo(context: Context) {
         }
     }
 
-    fun storeUserID(userPreference: UserPreference){
+    fun storeUserID(){
         runBlocking {
             userPreference.storeUserID(remote.getUserID(userPreference.getEmail()))
         }

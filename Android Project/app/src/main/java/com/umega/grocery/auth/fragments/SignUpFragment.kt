@@ -30,6 +30,23 @@ class SignUpFragment : Fragment() {
             viewModel.afterSignUp()
         }
 
+        //observing error raising
+        viewModel.firstNameError.observe(viewLifecycleOwner){
+            binding.firstNameEdit.error = it
+        }
+        viewModel.lastNameError.observe(viewLifecycleOwner){
+            binding.lastNameEdit.error = it
+        }
+        viewModel.emailError.observe(viewLifecycleOwner){
+            binding.emailAddressEdit.error = it
+        }
+        viewModel.passwordError.observe(viewLifecycleOwner){
+            binding.passwordEdit.error = it
+        }
+        viewModel.phoneNumberError.observe(viewLifecycleOwner){
+            binding.editTextPhone.error = it
+        }
+
         return binding.root
     }
 }

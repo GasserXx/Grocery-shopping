@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.umega.grocery.auth.LoginViewModel
+import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -16,7 +17,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var viewModel: LoginViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         viewModel = LoginViewModel(navController)
-        //init userPreference
-        viewModel.setUserPreference(UserPreference(context = this))
+        //init repo
+        viewModel.setRepo(Repo(context = this))
 
         // Observe the LiveData in the ViewModel
         viewModel.messageLiveData.observe(this) { message ->

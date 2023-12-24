@@ -27,6 +27,13 @@ class SignInFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.signin_page,container,false)
         binding.viewModel = viewModel
+
+        viewModel.emailError.observe(viewLifecycleOwner){
+            binding.emailAddressEdit.error = it
+        }
+        viewModel.passwordError.observe(viewLifecycleOwner){
+            binding.passwordEdit.error = it
+        }
         return binding.root
     }
 }
