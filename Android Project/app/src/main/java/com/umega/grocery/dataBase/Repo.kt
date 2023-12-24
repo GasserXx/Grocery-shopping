@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
 import com.umega.grocery.dataBase.remote.Remote
 import com.umega.grocery.utill.Category
+import com.umega.grocery.utill.FavouriteItemLocal
 import com.umega.grocery.utill.SubCategory
 import com.umega.grocery.utill.User
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -52,7 +53,22 @@ class Repo(context: Context) {
     fun getAllSubCategoriesByCategory(categoryId:Int,categories:MutableLiveData<List<SubCategory>>){
         categories.value = localDatabase.getAllSubcategoriesByCategory(categoryId)
     }
-    //TODO make function to get products from remote bt subCategory id
+    /*TODO make function to get products from remote by subCategory id*/
 
+    // favourite table
+    suspend fun refreshFavourite(){
+        withContext(Dispatchers.IO) {
+            localDatabase.insertFavoriteProducts(remote.getFavorites(userPreference.getUser()))
+        }
+    }
+    fun getAllFavourite(favourites:MutableLiveData<List<FavouriteItemLocal>>){
+        favourites.value = localDatabase.getAllFavoriteProducts()
+    }
+    suspend fun insertFavourite(favourite:MutableLiveData<FavouriteItemLocal>){
+        withContext(Dispatchers.IO){
+            localDatabase.insertFavoriteProduct(favourite.value)
+            remote.addFavorite(userPreference.getUser(), favourite.value!!.productID)
+        }
+    }
 
 }
