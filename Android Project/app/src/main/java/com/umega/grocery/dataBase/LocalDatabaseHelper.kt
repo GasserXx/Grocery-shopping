@@ -601,6 +601,23 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             }
         }
     }
+    fun deleteFavoriteProduct(favoriteItem: FavouriteItemLocal?) {
+        writableDatabase.use { db ->
+            db.beginTransaction()
+            try {
+                // Define the WHERE clause to identify the row to delete
+                val whereClause = "$Favourite_table_productID = ?"
+                val whereArgs = arrayOf(favoriteItem?.productID.toString())
+
+                // Perform the deletion
+                db.delete(favourite_table, whereClause, whereArgs)
+
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
+            }
+        }
+    }
     fun getAllFavoriteProducts(): List<FavouriteItemLocal> {
         val favoriteItemList = mutableListOf<FavouriteItemLocal>()
         val query = """

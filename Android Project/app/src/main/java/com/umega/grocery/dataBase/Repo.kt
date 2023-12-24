@@ -72,6 +72,13 @@ class Repo(context: Context) {
             remote.addFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
     }
+    suspend fun removeFavourite(favourite:MutableLiveData<FavouriteItemLocal>){
+        withContext(Dispatchers.IO){
+            localDatabase.deleteFavoriteProduct(favourite.value)
+            remote.removeFavorite(userPreference.getUser(), favourite.value!!.productID)
+        }
+    }
+
     // Daily and store Deals table
     suspend fun refreshDailyStoreDeals(){
         withContext(Dispatchers.IO) {
@@ -85,5 +92,6 @@ class Repo(context: Context) {
     fun getStoreDeals(storeDeals:MutableLiveData<List<DealsItemLocal>>){
         storeDeals.value = localDatabase.getAllStoreDeals()
     }
+    //
 
 }
