@@ -1,4 +1,5 @@
 package com.umega.grocery.auth.fragments
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,10 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.umega.grocery.R
 import com.umega.grocery.auth.LoginViewModel
 import com.umega.grocery.auth.LoginViewModelFactory
-import com.umega.grocery.databinding.SignupPageBinding
+import com.umega.grocery.databinding.LoginPageBinding
 
-class SignUpFragment : Fragment() {
-    lateinit var binding : SignupPageBinding
+class TransitionFragment : Fragment() {
+    lateinit var binding : LoginPageBinding
 
     private val navController by lazy { findNavController() }
     private val viewModel: LoginViewModel by viewModels { LoginViewModelFactory(navController) }
@@ -23,13 +24,8 @@ class SignUpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.signup_page,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.transistion_signup,container,false)
         binding.viewModel = viewModel
-
-        viewModel.response.observe(viewLifecycleOwner){
-            viewModel.afterSignUp()
-        }
-
         return binding.root
     }
 }
