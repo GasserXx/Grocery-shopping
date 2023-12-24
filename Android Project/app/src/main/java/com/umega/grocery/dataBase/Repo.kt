@@ -1,5 +1,6 @@
 package com.umega.grocery.dataBase
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,8 +11,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.runBlocking
 
 @OptIn(DelicateCoroutinesApi::class)
-class Repo {
+class Repo(context: Context) {
     private val remote = Remote()
+    private val localDatabase = LocalDatabaseHelper(context)
 
     fun authentication(user: User, response:MutableLiveData<Int>){
         runBlocking {
@@ -30,4 +32,5 @@ class Repo {
             userPreference.storeUserID(remote.getUserID(userPreference.getEmail()))
         }
     }
+
 }
