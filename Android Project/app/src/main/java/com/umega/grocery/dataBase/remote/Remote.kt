@@ -173,7 +173,7 @@ class Remote {
         }
         return Categories
     }
-    //TODO modify to have subcategory name
+
     suspend fun getSubCategories():MutableList<SubCategory> {
         val fnTAG = "SubCategories Fn:"
         val subCategories = mutableListOf<SubCategory>()
@@ -186,7 +186,7 @@ class Remote {
         //handling incoming resultSet
         try {
             while (result!!.next())
-                subCategories.add(SubCategory(result.getInt(1), result.getInt(2)))
+                subCategories.add(SubCategory(result.getInt(1), result.getInt(2), result.getString(3)))
 
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
