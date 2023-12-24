@@ -392,17 +392,20 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return subcategoriesList
     }
 
-    fun getAllCategories(): List<String> {
-        val categoriesList = mutableListOf<String>()
+    fun getAllCategories(): List<Category> {
+        val categoriesList = mutableListOf<Category>()
         val query = """
-        SELECT $categories_table_categoryName
+        SELECT $categories_table_categoryID, $categories_table_categoryName
         FROM $categories_table
-    """
+        """
         readableDatabase.use { db ->
             db.rawQuery(query, null).use { cursor ->
                 while (cursor.moveToNext()) {
+                    val id = cursor.getInt(cursor.getColumnIndexOrThrow(categories_table_categoryID))
                     val categoryName = cursor.getString(cursor.getColumnIndexOrThrow(categories_table_categoryName))
-                    categoriesList.add(categoryName)
+
+                    val category = Category(id, categoryName)
+                    categoriesList.add(category)
                 }
             }
         }
