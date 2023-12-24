@@ -686,6 +686,24 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             }
         }
     }
+    fun insertOrder(order: Order) {
+        writableDatabase.use { db ->
+            db.beginTransaction()
+            try {
+                val values = ContentValues().apply {
+                    put(order_table_voucher, order.voucher)
+                    put(order_table_totalPrice, order.totalPrice)
+                    put(order_table_address, order.address)
+                    put(order_table_date, order.date.toString()) // Assuming date is a String
+                }
+                val orderId = db.insert(order_table, null, values)
+                order.id = orderId.toInt()
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
+            }
+        }
+    }
     // TODO function to get back orders
     // order items table
     fun insertOrderItems(orderItems: List<OrderItem>) {
@@ -708,5 +726,6 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             }
         }
     }
+    //TODO Adress table
 
 }
