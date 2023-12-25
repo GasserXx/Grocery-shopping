@@ -492,10 +492,39 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return Pair(productList,missingProducts)
     }
 
-    private fun getProduct(productID:Int):Product?{
-        //TODO get the product from data base by id || null if not present in the db
-        return Product(-1,"",-1,-9.99,-1,-1,-1,"")
+    private fun getProduct(productID:Int):Product? {
+        val selectProductQuery = """
+        SELECT *
+        FROM $products_table
+        WHERE $Products_table_productID = ?
+    """
+        //DONE
+        return try {
+            readableDatabase.use { db ->
+                val cursor = db.rawQuery(selectProductQuery, arrayOf(productID.toString()))
+                if (cursor.moveToFirst()) {
+                    val product = Product(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_brandId)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(Products_table_price)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_stockQuantity)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_subcategoryId)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_purchaseCount)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Products_table_imgName))
+                    )
+                    cursor.close()
+                    product
+                } else {
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            // Handle exceptions
+            null
+        }
     }
+
 
     //SEARCH fun will be implemented once reached the task
 
