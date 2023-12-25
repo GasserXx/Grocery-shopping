@@ -11,10 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.umega.grocery.R
 import com.umega.grocery.auth.LoginViewModel
 import com.umega.grocery.auth.LoginViewModelFactory
-import com.umega.grocery.databinding.LoginPageBinding
+import com.umega.grocery.databinding.TransistionSignupBinding
 
 class TransitionFragment : Fragment() {
-    lateinit var binding : LoginPageBinding
+    lateinit var binding : TransistionSignupBinding
 
     private val navController by lazy { findNavController() }
     private val viewModel: LoginViewModel by viewModels { LoginViewModelFactory(navController) }
