@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.umega.grocery.R
-import com.umega.grocery.UserPreference
 import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.utill.User
+import kotlinx.coroutines.runBlocking
 
 class LoginViewModel(private val navController: NavController) : ViewModel() {
     var email: String = ""
@@ -28,7 +28,7 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
 
     private var repo:Repo? = null
 
-    private val _response: MutableLiveData<Int> = MutableLiveData(-1)
+    private val _response: MutableLiveData<Int> = MutableLiveData(-3)
     val response: LiveData<Int>
         get() = _response
 
@@ -55,12 +55,16 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         passwordError.value= null
         firstNameError.value = null
         lastNameError.value= null
-        phoneNumberError.value   = null
+        phoneNumberError.value = null
+        _response.value = -3
     }
     //setting repo on launch
     fun setRepo(repoObject: Repo){
         repo = repoObject
     }
+
+    //Are we still signed in
+    fun checkUserIdStorage():Boolean = repo!!.getUserID() != -1
 
     //Validation
     private fun isEmailValid(signIn: Boolean): Boolean = if (email.isBlank()) {
@@ -111,13 +115,14 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
             phoneNumberError.value = invalidInputError_string
             false
         } else if (!phoneNumber.matches(phoneRegex)) {
-            phoneNumberError.value = if (phoneNumber.length != 11) {
-                phoneNumberError_shouldBe11_string
-            } else {
-                phoneNumberError_invalid_string
-            }
+            phoneNumberError.value = phoneNumberError_invalid_string
             false
-        } else
+        }
+        else if (phoneNumber.length != 11) {
+            phoneNumberError_shouldBe11_string
+            false
+        }
+        else
             true
 
 
@@ -152,11 +157,14 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         hideLoading()
         when (_response.value) {
             200 -> {
-                //Store userID and flag end activity
-                repo!!.storeUserID()
-                signInSuccess()
-                clearCache()
-                _authenticated.value = true
+                runBlocking {
+                    repo!!.storeEmail(email)
+                    //Store userID and flag end activity
+                    repo!!.storeUserID()
+                    signInSuccess()
+                    clearCache()
+                    _authenticated.value = true
+                }
                 return
             }
 
@@ -236,17 +244,16 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         navController.navigate(R.id.action_loginFragment2_to_signUpFragment)
     }
     fun navigateTransitionToSignIn(){
-        navController.navigateUp()
-
+        navController.navigate(R.id.action_transistionFragment_to_signInFragment)
     }
-    fun navigateSignUpToTransition(){
+    private fun navigateSignUpToTransition(){
         navController.navigate(R.id.action_signUpFragment_to_transistionFragment)
     }
     fun navigateUp(){
         navController.navigateUp()
     }
     fun navigateTransitionToLogin (){
-        navController.clearBackStack(R.id.loginFragment2)
+        navController.navigate(R.id.action_transistionFragment_to_loginFragment2)
     }
     fun navigateSignInToUnderConstruction (){
         navController.navigate(R.id.action_signInFragment_to_underConstructionFragment2)
@@ -280,7 +287,7 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
         const val loginError_success:String = "Logged In Successfully"
 
         val emailRegex:Regex = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}".toRegex()
-        val phoneRegex:Regex = "012\\d{8}".toRegex()
+        val phoneRegex:Regex = "01\\d{9}".toRegex()
 
     }
 }
