@@ -1,6 +1,5 @@
 package com.umega.grocery.dataBase
 
-import android.content.ContentValues
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
@@ -13,6 +12,7 @@ import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavouriteItemLocal
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
+import com.umega.grocery.utill.Product
 import com.umega.grocery.utill.SubCategory
 import com.umega.grocery.utill.User
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -47,6 +47,47 @@ class Repo(context: Context) {
             userPreference.storeUserID(remote.getUserID(userPreference.getEmail()))
         }
     }
+    //retrieve products onDemand fn
+    private fun retrieveProductsRemotely(productsIDs: MutableList<Int>):MutableList<Product>{
+        val products:MutableList<Product>
+        runBlocking {
+            products = remote.getProducts(productsIDs)
+            //TODO make sure that on conflict in insertion no error occurs or Replace on conflict
+            localDatabase.insertProducts(products)
+        }
+        return products
+    }
+
+    //request products from cached
+    fun retrieveProducts(productsIDs: MutableList<Int>, flag: MutableLiveData<Int>){
+        val products:MutableList<Product>
+        val missingProducts:MutableList<Int>
+
+        runBlocking {
+            localDatabase.getProducts(productsIDs).apply {
+                products = this.first
+                missingProducts = this.second
+            }
+        }
+        if (missingProducts.isNotEmpty())
+
+            runBlocking {
+                products.addAll(retrieveProductsRemotely(missingProducts))
+                flag.value = 1
+            }
+        else
+        //on change of the liveData it means that the required products are in the local DB
+        //flag indicating all data retrieved
+            flag.value = 1
+
+    }
+
+    fun retrieveAllSearchedIds(){
+        //On search retrieve all Ids of the products
+        //retrieve 40 product of the searched items and store it in the local database
+        //prepare the items once reached some elements
+    }
+
     // refresh categories and sub categories
     suspend fun refreshCategoriesAndSubCategories(){
         try{

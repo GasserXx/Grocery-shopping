@@ -478,6 +478,27 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return productList
     }
+
+    fun getProducts(productIDs: MutableList<Int>) :Pair<MutableList<Product>,MutableList<Int>> {
+        val productList = mutableListOf<Product>()
+        val missingProducts = mutableListOf<Int>()
+        for (x in productIDs){
+            val product = getProduct(x)
+            if (product != null)
+                productList.add(product)
+            else
+                missingProducts.add(x)
+        }
+        return Pair(productList,missingProducts)
+    }
+
+    private fun getProduct(productID:Int):Product?{
+        //TODO get the product from data base by id || null if not present in the db
+        return Product(-1,"",-1,-9.99,-1,-1,-1,"")
+    }
+
+    //SEARCH fun will be implemented once reached the task
+
     /*
     fun searchProducts(token: String): List<ResultItem> {
         val productList = mutableListOf<ResultItem>()
