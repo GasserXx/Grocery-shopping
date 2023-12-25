@@ -1,8 +1,6 @@
 package com.umega.grocery.dataBase
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
 import com.umega.grocery.dataBase.remote.Remote
@@ -34,6 +32,11 @@ class Repo(context: Context) {
         }
     }
 
+    fun storeEmail(email: String) {
+        runBlocking {
+            userPreference.storeEmail(email)
+        }
+    }
     fun storeUserID(){
         runBlocking {
             userPreference.storeUserID(remote.getUserID(userPreference.getEmail()))
@@ -97,6 +100,14 @@ class Repo(context: Context) {
         withContext(Dispatchers.IO) {
             localDatabase.insertBrands(remote.getBrands())
         }
+    }
+
+    fun getUserID():Int {
+        val id:Int
+        runBlocking {
+        id = userPreference.getUser()
+        }
+        return id
     }
 
 
