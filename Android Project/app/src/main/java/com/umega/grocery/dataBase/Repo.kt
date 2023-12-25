@@ -1,13 +1,18 @@
 package com.umega.grocery.dataBase
 
+import android.content.ContentValues
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
+import android.util.Log
 import com.umega.grocery.dataBase.remote.Remote
+import com.umega.grocery.utill.CartItem
 import com.umega.grocery.utill.Category
 import com.umega.grocery.utill.DealsItemLocal
 import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavouriteItemLocal
+import com.umega.grocery.utill.Order
+import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.SubCategory
 import com.umega.grocery.utill.User
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -44,12 +49,32 @@ class Repo(context: Context) {
     }
     // refresh categories and sub categories
     suspend fun refreshCategoriesAndSubCategories(){
-        withContext(Dispatchers.IO) {
-            val allCategoriesFromRemote = remote.getCategories()
-            val allSubCategoriesFromRemote = remote.getSubCategories()
-            localDatabase.insertCategories(allCategoriesFromRemote)
-            localDatabase.insertSubCategories(allSubCategoriesFromRemote)
+        try{
+            runBlocking {
+                localDatabase.clearCategoriesAndSubCategories()
+                var allCategoriesFromRemote = remote.getCategories()
+                Log.i("lol1",allCategoriesFromRemote.toString())
+                Log.i("lol5","bdan")
+                allCategoriesFromRemote = listOf(Category(1,"Grocery"),
+                    Category(2,"Beverages"),
+                    Category(3,"Chilled"),
+                    Category(4,"Drinks"),
+                    Category(5,"Fish"),
+                    Category(6,"Frozen Food"),
+                    Category(7,"Fruits"),
+                    Category(8,"Home Ware"),
+                    Category(9,"House Hold"),
+                    Category(10,"Meat"),
+                    Category(11,"Pharmacy"),
+                    Category(12,"Vegetables")).toMutableList()
+                val allSubCategoriesFromRemote = remote.getSubCategories()
+                localDatabase.insertCategories(allCategoriesFromRemote)
+                localDatabase.insertSubCategories(allSubCategoriesFromRemote)
+            }
+        }catch (e:Exception){
+            Log.i("lol",e.toString())
         }
+
     }
     // get all categories  and subCategories
     fun getAllCategories(categories:MutableLiveData<List<Category>>){
@@ -62,7 +87,7 @@ class Repo(context: Context) {
 
     // favourite table
     suspend fun refreshFavourite(){
-        withContext(Dispatchers.IO) {
+        runBlocking {
             localDatabase.insertFavoriteProducts(remote.getFavorites(userPreference.getUser()))
         }
     }
@@ -70,13 +95,13 @@ class Repo(context: Context) {
         favourites.value = localDatabase.getAllFavoriteProducts()
     }
     suspend fun insertFavourite(favourite:MutableLiveData<FavouriteItemLocal>){
-        withContext(Dispatchers.IO){
+        runBlocking{
             localDatabase.insertFavoriteProduct(favourite.value)
             remote.addFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
     }
     suspend fun removeFavourite(favourite:MutableLiveData<FavouriteItemLocal>){
-        withContext(Dispatchers.IO){
+        runBlocking{
             localDatabase.deleteFavoriteProduct(favourite.value)
             remote.removeFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
@@ -84,7 +109,7 @@ class Repo(context: Context) {
 
     // Daily and store Deals table
     suspend fun refreshDailyStoreDeals(){
-        withContext(Dispatchers.IO) {
+        runBlocking {
             localDatabase.insertDailyDeals(remote.getDeals(DealsType.Daily))
             localDatabase.insertStoreDeals(remote.getDeals(DealsType.Store))
         }
@@ -109,6 +134,37 @@ class Repo(context: Context) {
         }
         return id
     }
-
-
+    // orders and orders Items tables
+    suspend fun refreshOrderAndOrderItemsTables(){
+        runBlocking {
+            val orderItems = mutableListOf<OrderItem>()
+            val orders = remote.getOrders(userPreference.getUser())
+            localDatabase.insertOrders(orders)
+            for (order in orders){
+                localDatabase.insertOrderItems(remote.getOrderItems(order.id!!))
+            }
+        }
+    }
+    suspend fun insertOrder(order:MutableLiveData<Order>,orderItems:MutableLiveData<List<OrderItem>>){
+        runBlocking{
+            localDatabase.insertOrder(order.value!!)
+            localDatabase.insertOrderItems(orderItems.value!!)
+            remote.placeOrder(userPreference.getUser(), order.value!!)
+          //  remote.it(userPreference.getUser(), order.value!!)
+        }
+    }
+    // cart tables
+    fun getAllCartItems(cartItems:MutableLiveData<List<CartItem>>){
+        cartItems.value = localDatabase.getAllCartItems()
+    }
+    fun insertCartItem(productID: Int, quantity: Int) {
+        localDatabase.insertCartItem(productID,quantity)
+    }
+    fun updateCartItemQuantity(productID: Int, newQuantity: Int) {
+        localDatabase.updateCartItemQuantity(productID,newQuantity)
+    }
+    fun deleteCartItem(productID: Int) {
+        localDatabase.deleteCartItem(productID)
+    }
+    //TODO Address table function
 }
