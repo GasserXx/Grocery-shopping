@@ -46,7 +46,12 @@
         android:label="TransistionFragment" >
         <action
             android:id="@+id/action_transistionFragment_to_loginFragment2"
-            app:destination="@id/loginFragment2" />
+            app:destination="@id/loginFragment2"
+            app:popUpTo="@id/auth" />
+        <action
+            android:id="@+id/action_transistionFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/loginFragment2" />
     </fragment>
     <fragment
         android:id="@+id/underConstructionFragment2"
