@@ -9,12 +9,9 @@ import android.view.ViewGroup
 import android.widget.GridView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import com.umega.grocery.R
-import com.umega.grocery.auth.LoginViewModelFactory
 import com.umega.grocery.databinding.HomePageBinding
-import com.umega.grocery.databinding.LoginPageBinding
 import com.umega.grocery.shopping.fragments.CategoryAdapter
 import com.umega.grocery.shopping.fragments.HomeViewModel
 import com.umega.grocery.shopping.fragments.HomeViewModelFactory
