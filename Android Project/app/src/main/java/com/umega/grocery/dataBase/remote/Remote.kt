@@ -270,13 +270,18 @@ class Remote {
         return functionCall(query, fnTAG)
     }
 
-    suspend fun placeOrderItem(orderID:Int, orderItem: OrderItem):Int{
-        //response -> 200 OK
-        //response -> 400 ERROR
-
-        val fnTAG = "PlaceOrderItem Fn:"
+    //Modified to take more than on item at once
+    suspend fun placeOrderItems(orderID:Int, orderItems: MutableList<OrderItem>):Int{
+        //response -> No Response
+        val fnTAG = "PlaceOrderItems Fn:"
+        var items = ""
+        orderItems.forEach {orderItem-> items += "(${orderItem.productID}, ${orderItem.price}, ${orderItem.discount}, ${orderItem.quantity}),\n" }
+        orderItems.dropLast(1)
         val query  = """
-           SELECT $placeOrderItem_function($orderID, ${orderItem.productID}, ${orderItem.price}, ${orderItem.discount}, ${orderItem.quantity});
+           INSERT INTO $orderItem_table ($orderID_column_name, $productID_column_name, $unitPrice_column_name, $discount_column_name, $quantity_column_name)
+           VALUES 
+           $items
+           WHERE $orderID_column_name = $orderID
         """
         return functionCall(query, fnTAG)
     }
@@ -399,6 +404,10 @@ class Remote {
         const val userID_column_name = "user_id"
         const val orderID_column_name = "order_id"
         const val productID_column_name = "product_id"
+        const val unitPrice_column_name = "unit_price"
+        const val discount_column_name = "discount"
+        const val quantity_column_name = "quantity"
+
 
         //Functions
         const val registerUser_function = "RegisterUser"
