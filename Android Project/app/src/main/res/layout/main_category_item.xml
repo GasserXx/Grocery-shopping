@@ -8,12 +8,14 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!--
         <ImageView
+            android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="" />TODO-->
+            android:src="@drawable/chilled"
+            android:layout_gravity="center"/>
         <TextView
+            android:id="@+id/category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/sample_main_category"
