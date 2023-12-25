@@ -18,7 +18,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.sql.DriverManager
 import java.sql.ResultSet
-import java.sql.Statement
 
 /*
 * Remote Schema: https://showme.redstarplugin.com/d/d:bedz55fH
@@ -36,7 +35,7 @@ class Remote {
     private suspend fun executeQuery(query: String): ResultSet? = withContext(Dispatchers.Unconfined){
         var result: ResultSet? = null
                 //trying establishing connection=
-        withContext(Dispatchers.Unconfined) {
+        withContext(Dispatchers.IO) {
             runBlocking {
                 Log.i(TAG, "ESTABLISHING CONNECTION")
                 try {
@@ -44,10 +43,8 @@ class Remote {
 
                     Log.i(TAG, "Connection Established")
                     //trying executing the query
-                    val statement: Statement = conn.createStatement()
                     Log.i(TAG, "Created Statement")
-                    result = statement.executeQuery(query)
-                    Log.i(TAG, "Closing Connection || Result: $result")
+                    result = conn.createStatement().executeQuery(query)
                     //closing connection
                     conn?.close()
                 } catch (e: Exception) {
@@ -156,7 +153,7 @@ class Remote {
 
     suspend fun getCategories():MutableList<Category> {
         val fnTAG = "Categories Fn:"
-        val Categories = mutableListOf<Category>()
+        val categories = mutableListOf<Category>()
         val query  = """
            SELECT * 
            FROM $categories_table
@@ -166,12 +163,12 @@ class Remote {
         //handling incoming resultSet
         try {
             while (result!!.next())
-                Categories.add(Category(result.getInt(1), result.getString(2)))
+                categories.add(Category(result.getInt(1), result.getString(2)))
 
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
         }
-        return Categories
+        return categories
     }
 
     suspend fun getSubCategories():MutableList<SubCategory> {
@@ -241,12 +238,15 @@ class Remote {
     //base fn
     private suspend fun functionCall(query: String, fnTAG:String):Int{
 
+        Log.i("LOL","fn call called")
         var response = -1
         //handling incoming resultSet
             val result = executeQuery(query)
         try {
             if (result!!.next())
                 response = result.getInt(1)
+            Log.i(TAG, "Closing Connection || Result: $response")
+            result.close()
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
             Log.i(TAG, "$fnTAG $result")
@@ -290,10 +290,10 @@ class Remote {
     suspend fun getUserID(email:String):Int{
         //response -> UserID OK
         //response -> -1 ERROR
-
+        Log.i("LOL","Get User called")
         val fnTAG = "getUserID Fn:"
         val query  = """
-           SELECT $getUserID_function($email);
+           SELECT $getUserID_function('$email');
         """
         return functionCall(query, fnTAG)
     }
@@ -322,6 +322,7 @@ class Remote {
         val query  = """
            SELECT $authentication_function('${user.email}', '${user.password}');
         """
+
         return functionCall(query, fnTAG)
     }
 
