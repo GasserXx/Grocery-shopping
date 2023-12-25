@@ -3,6 +3,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.umega.grocery.utill.Brand
 import com.umega.grocery.utill.CartItem
 import com.umega.grocery.utill.Category
@@ -183,13 +184,8 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         FOREIGN KEY ($orderItem_table_productID) REFERENCES $products_table($Products_table_productID)
     );
     """
-    private val createTableAddresses = """
-    CREATE TABLE IF NOT EXISTS $addresses_table (
-        $addresses_table_address TEXT PRIMARY KEY,
-        $addresses_table_primary BOOLEAN NOT NULL
-    );
-    """
     override fun onCreate(db: SQLiteDatabase?) {
+        Log.i("lol","hi from data base")
         db?.execSQL(createTableCategories)
         db?.execSQL(createTableSubCategories)
         db?.execSQL(createTableBrands)
@@ -198,6 +194,8 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         db?.execSQL(createTableDailyDeals)
         db?.execSQL(createTableStoreDeals)
         db?.execSQL(createTableFavourite)
+        db?.execSQL(createTableOrder)
+        db?.execSQL(createTableOrderItem)
     }
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Handle database upgrades if needed
@@ -727,5 +725,13 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
     }
     //TODO Adress table
+    //clear functions
+    fun clearCategoriesAndSubCategories() {
+        writableDatabase.use { db ->
+            db.execSQL("DELETE FROM $categories_table")
+            db.execSQL("DELETE FROM $subCategories_table")
+        }
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.umega.grocery.dataBase
 import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
@@ -45,12 +46,32 @@ class Repo(context: Context) {
     }
     // refresh categories and sub categories
     suspend fun refreshCategoriesAndSubCategories(){
-        withContext(Dispatchers.IO) {
-            val allCategoriesFromRemote = remote.getCategories()
-            val allSubCategoriesFromRemote = remote.getSubCategories()
-            localDatabase.insertCategories(allCategoriesFromRemote)
-            localDatabase.insertSubCategories(allSubCategoriesFromRemote)
+        try{
+            runBlocking {
+                localDatabase.clearCategoriesAndSubCategories()
+                var allCategoriesFromRemote = remote.getCategories()
+                Log.i("lol1",allCategoriesFromRemote.toString())
+                Log.i("lol5","bdan")
+                allCategoriesFromRemote = listOf(Category(1,"Grocery"),
+                    Category(2,"Beverages"),
+                    Category(3,"Chilled"),
+                    Category(4,"Drinks"),
+                    Category(5,"Fish"),
+                    Category(6,"Frozen Food"),
+                    Category(7,"Fruits"),
+                    Category(8,"Home Ware"),
+                    Category(9,"House Hold"),
+                    Category(10,"Meat"),
+                    Category(11,"Pharmacy"),
+                    Category(12,"Vegetables")).toMutableList()
+                val allSubCategoriesFromRemote = remote.getSubCategories()
+                localDatabase.insertCategories(allCategoriesFromRemote)
+                localDatabase.insertSubCategories(allSubCategoriesFromRemote)
+            }
+        }catch (e:Exception){
+            Log.i("lol",e.toString())
         }
+
     }
     // get all categories  and subCategories
     fun getAllCategories(categories:MutableLiveData<List<Category>>){
@@ -63,7 +84,7 @@ class Repo(context: Context) {
 
     // favourite table
     suspend fun refreshFavourite(){
-        withContext(Dispatchers.IO) {
+        runBlocking {
             localDatabase.insertFavoriteProducts(remote.getFavorites(userPreference.getUser()))
         }
     }
@@ -71,13 +92,13 @@ class Repo(context: Context) {
         favourites.value = localDatabase.getAllFavoriteProducts()
     }
     suspend fun insertFavourite(favourite:MutableLiveData<FavouriteItemLocal>){
-        withContext(Dispatchers.IO){
+        runBlocking{
             localDatabase.insertFavoriteProduct(favourite.value)
             remote.addFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
     }
     suspend fun removeFavourite(favourite:MutableLiveData<FavouriteItemLocal>){
-        withContext(Dispatchers.IO){
+        runBlocking{
             localDatabase.deleteFavoriteProduct(favourite.value)
             remote.removeFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
@@ -85,7 +106,7 @@ class Repo(context: Context) {
 
     // Daily and store Deals table
     suspend fun refreshDailyStoreDeals(){
-        withContext(Dispatchers.IO) {
+        runBlocking {
             localDatabase.insertDailyDeals(remote.getDeals(DealsType.Daily))
             localDatabase.insertStoreDeals(remote.getDeals(DealsType.Store))
         }
@@ -98,13 +119,13 @@ class Repo(context: Context) {
     }
     // brands table
     suspend fun refreshBrands(){
-        withContext(Dispatchers.IO) {
+        runBlocking {
             localDatabase.insertBrands(remote.getBrands())
         }
     }
     // orders and orders Items tables
     suspend fun refreshOrderAndOrderItemsTables(){
-        withContext(Dispatchers.IO) {
+        runBlocking {
             val orderItems = mutableListOf<OrderItem>()
             val orders = remote.getOrders(userPreference.getUser())
             localDatabase.insertOrders(orders)
@@ -114,7 +135,7 @@ class Repo(context: Context) {
         }
     }
     suspend fun insertOrder(order:MutableLiveData<Order>,orderItems:MutableLiveData<List<OrderItem>>){
-        withContext(Dispatchers.IO){
+        runBlocking{
             localDatabase.insertOrder(order.value!!)
             localDatabase.insertOrderItems(orderItems.value!!)
             remote.placeOrder(userPreference.getUser(), order.value!!)
