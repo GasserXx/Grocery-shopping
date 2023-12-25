@@ -28,10 +28,6 @@ class LoginFragment :Fragment(){
         binding = DataBindingUtil.inflate(inflater, R.layout.login_page,container,false)
         binding.viewModel = viewModel
 
-        viewModel.response.observe(viewLifecycleOwner){
-            viewModel.afterLogin()
-        }
-
         return binding.root
     }
 
