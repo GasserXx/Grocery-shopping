@@ -64,7 +64,7 @@ class Remote {
         val query  = """
            SELECT * 
            FROM $products_table
-           WHERE $productID_column_name IN ([${productsIDs.joinToString(", ")}])
+           WHERE $productID_column_name IN ( ${productsIDs.joinToString(", ")} )
         """
         val result = executeQuery(query)
 
