@@ -18,18 +18,6 @@ import com.umega.grocery.utill.ResultItem
 import com.umega.grocery.utill.SubCategory
 
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    /*TODO
-    *  1. Remove BrandName, BrandNationality in products Table, add instead BrandId ForeignKey referenced to PK of Brands Table
-    *  2. add (imgName "STRING", purchaseCount "INT") table products Table.   Done
-    *  3. remove quantity column in product table. Done
-    *  4. add subcategoryId fk column in product table referenced to subcategoryID in subcategory Table. Done
-    *  5. remove subcategoryID in brands table. Done
-    *  6. Favorite table not created below, create the table favorite. Done
-    *  7. create StoreDeals table same structure as dailyDeals. Done
-    *  8. create Order Table contains columns (orderId "INT", Voucher "String", date "DATETIME", address "String", totalPrice "REAL")
-    *  9. create orderItem table contains columns (ID "Incremental INT", OrderID "FK to order table", productID "FK to product Table", quantity "INT", discount "Percentage from 0 to 100", fullPrice "REAL")
-    *  10. create Addresses table (address "String", primary "Boolean")
-    *  11. */
     companion object {
         const val DATABASE_NAME = "GroceryShopping"
         const val DATABASE_VERSION = 1
@@ -201,6 +189,25 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         // Handle database upgrades if needed
     }
     // DailyDealsTable queries
+    fun getDailyStoreProductIds(): List<Int> {
+        val resultList = mutableListOf<Int>()
+
+        val query = """
+        SELECT $dailyDeals_table_productID AS productID FROM $dailyDeals_table
+        UNION
+        SELECT $storeDeals_table_productID AS productID FROM $storeDeals_table
+    """
+
+        readableDatabase.use { db ->
+            db.rawQuery(query, null)?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow("productID"))
+                    resultList.add(productId)
+                }
+            }
+        }
+        return resultList
+    }
     fun getAllDailyDeals(): List<DealsItemLocal> {
         val dailyDealsList = mutableListOf<DealsItemLocal>()
         val query = """

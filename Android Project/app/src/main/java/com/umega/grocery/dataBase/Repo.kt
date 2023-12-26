@@ -1,5 +1,6 @@
 package com.umega.grocery.dataBase
 
+import ImageHandle
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
@@ -25,6 +26,7 @@ class Repo(context: Context) {
     private val remote = Remote()
     private val localDatabase = LocalDatabaseHelper(context)
     private val userPreference = UserPreference(context)
+    private val imageHandle = ImageHandle(context)
     fun authentication(user: User, response:MutableLiveData<Int>){
         runBlocking {
             response.value = remote.authentication(user)
@@ -48,10 +50,11 @@ class Repo(context: Context) {
         }
     }
     //retrieve products onDemand fn
-    private fun retrieveProductsRemotely(productsIDs: MutableList<Int>):MutableList<Product>{
+    private fun retrieveProductsRemotely(productsIDs: List<Int>):MutableList<Product>{
         val products:MutableList<Product>
         runBlocking {
             products = remote.getProducts(productsIDs)
+            cacheProductsImages(products)
             //TODO make sure that on conflict in insertion no error occurs or Replace on conflict
             localDatabase.insertProducts(products)
         }
@@ -93,21 +96,7 @@ class Repo(context: Context) {
         try{
             runBlocking {
                 localDatabase.clearCategoriesAndSubCategories()
-                var allCategoriesFromRemote = remote.getCategories()
-                Log.i("lol1",allCategoriesFromRemote.toString())
-                Log.i("lol5","bdan")
-                allCategoriesFromRemote = listOf(Category(1,"Grocery"),
-                    Category(2,"Beverages"),
-                    Category(3,"Chilled"),
-                    Category(4,"Drinks"),
-                    Category(5,"Fish"),
-                    Category(6,"Frozen Food"),
-                    Category(7,"Fruits"),
-                    Category(8,"Home Ware"),
-                    Category(9,"House Hold"),
-                    Category(10,"Meat"),
-                    Category(11,"Pharmacy"),
-                    Category(12,"Vegetables")).toMutableList()
+                val allCategoriesFromRemote = remote.getCategories()
                 val allSubCategoriesFromRemote = remote.getSubCategories()
                 localDatabase.insertCategories(allCategoriesFromRemote)
                 localDatabase.insertSubCategories(allSubCategoriesFromRemote)
@@ -151,12 +140,16 @@ class Repo(context: Context) {
     // Daily and store Deals table
     suspend fun refreshDailyStoreDeals(){
         runBlocking {
-            localDatabase.insertDailyDeals(remote.getDeals(DealsType.Daily))
-            localDatabase.insertStoreDeals(remote.getDeals(DealsType.Store))
+            val allDailyDealsFromRemote = remote.getDeals(DealsType.Daily)
+            val allStoreDealsFromRemote = remote.getDeals(DealsType.Store)
+            localDatabase.insertDailyDeals(allDailyDealsFromRemote)
+            localDatabase.insertStoreDeals(allStoreDealsFromRemote)
+            retrieveProductsRemotely(localDatabase.getDailyStoreProductIds())
         }
     }
     fun getDailyDeals(dailyDeals:MutableLiveData<List<DealsItemLocal>>){
-        dailyDeals.value = localDatabase.getAllDailyDeals()
+        //dailyDeals.value = localDatabase.getAllDailyDeals()
+        dailyDeals.value = listOf(DealsItemLocal("nescafe", 150.0,"aaaa",true,1))
     }
     fun getStoreDeals(storeDeals:MutableLiveData<List<DealsItemLocal>>){
         storeDeals.value = localDatabase.getAllStoreDeals()
@@ -208,4 +201,12 @@ class Repo(context: Context) {
         localDatabase.deleteCartItem(productID)
     }
     //TODO Address table function
+    //download download images
+    private suspend fun cacheProductsImages(products:MutableList<Product>){
+        runBlocking {
+            for(product in products){
+                imageHandle.cacheImage(product.imgName,product.imgName)
+            }
+        }
+    }
 }
