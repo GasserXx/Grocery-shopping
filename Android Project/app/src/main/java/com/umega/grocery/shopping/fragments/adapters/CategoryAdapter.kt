@@ -1,10 +1,8 @@
-package com.umega.grocery.shopping.fragments
+package com.umega.grocery.shopping.fragments.adapters
 
 import android.content.Context
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.Fragment
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
