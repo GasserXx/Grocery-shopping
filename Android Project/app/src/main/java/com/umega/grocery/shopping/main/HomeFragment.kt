@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.fragments.main
+package com.umega.grocery.shopping.main
 
 import android.os.Bundle
 import android.util.Log
@@ -13,8 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.umega.grocery.R
 import com.umega.grocery.databinding.HomePageBinding
 import com.umega.grocery.shopping.fragments.CategoryAdapter
-import com.umega.grocery.shopping.fragments.HomeViewModel
-import com.umega.grocery.shopping.fragments.HomeViewModelFactory
+import com.umega.grocery.shopping.HomeViewModel
+import com.umega.grocery.shopping.HomeViewModelFactory
 
 
 class HomeFragment : Fragment() {

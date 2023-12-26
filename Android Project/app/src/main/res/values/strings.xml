@@ -95,5 +95,6 @@
     <string name="voice_image">voice image to open voice to search</string>
     <string name="construction_image_description">A Working man holds a shovel directed to sand indicating undergoing work</string>
     <string name="mobile_phone">Mobile Phone</string>
+    <string name="sort_price">Sort Price</string>
 
 </resources>

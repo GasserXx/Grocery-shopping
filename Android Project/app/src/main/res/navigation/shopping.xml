@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.umega.grocery.shopping.fragments.main.CartFragment"
+        android:name="com.umega.grocery.shopping.main.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/cart_page" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainPageContainer"
-        android:name="com.umega.grocery.shopping.fragments.main.MainPageContainer"
+        android:name="com.umega.grocery.shopping.main.MainPageContainer"
         android:label="MainPageContainer" >
         <action
             android:id="@+id/action_mainPageContainer_to_underConstructionFragment2"
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.umega.grocery.shopping.fragments.main.FavoriteFragment"
+        android:name="com.umega.grocery.shopping.main.FavoriteFragment"
         android:label="FavoriteFragment" >
         <action
             android:id="@+id/action_favoriteFragment_to_detailItemFragment"
@@ -60,11 +60,11 @@
         android:label="DetailItemFragment" />
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.umega.grocery.shopping.fragments.FilterFragment"
+        android:name="com.umega.grocery.shopping.result.fragments.FilterFragment"
         android:label="FilterFragment" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.umega.grocery.shopping.fragments.main.HomeFragment"
+        android:name="com.umega.grocery.shopping.main.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_detailItemFragment"
@@ -72,11 +72,11 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.umega.grocery.shopping.fragments.main.ProfileFragment"
+        android:name="com.umega.grocery.shopping.main.ProfileFragment"
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/resultFragment"
-        android:name="com.umega.grocery.shopping.fragments.ResultFragment"
+        android:name="com.umega.grocery.shopping.result.fragments.ResultFragment"
         android:label="ResultFragment" >
         <action
             android:id="@+id/action_resultFragment_to_filterFragment"
@@ -84,11 +84,11 @@
     </fragment>
     <fragment
         android:id="@+id/underConstructionFragment"
-        android:name="com.umega.grocery.shopping.fragments.UnderConstructionFragment"
+        android:name="com.umega.grocery.shopping.UnderConstructionFragment"
         android:label="UnderConstructionFragment" />
     <fragment
         android:id="@+id/categoryDetailFragment"
-        android:name="com.umega.grocery.shopping.fragments.CategoryDetailFragment"
+        android:name="com.umega.grocery.shopping.CategoryDetailFragment"
         android:label="category_detail_page"
         tools:layout="@layout/category_detail_page" >
         <action
