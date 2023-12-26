@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/result"
+    app:startDestination="@id/resultFragment2">
+
+    <fragment
+        android:id="@+id/resultFragment2"
+        android:name="com.umega.grocery.shopping.result.fragments.ResultFragment"
+        android:label="ResultFragment" >
+        <action
+            android:id="@+id/action_resultFragment2_to_filterFragment2"
+            app:destination="@id/filterFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/filterFragment2"
+        android:name="com.umega.grocery.shopping.result.fragments.FilterFragment"
+        android:label="FilterFragment" />
+</navigation>

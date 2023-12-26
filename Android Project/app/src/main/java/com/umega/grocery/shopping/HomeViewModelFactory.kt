@@ -1,10 +1,9 @@
-package com.umega.grocery.shopping.fragments
+package com.umega.grocery.shopping
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import com.umega.grocery.auth.LoginViewModel
 
 class HomeViewModelFactory(private val navController: NavController,private val context: Context) : ViewModelProvider.Factory {
 

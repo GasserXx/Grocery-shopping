@@ -5,72 +5,32 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/myToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="#fff"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-        <ImageView
-            android:id="@+id/backButton_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/back_image"
-            android:src="@drawable/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:id="@+id/title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="24sp"
-            android:gravity="center"
-            android:text="@string/coffee"
-            android:textColor="@color/white"
-            android:layout_marginStart="60dp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/item_image"
-            app:layout_constraintStart_toEndOf="@+id/backButton_image"
-            app:layout_constraintEnd_toStartOf="@+id/searchButton_image" />
-        <ImageView
-            android:id="@+id/searchButton_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/search_image"
-            android:layout_marginEnd="20dp"
-            android:layout_gravity="end"
-            android:src="@drawable/search"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:id="@+id/filter_layout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/myToolbar">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/exit_filter"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/icon"
+                android:layout_marginStart="10dp"
                 android:contentDescription="@string/exit_image"
-                android:layout_marginStart="10dp"/>
+                android:src="@drawable/icon" />
+
             <TextView
                 android:id="@+id/filter_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
+                android:layout_marginStart="10dp"
                 android:text="@string/filter_by"
                 android:textColor="#282a3a"
-                android:layout_marginStart="10dp"
-                />
+                android:textSize="24sp" />
         </LinearLayout>
 
         <!-- RadioGroup with dynamically added RadioButtons -->
@@ -95,7 +55,7 @@
             android:text="@string/name"
             android:textColor="#282934"
             android:layout_marginStart="50dp"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/filter_layout" />
 
@@ -114,13 +74,13 @@
                 android:minHeight="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:button="@null"
                 android:textColor="#282934"
                 android:background="@null"
                 android:padding="3dp"
                 android:drawableStart="@drawable/custom_radiobutton"
-                android:drawablePadding="3dp"
+                android:drawablePadding="9dp"
                 android:text="@string/ascending_order" />
             <RadioButton
                 android:id="@+id/radioButton2_nameRadioGroup"
@@ -128,13 +88,13 @@
                 android:minHeight="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:button="@null"
                 android:background="@null"
                 android:padding="3dp"
                 android:textColor="#282934"
                 android:drawableStart="@drawable/custom_radiobutton"
-                android:drawablePadding="3dp"
+                android:drawablePadding="9dp"
                 android:text="@string/descending_order" />
         </RadioGroup>
         <ImageView
@@ -157,76 +117,20 @@
             android:layout_marginTop="10dp"
             android:text="@string/brand"
             android:layout_marginStart="50dp"
-            android:textSize="14sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_radioGroup" />
 
-        <RadioGroup
+        <ListView
             android:id="@+id/brand_radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="50dp"
+            android:padding="8dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_brandRadioGroup">
-
-            <RadioButton
-                android:id="@+id/radioButton1_brandRadioGroup"
-                android:minWidth="16dp"
-                android:minHeight="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="#282934"
-                android:button="@null"
-                android:background="@null"
-                android:padding="3dp"
-                android:drawableStart="@drawable/custom_radiobutton2"
-                android:drawablePadding="3dp"
-                android:text="@string/nescafe" />
-            <RadioButton
-                android:id="@+id/radioButton2_brandRadioGroup"
-                android:minWidth="16dp"
-                android:minHeight="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:button="@null"
-                android:textColor="#282934"
-                android:background="@null"
-                android:padding="3dp"
-                android:drawableStart="@drawable/custom_radiobutton2"
-                android:drawablePadding="3dp"
-                android:text="@string/starbucks" />
-            <RadioButton
-                android:id="@+id/radioButton3_brandRadioGroup"
-                android:minWidth="16dp"
-                android:minHeight="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:button="@null"
-                android:textColor="#282934"
-                android:background="@null"
-                android:padding="3dp"
-                android:drawableStart="@drawable/custom_radiobutton2"
-                android:drawablePadding="3dp"
-                android:text="@string/mccafe" />
-            <RadioButton
-                android:id="@+id/radioButton4_brandRadioGroup"
-                android:minWidth="16dp"
-                android:minHeight="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:button="@null"
-                android:textColor="#282934"
-                android:background="@null"
-                android:padding="3dp"
-                android:drawableStart="@drawable/custom_radiobutton2"
-                android:drawablePadding="3dp"
-                android:text="@string/khao" />
-        </RadioGroup>
+            app:layout_constraintTop_toBottomOf="@+id/title_brandRadioGroup" />
         <ImageView
             android:id="@+id/downImage_3"
             android:layout_width="wrap_content"

@@ -55,6 +55,6 @@
     </fragment>
     <fragment
         android:id="@+id/underConstructionFragment2"
-        android:name="com.umega.grocery.shopping.fragments.UnderConstructionFragment"
+        android:name="com.umega.grocery.shopping.UnderConstructionFragment"
         android:label="UnderConstructionFragment" />
 </navigation>

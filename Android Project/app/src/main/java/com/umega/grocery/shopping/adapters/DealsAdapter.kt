@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.fragments.adapters
+package com.umega.grocery.shopping.adapters
 
 import ImageHandle
 import android.annotation.SuppressLint

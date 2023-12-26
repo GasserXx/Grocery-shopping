@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.fragments.main
+package com.umega.grocery.shopping.main
 
 import android.content.res.TypedArray
 import android.graphics.Color

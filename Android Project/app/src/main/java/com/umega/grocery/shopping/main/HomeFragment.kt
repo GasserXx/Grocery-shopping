@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.fragments.main
+package com.umega.grocery.shopping.main
 
 import ImageHandle
 import android.os.Bundle
@@ -19,6 +19,9 @@ import com.umega.grocery.shopping.fragments.adapters.CategoryAdapter
 import com.umega.grocery.shopping.fragments.HomeViewModel
 import com.umega.grocery.shopping.fragments.HomeViewModelFactory
 import com.umega.grocery.shopping.fragments.adapters.DealsAdapter
+import com.umega.grocery.shopping.fragments.CategoryAdapter
+import com.umega.grocery.shopping.HomeViewModel
+import com.umega.grocery.shopping.HomeViewModelFactory
 
 
 class HomeFragment : Fragment() {
