@@ -15,13 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umega.grocery.R
 import com.umega.grocery.databinding.HomePageBinding
-import com.umega.grocery.shopping.fragments.adapters.CategoryAdapter
-import com.umega.grocery.shopping.fragments.HomeViewModel
-import com.umega.grocery.shopping.fragments.HomeViewModelFactory
-import com.umega.grocery.shopping.fragments.adapters.DealsAdapter
-import com.umega.grocery.shopping.fragments.CategoryAdapter
 import com.umega.grocery.shopping.HomeViewModel
 import com.umega.grocery.shopping.HomeViewModelFactory
+import com.umega.grocery.shopping.adapters.CategoryAdapter
+import com.umega.grocery.shopping.adapters.DealsAdapter
 
 
 class HomeFragment : Fragment() {
