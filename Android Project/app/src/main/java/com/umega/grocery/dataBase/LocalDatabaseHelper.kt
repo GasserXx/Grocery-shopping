@@ -90,7 +90,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     //create tables
     private val createTableProducts = """
     CREATE TABLE IF NOT EXISTS $products_table (
-        $Products_table_productID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $Products_table_productID INTEGER PRIMARY KEY ,
         $Products_table_name TEXT NOT NULL,
         $Products_table_price REAL NOT NULL,
         $Products_table_stockQuantity INTEGER NOT NULL,
@@ -125,7 +125,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         """
     private val createTableDailyDeals = """
             CREATE TABLE IF NOT EXISTS $dailyDeals_table (
-                $dailyDeals_table_productID INTEGER PRIMARY KEY,
+                $dailyDeals_table_productID INTEGER PRIMARY KEY ,
                 $dailyDeals_table_discount REAL,
                 FOREIGN KEY($dailyDeals_table_productID) REFERENCES $products_table($Products_table_productID)
             );
@@ -173,7 +173,6 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     );
     """
     override fun onCreate(db: SQLiteDatabase?) {
-        Log.i("lol","hi from data base")
         db?.execSQL(createTableCategories)
         db?.execSQL(createTableSubCategories)
         db?.execSQL(createTableBrands)
@@ -206,13 +205,14 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                 }
             }
         }
+        Log.i("lolids",resultList.toString())
         return resultList
     }
     fun getAllDailyDeals(): List<DealsItemLocal> {
         val dailyDealsList = mutableListOf<DealsItemLocal>()
         val query = """
        SELECT P.$Products_table_name, 
-              (P.$Products_table_price * DD.$dailyDeals_table_discount) AS productPriceAfterDiscount,
+              (P.$Products_table_price - DD.$dailyDeals_table_discount) AS productPriceAfterDiscount,
               P.$Products_table_imgName,
               COUNT(F.$Favourite_table_productID) > 0 as isFavourite,
               P.$Products_table_productID
@@ -222,24 +222,36 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
        LEFT JOIN $cartItems_table CI ON P.$Products_table_productID = CI.$cartItems_table_productID
        GROUP BY P.$Products_table_productID
        """
-        readableDatabase.use { db ->
-            db.rawQuery(query, null).use { cursor ->
-                while (cursor.moveToNext()) {
-                    val productName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
-                    val productPriceAfterDiscount = cursor.getDouble(cursor.getColumnIndexOrThrow("productPriceAfterDiscount"))
-                    val imgName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_imgName))
-                    val isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("isFavourite")) == 1
-                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
-                    val dealsItemLocal = DealsItemLocal(
-                        productName = productName,
-                        productPriceAfterDiscount = productPriceAfterDiscount,
-                        imgName = imgName,
-                        isFavourite = isFavourite,
-                        productId = productId
-                    )
-                    dailyDealsList.add(dealsItemLocal)
+        try {
+            readableDatabase.use { db ->
+                db.rawQuery(query, null).use { cursor ->
+                    while (cursor.moveToNext()) {
+                        val productName =
+                            cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
+                        val productPriceAfterDiscount =
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("productPriceAfterDiscount"))
+                        val imgName =
+                            cursor.getString(cursor.getColumnIndexOrThrow(Products_table_imgName))
+                        val isFavourite =
+                            cursor.getInt(cursor.getColumnIndexOrThrow("isFavourite")) == 1
+                        val productId =
+                            cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
+                        val dealsItemLocal = DealsItemLocal(
+                            productName = productName,
+                            productPriceAfterDiscount = productPriceAfterDiscount,
+                            imgName = imgName,
+                            isFavourite = isFavourite,
+                            productId = productId
+                        )
+                        dailyDealsList.add(dealsItemLocal)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.i("lolerror", e.toString())
+        } finally {
+            // Close the database to release resources
+            readableDatabase.close()
         }
         return dailyDealsList
     }
@@ -251,7 +263,13 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                     put(dailyDeals_table_productID, productID)
                     put(dailyDeals_table_discount, discount)
                 }
-                writableDatabase.insert(dailyDeals_table, null, values)
+
+                writableDatabase.insertWithOnConflict(
+                    dailyDeals_table,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE
+                )
             }
             writableDatabase.setTransactionSuccessful()
         } finally {
@@ -263,7 +281,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         val storeDealsList = mutableListOf<DealsItemLocal>()
         val query = """
        SELECT P.$Products_table_name, 
-              (P.$Products_table_price * SD.$storeDeals_table_discount) AS productPriceAfterDiscount,
+              (P.$Products_table_price - SD.$storeDeals_table_discount) AS productPriceAfterDiscount,
               P.$Products_table_imgName,
               COUNT(F.$Favourite_table_productID) > 0 as isFavourite,
               P.$Products_table_productID
@@ -272,38 +290,57 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
        LEFT JOIN $favourite_table F ON P.$Products_table_productID = F.$Favourite_table_productID
        LEFT JOIN $cartItems_table CI ON P.$Products_table_productID = CI.$cartItems_table_productID
        GROUP BY P.$Products_table_productID
-       """
-        readableDatabase.use { db ->
-            db.rawQuery(query, null).use { cursor ->
-                while (cursor.moveToNext()) {
-                    val productName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
-                    val productPriceAfterDiscount = cursor.getDouble(cursor.getColumnIndexOrThrow("productPriceAfterDiscount"))
-                    val imgName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_imgName))
-                    val isFavourite = cursor.getInt(cursor.getColumnIndexOrThrow("isFavourite")) == 1
-                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
-
-                    val dealsItemLocal = DealsItemLocal(
-                        productName = productName,
-                        productPriceAfterDiscount = productPriceAfterDiscount,
-                        imgName = imgName,
-                        isFavourite = isFavourite,
-                        productId = productId
-                    )
-                    storeDealsList.add(dealsItemLocal)
+    """
+        try {
+            readableDatabase.use { db ->
+                db.rawQuery(query, null).use { cursor ->
+                    while (cursor.moveToNext()) {
+                        val productName =
+                            cursor.getString(cursor.getColumnIndexOrThrow(Products_table_name))
+                        val productPriceAfterDiscount =
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("productPriceAfterDiscount"))
+                        val imgName =
+                            cursor.getString(cursor.getColumnIndexOrThrow(Products_table_imgName))
+                        val isFavourite =
+                            cursor.getInt(cursor.getColumnIndexOrThrow("isFavourite")) == 1
+                        val productId =
+                            cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
+                        val dealsItemLocal = DealsItemLocal(
+                            productName = productName,
+                            productPriceAfterDiscount = productPriceAfterDiscount,
+                            imgName = imgName,
+                            isFavourite = isFavourite,
+                            productId = productId
+                        )
+                        storeDealsList.add(dealsItemLocal)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.i("lolerror", e.toString())
+        } finally {
+            // Close the database to release resources
+            readableDatabase.close()
         }
+        Log.i("lol store list", storeDealsList.toString())
         return storeDealsList
     }
-    fun insertStoreDeals(dailyDeals: List<DealsItem>) {
+    fun insertStoreDeals(storeDeals: List<DealsItem>) {
+        Log.i("loliteminsertstore", storeDeals.toString())
         writableDatabase.beginTransaction()
         try {
-            for ((productID, discount) in dailyDeals) {
+            for ((productID, discount) in storeDeals) {
                 val values = ContentValues().apply {
-                    put(dailyDeals_table_productID, productID)
-                    put(dailyDeals_table_discount, discount)
+                    put(storeDeals_table_productID, productID)
+                    put(storeDeals_table_discount, discount)
                 }
-                writableDatabase.insert(storeDeals_table, null, values)
+
+                writableDatabase.insertWithOnConflict(
+                    storeDeals_table,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE
+                )
             }
             writableDatabase.setTransactionSuccessful()
         } finally {
@@ -499,7 +536,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return Pair(productList,missingProducts)
     }
 
-    private fun getProduct(productID:Int):Product? {
+    fun getProduct(productID:Int):Product? {
         val selectProductQuery = """
         SELECT *
         FROM $products_table
@@ -603,26 +640,35 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     }*/
     // products table
     fun insertProducts(products: List<Product>) {
-        writableDatabase.use { db ->
-            db.beginTransaction()
-            try {
-                for (product in products) {
-                    val values = ContentValues().apply {
-                        put(Products_table_name, product.name)
-                        put(Products_table_price, product.price)
-                        put(Products_table_stockQuantity, product.stockQuantity)
-                        put(Products_table_brandId, product.brandID)
-                        put(Products_table_imgName, product.imgName)
-                        put(Products_table_purchaseCount, product.purchaseCount)
-                        put(Products_table_subcategoryId, product.subCategoryID)
+        try {
+            writableDatabase.use { db ->
+                db.beginTransaction()
+                try {
+                    for (product in products) {
+                        val values = ContentValues().apply {
+                            put(storeDeals_table_productID,product.id)
+                            put(Products_table_name, product.name)
+                            put(Products_table_price, product.price)
+                            put(Products_table_stockQuantity, product.stockQuantity)
+                            put(Products_table_brandId, product.brandID)
+                            put(Products_table_imgName, product.imgName)
+                            put(Products_table_purchaseCount, product.purchaseCount)
+                            put(Products_table_subcategoryId, product.subCategoryID)
+                        }
+                        db.insertWithOnConflict(
+                            products_table,
+                            null,
+                            values,
+                            SQLiteDatabase.CONFLICT_REPLACE
+                        )
                     }
-
-                    db.insert(products_table, null, values)
+                    db.setTransactionSuccessful()
+                } finally {
+                    db.endTransaction()
                 }
-                db.setTransactionSuccessful()
-            } finally {
-                db.endTransaction()
             }
+        } catch (e: Exception) {
+            Log.e("loldatabase", "Error inserting products: ${e.message}")
         }
     }
     // favourite table

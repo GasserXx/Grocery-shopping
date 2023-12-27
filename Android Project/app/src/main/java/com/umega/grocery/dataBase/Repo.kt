@@ -54,16 +54,17 @@ class Repo(context: Context) {
         val products:MutableList<Product>
         runBlocking {
             products = remote.getProducts(productsIDs)
-            //TODO fix the following line
-            //cacheProductsImages(products)
+            Log.i("lolproduct",products.toString())
+            cacheProductsImages(products)
+            //TODO make sure that on conflict in insertion no error occurs or Replace on conflict
+            Log.i("lolpass",products.toString())
             localDatabase.insertProducts(products)
-            Log.i("LOL from retrieve products", products.size.toString())
         }
         return products
     }
 
     //request products from cached
-    fun retrieveProducts(productsIDs: MutableList<Int>, flag: MutableLiveData<MutableList<Product>>) {
+    fun retrieveProducts(productsIDs: MutableList<Int>, flag: MutableLiveData<Int>){
         val products:MutableList<Product>
         val missingProducts:MutableList<Int>
 
@@ -76,14 +77,13 @@ class Repo(context: Context) {
         if (missingProducts.isNotEmpty())
 
             runBlocking {
-
                 products.addAll(retrieveProductsRemotely(missingProducts))
-                flag.value = products
+                flag.value = 1
             }
         else
         //on change of the liveData it means that the required products are in the local DB
         //flag indicating all data retrieved
-            flag.value = products
+            flag.value = 1
 
     }
 
@@ -144,17 +144,23 @@ class Repo(context: Context) {
         runBlocking {
             val allDailyDealsFromRemote = remote.getDeals(DealsType.Daily)
             val allStoreDealsFromRemote = remote.getDeals(DealsType.Store)
+            Log.i("lolstoredeals",allStoreDealsFromRemote.toString())
             localDatabase.insertDailyDeals(allDailyDealsFromRemote)
             localDatabase.insertStoreDeals(allStoreDealsFromRemote)
             retrieveProductsRemotely(localDatabase.getDailyStoreProductIds())
         }
     }
     fun getDailyDeals(dailyDeals:MutableLiveData<List<DealsItemLocal>>){
-        //dailyDeals.value = localDatabase.getAllDailyDeals()
-        dailyDeals.value = listOf(DealsItemLocal("nescafe", 150.0,"aaaa",true,1))
+        runBlocking {
+            dailyDeals.value = localDatabase.getAllDailyDeals()
+            Log.i("loldata",localDatabase.getAllDailyDeals().toString())
+        }
+
     }
     fun getStoreDeals(storeDeals:MutableLiveData<List<DealsItemLocal>>){
         storeDeals.value = localDatabase.getAllStoreDeals()
+        Log.i("loldatastore",localDatabase.getAllStoreDeals().toString())
+        Log.i("lol27", localDatabase.getProduct(27).toString())
     }
     // brands table
     suspend fun refreshBrands(){
@@ -207,7 +213,9 @@ class Repo(context: Context) {
     private suspend fun cacheProductsImages(products:MutableList<Product>){
         runBlocking {
             for(product in products){
-                imageHandle.cacheImage(product.imgName,product.imgName)
+                val imageUrl = "https://grocceryshopping.000webhostapp.com/wp-content/uploads/2023/12/"+product.imgName
+                imageHandle.cacheImage(imageUrl,product.imgName)
+                Log.i("lolcachetohandle",imageHandle.cacheImage(imageUrl,product.imgName).toString())
             }
         }
     }
