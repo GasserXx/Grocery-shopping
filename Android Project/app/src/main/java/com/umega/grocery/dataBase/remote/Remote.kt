@@ -397,7 +397,7 @@ class Remote {
         const val dailyDeals_table = "Daily_deals"
         const val storeDeals_table = "Store_deals"
         const val categories_table = "Categories"
-        const val subCategories_table = "Sub_Categories"
+        const val subCategories_table = "SubCategories"
         const val orders_table = "Orders"
         const val orderItem_table = "Order_item"
 
