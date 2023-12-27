@@ -64,7 +64,7 @@ class Repo(context: Context) {
     }
 
     //request products from cached
-    fun retrieveProducts(productsIDs: MutableList<Int>, flag: MutableLiveData<Int>){
+    fun retrieveProducts(productsIDs: MutableList<Int>, flag: MutableLiveData<MutableList<Product>>) {
         val products:MutableList<Product>
         val missingProducts:MutableList<Int>
 
@@ -78,12 +78,12 @@ class Repo(context: Context) {
 
             runBlocking {
                 products.addAll(retrieveProductsRemotely(missingProducts))
-                flag.value = 1
+                flag.value = products
             }
         else
         //on change of the liveData it means that the required products are in the local DB
         //flag indicating all data retrieved
-            flag.value = 1
+            flag.value = products
 
     }
 
