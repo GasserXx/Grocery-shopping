@@ -275,13 +275,15 @@ class Remote {
         //response -> No Response
         val fnTAG = "PlaceOrderItems Fn:"
         var items = ""
-        orderItems.forEach {orderItem-> items += "(${orderItem.productID}, ${orderItem.price}, ${orderItem.discount}, ${orderItem.quantity}),\n" }
+        var countQuery = ""
+        orderItems.forEach {orderItem-> items += "(${orderItem.productID}, ${orderItem.price}, ${orderItem.discount}, ${orderItem.quantity}),\n" ;countQuery+="SELECT increment_purchase_count(${orderItem.productID})\n;"}
         orderItems.dropLast(1)
+
         val query  = """
            INSERT INTO $orderItem_table ($orderID_column_name, $productID_column_name, $unitPrice_column_name, $discount_column_name, $quantity_column_name)
            VALUES 
-           $items
-           WHERE $orderID_column_name = $orderID
+           $items;
+           $countQuery
         """
         return functionCall(query, fnTAG)
     }
@@ -408,6 +410,7 @@ class Remote {
         const val unitPrice_column_name = "unit_price"
         const val discount_column_name = "discount"
         const val quantity_column_name = "quantity"
+        const val purchase_count_column_name = "purchase_count"
 
 
         //Functions
