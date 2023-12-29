@@ -30,7 +30,7 @@ class ImageHandle(private val context: Context) {
                 outputStream.close()
 
                 return@withContext customFile.absolutePath
-            } catch (e: IOException) {
+            } catch (e:Exception) {
                 e.printStackTrace()
                 return@withContext null
             }
