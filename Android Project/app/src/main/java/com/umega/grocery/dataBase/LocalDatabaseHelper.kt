@@ -432,6 +432,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                 }
             }
         }
+        Log.i("lolsubcategori",subcategoriesList.toString())
         return subcategoriesList
     }
 
@@ -755,7 +756,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return favoriteItemList
     }
     // brands table
-    //TODO add nationality to the table
+    //Done add nationality to the table
     fun insertBrands(brands: List<Brand>) {
         writableDatabase.use { db ->
             db.beginTransaction()
@@ -764,6 +765,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                     val values = ContentValues().apply {
                         put(Brands_table_name, brand.name)
                         put(Brands_table_brandID, brand.id)
+                        put(Brands_table_nationality, brand.nationality)
                     }
                     db.insert(brands_table, null, values)
                 }
@@ -772,6 +774,25 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                 db.endTransaction()
             }
         }
+    }
+    fun getBrandById(brandId: Int): Brand? {
+        val query = "SELECT * FROM $brands_table WHERE $Brands_table_brandID = ?"
+        var brand: Brand? = null
+        readableDatabase.use { db ->
+            db.rawQuery(query, arrayOf(brandId.toString())).use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val brandID = cursor.getInt(cursor.getColumnIndexOrThrow(Brands_table_brandID))
+                    val brandName = cursor.getString(cursor.getColumnIndexOrThrow(Brands_table_name))
+                    val brandNationality = cursor.getString(cursor.getColumnIndexOrThrow(Brands_table_nationality))
+                    brand = Brand(
+                        id = brandID,
+                        name = brandName,
+                        nationality = brandNationality
+                    )
+                }
+            }
+        }
+        return brand
     }
     //order table
     fun insertOrders(orders: List<Order>) {
