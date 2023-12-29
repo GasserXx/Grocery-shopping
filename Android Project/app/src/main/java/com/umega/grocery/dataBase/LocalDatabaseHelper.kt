@@ -11,6 +11,7 @@ import com.umega.grocery.utill.DealsItem
 import com.umega.grocery.utill.DealsItemLocal
 import com.umega.grocery.utill.FavoriteItem
 import com.umega.grocery.utill.FavouriteItemLocal
+import com.umega.grocery.utill.Filter
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.Product
@@ -523,11 +524,12 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return productList
     }
 
-    fun getProducts(productIDs: MutableList<Int>) :Pair<MutableList<Product>,MutableList<Int>> {
+    //TODO incolming
+    fun getProducts(productIDs: MutableList<Int>, filter: Filter) :Pair<MutableList<Product>,MutableList<Int>> {
         val productList = mutableListOf<Product>()
         val missingProducts = mutableListOf<Int>()
         for (x in productIDs){
-            val product = getProduct(x)
+            val product = getProduct(x, filter)
             if (product != null)
                 productList.add(product)
             else
@@ -536,7 +538,11 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return Pair(productList,missingProducts)
     }
 
-    fun getProduct(productID:Int):Product? {
+    //TODO handle the filter in a WHERE statement
+    // note that if inner values of filter == null for each one of them it means that no filter applied
+    // for that specific value
+    //  look at the get products in the remote class for more specifications
+    fun getProduct(productID:Int, filter: Filter = Filter()):Product? {
         val selectProductQuery = """
         SELECT *
         FROM $products_table
@@ -749,6 +755,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return favoriteItemList
     }
     // brands table
+    //TODO add nationality to the table
     fun insertBrands(brands: List<Brand>) {
         writableDatabase.use { db ->
             db.beginTransaction()
