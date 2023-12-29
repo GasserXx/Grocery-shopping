@@ -11,6 +11,7 @@ import com.umega.grocery.utill.Category
 import com.umega.grocery.utill.DealsItemLocal
 import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavouriteItemLocal
+import com.umega.grocery.utill.Filter
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.Product
@@ -50,40 +51,50 @@ class Repo(context: Context) {
         }
     }
     //retrieve products onDemand fn
-    private fun retrieveProductsRemotely(productsIDs: List<Int>):MutableList<Product>{
+    private fun retrieveProductsRemotely(productsIDs: List<Int>, filter: Filter = Filter()):MutableList<Product>{
         val products:MutableList<Product>
         runBlocking {
-            products = remote.getProducts(productsIDs)
-            Log.i("lolproduct",products.toString())
+
+            Log.i("LOL", "ATTEMPTING CONNECTION")
+            products = remote.getProducts(productsIDs, filter)
+            Log.i("LOL",products.toString())
             cacheProductsImages(products)
-            //TODO make sure that on conflict in insertion no error occurs or Replace on conflict
-            Log.i("lolpass",products.toString())
             localDatabase.insertProducts(products)
         }
         return products
     }
 
     //request products from cached
-    fun retrieveProducts(productsIDs: MutableList<Int>, flag: MutableLiveData<MutableList<Product>>) {
+    fun retrieveProducts(
+        productsIDs: MutableList<Int>,
+        filter: Filter,
+        flag: MutableLiveData<MutableList<Product>>
+    ) {
         val products:MutableList<Product>
         val missingProducts:MutableList<Int>
 
         runBlocking {
-            localDatabase.getProducts(productsIDs).apply {
+            localDatabase.getProducts(productsIDs,filter).apply {
                 products = this.first
                 missingProducts = this.second
             }
         }
+        Log.i("LOL", "Got out of local db")
         if (missingProducts.isNotEmpty())
 
             runBlocking {
-                products.addAll(retrieveProductsRemotely(missingProducts))
+                Log.i("LOL", "Entering Remote")
+                products.addAll(retrieveProductsRemotely(missingProducts, filter))
                 flag.value = products
+
+                Log.i("LOL", "Got out of remote db")
             }
         else
         //on change of the liveData it means that the required products are in the local DB
         //flag indicating all data retrieved
             flag.value = products
+
+        Log.i("LOL", "going out without getting into the local DB")
 
     }
 
@@ -214,8 +225,10 @@ class Repo(context: Context) {
         runBlocking {
             for(product in products){
                 val imageUrl = "https://grocceryshopping.000webhostapp.com/wp-content/uploads/2023/12/"+product.imgName
+
+                Log.i("LOL","Attempting Caching Image")
                 imageHandle.cacheImage(imageUrl,product.imgName)
-                Log.i("lolcachetohandle",imageHandle.cacheImage(imageUrl,product.imgName).toString())
+                Log.i("LOL","${imageHandle.cacheImage(imageUrl,product.imgName).toString()} cached image success")
             }
         }
     }

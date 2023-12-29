@@ -7,11 +7,13 @@ import com.umega.grocery.utill.Category
 import com.umega.grocery.utill.DealsItem
 import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavoriteItem
+import com.umega.grocery.utill.Filter
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.Product
 import com.umega.grocery.utill.SubCategory
 import com.umega.grocery.utill.User
+import com.umega.grocery.utill.VerbalSortingType
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -58,14 +60,17 @@ class Remote {
     }
 
     //Data Retrieval first
-    suspend fun getProducts(productsIDs: List<Int>):MutableList<Product> {
+    suspend fun getProducts(productsIDs: List<Int>, filter: Filter):MutableList<Product> {
         val fnTAG = "getProducts Fn:"
         val products = mutableListOf<Product>()
+        val filterQuery : String = filterQueryBuilder(filter)
         val query  = """
            SELECT * 
            FROM $products_table
            WHERE $productID_column_name IN ( ${productsIDs.joinToString(", ")} )
+           $filterQuery
         """
+
         val result = executeQuery(query)
 
         //handling incoming resultSet
@@ -85,6 +90,24 @@ class Remote {
             Log.i(TAG, "$fnTAG $e")
         }
         return products
+    }
+
+    private fun filterQueryBuilder(filter: Filter): String {
+        var query  = ""
+
+        if (filter.brand != null) {
+            query += "AND\n"
+            query += "$brandID_column_name IN ( ${filter.brand.joinToString(", ","'","'")} )"
+        }
+        if (filter.priceRange != null) {
+            query += "AND\n"
+            query += "$price_column_name BETWEEN ${filter.priceRange.minPriceRange} AND ${filter.priceRange.maxPriceRange}\n"
+        }
+        if (filter.verbalSort != null) {
+            query += "ORDER BY $productName_column_name ${if (filter.verbalSort == VerbalSortingType.Ascending) "ASC" else "DESC"}\n"
+        }
+        query+= ";"
+        return query
     }
 
 
@@ -143,7 +166,7 @@ class Remote {
         //handling incoming resultSet
         try {
             while (result!!.next())
-                brands.add(Brand(result.getInt(1), result.getString(2)))
+                brands.add(Brand(result.getInt(1), result.getString(2),result.getString(3)))
 
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
@@ -407,10 +430,13 @@ class Remote {
         const val userID_column_name = "user_id"
         const val orderID_column_name = "order_id"
         const val productID_column_name = "product_id"
+        const val productName_column_name = "name"
         const val unitPrice_column_name = "unit_price"
         const val discount_column_name = "discount"
         const val quantity_column_name = "quantity"
         const val purchase_count_column_name = "purchase_count"
+        const val brandID_column_name = "brandID"
+        const val price_column_name = "price"
 
 
         //Functions
