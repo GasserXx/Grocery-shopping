@@ -8,5 +8,6 @@ data class Product(
     val stockQuantity:Int,
     val subCategoryID: Int,
     val purchaseCount:Int,
-    val imgName:String
+    val imgName:String,
+    var discount:Double = 0.0
 )
