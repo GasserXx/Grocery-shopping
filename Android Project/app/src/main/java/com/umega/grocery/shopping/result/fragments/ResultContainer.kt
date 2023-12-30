@@ -41,15 +41,16 @@ class ResultContainer : Fragment() {
         // Retrieve arguments
         val args = arguments
         if (args != null) {
-            val pageTitle = args.getString("title_string", "")
-            val ids: ArrayList<Int>? = args.getIntegerArrayList("products_ids")
+            val pageTitle = args.getString(title_bundle_key, "")
+            val ids: ArrayList<Int>? = args.getIntegerArrayList(ids_bundle_key)
             title = pageTitle
             productsIds = ids
         }
-
-        //TODO Remove Dummy data
-        title = "lol"
-        productsIds = arrayListOf(19,20,21,22)
+        else
+        {
+            title = "error"
+            productsIds = ArrayList()
+        }
 
         //fragments init
         filterFragment = FilterFragment(viewModel)
@@ -78,13 +79,11 @@ class ResultContainer : Fragment() {
                     .replace(R.id.container_layout, resultFragment)
                     .commit()
         }
-        val imageHandle = ImageHandle(requireContext())
-        runBlocking {
-            Log.i(
-                "LOL",
-                "from result container frag with image path of ${imageHandle.getCachedFilePath("khao_shong_red.webp")}"
-            )
-        }
+
         return binding.root
+    }
+    companion object{
+        const val title_bundle_key = "title_string"
+        const val ids_bundle_key = "products_ids"
     }
 }
