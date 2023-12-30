@@ -9,7 +9,6 @@ import com.umega.grocery.dataBase.remote.Remote
 import com.umega.grocery.utill.Brand
 import com.umega.grocery.utill.CartItem
 import com.umega.grocery.utill.Category
-import com.umega.grocery.utill.DealsItemLocal
 import com.umega.grocery.utill.DealsType
 import com.umega.grocery.utill.FavouriteItemLocal
 import com.umega.grocery.utill.Filter
@@ -164,19 +163,22 @@ class Repo(context: Context) {
         runBlocking {
             val allDailyDealsFromRemote = remote.getDeals(DealsType.Daily)
             val allStoreDealsFromRemote = remote.getDeals(DealsType.Store)
+            Log.i("loldaily",allDailyDealsFromRemote.toString())
             localDatabase.insertDailyDeals(allDailyDealsFromRemote)
             localDatabase.insertStoreDeals(allStoreDealsFromRemote)
             retrieveProductsRemotely(localDatabase.getDailyStoreProductIds())
+            localDatabase.updateProductDiscounts(allDailyDealsFromRemote,allStoreDealsFromRemote)
+
         }
     }
-    fun getDailyDeals(dailyDeals:MutableLiveData<List<DealsItemLocal>>){
+    fun getDailyDeals(dailyDeals:MutableLiveData<List<Product>>){
         runBlocking {
             dailyDeals.value = localDatabase.getAllDailyDeals()
             Log.i("loldata",localDatabase.getAllDailyDeals().toString())
         }
 
     }
-    fun getStoreDeals(storeDeals:MutableLiveData<List<DealsItemLocal>>){
+    fun getStoreDeals(storeDeals:MutableLiveData<List<Product>>){
         storeDeals.value = localDatabase.getAllStoreDeals()
         Log.i("loldatastore",localDatabase.getAllStoreDeals().toString())
         Log.i("lol27", localDatabase.getProduct(27).toString())
@@ -250,6 +252,7 @@ class Repo(context: Context) {
     private suspend fun cacheProductsImages(products:MutableList<Product>){
         runBlocking {
             for(product in products){
+                Log.i("LOLO",product.imgName)
                 val imageUrl = "https://grocceryshopping.000webhostapp.com/wp-content/uploads/2023/12/"+product.imgName
 
                 Log.i("LOLO","Attempting Caching Image")

@@ -12,7 +12,6 @@ import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.databinding.CartItemBinding
 import com.umega.grocery.shopping.HomeViewModel
 import com.umega.grocery.utill.CartItem
-import com.umega.grocery.utill.DealsItemLocal
 import kotlinx.coroutines.runBlocking
 
 class CartAdapter(private val context: Context,private val viewModel: HomeViewModel) :
