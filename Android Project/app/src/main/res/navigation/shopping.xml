@@ -6,15 +6,6 @@
     app:startDestination="@id/mainPageContainer">
 
     <fragment
-        android:id="@+id/cartFragment"
-        android:name="com.umega.grocery.shopping.main.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/cart_page" >
-        <action
-            android:id="@+id/action_cartFragment_to_detailItemFragment"
-            app:destination="@id/detailItemFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/mainPageContainer"
         android:name="com.umega.grocery.shopping.main.MainPageContainer"
         android:label="MainPageContainer" >
@@ -25,51 +16,19 @@
             android:id="@+id/action_mainPageContainer_to_categoryDetailFragment"
             app:destination="@id/categoryDetailFragment" />
         <action
-            android:id="@+id/action_mainPageContainer_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_mainPageContainer_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
-        <action
-            android:id="@+id/action_mainPageContainer_to_cartFragment"
-            app:destination="@id/cartFragment" />
-        <action
             android:id="@+id/action_mainPageContainer_to_underConstructionFragment"
             app:destination="@id/underConstructionFragment" />
         <action
-            android:id="@+id/action_mainPageContainer_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_mainPageContainer_to_underConstructionFragment3"
             app:destination="@id/underConstructionFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.umega.grocery.shopping.main.FavoriteFragment"
-        android:label="FavoriteFragment" >
         <action
-            android:id="@+id/action_favoriteFragment_to_detailItemFragment"
-            app:destination="@id/detailItemFragment" />
+            android:id="@+id/action_mainPageContainer_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailItemFragment"
         android:name="com.umega.grocery.shopping.DetailItemFragment"
         android:label="DetailItemFragment" />
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.umega.grocery.shopping.main.HomeFragment"
-        android:label="HomeFragment" >
-        <action
-            android:id="@+id/action_homeFragment_to_detailItemFragment"
-            app:destination="@id/detailItemFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_resultContainer"
-            app:destination="@id/resultContainer" />
-    </fragment>
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.umega.grocery.shopping.main.ProfileFragment"
-        android:label="ProfileFragment" />
     <fragment
         android:id="@+id/underConstructionFragment"
         android:name="com.umega.grocery.shopping.UnderConstructionFragment"
@@ -90,6 +49,14 @@
         <action
             android:id="@+id/action_resultContainer_to_detailItemFragment"
             app:destination="@id/detailItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.umega.grocery.shopping.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_resultContainer"
+            app:destination="@id/resultContainer" />
     </fragment>
 
 </navigation>
