@@ -56,19 +56,9 @@
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/item_unit_price"
             app:layout_constraintTop_toBottomOf="@+id/itemName" />
-        <TextView
-            android:id="@+id/unit_quantity_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/roboto"
-            android:text="@string/unit_quantity"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/egp_text"
-            app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -90,8 +80,10 @@
             app:layout_constraintStart_toEndOf="@+id/item_count"
             app:layout_constraintTop_toBottomOf="@+id/trash"
             app:layout_constraintVertical_bias="1.0"
+            android:clickable="true"
             app:srcCompat="@drawable/group_2782"
-            android:contentDescription="@string/plus_rectangle_description"/>
+            android:contentDescription="@string/plus_rectangle_description"
+            android:focusable="true" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -103,8 +95,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/item_image"
             app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"
             app:srcCompat="@drawable/group_2783"
-            android:contentDescription="@string/minus_rectangle_description"/>
+            android:contentDescription="@string/minus_rectangle_description"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/item_count"
