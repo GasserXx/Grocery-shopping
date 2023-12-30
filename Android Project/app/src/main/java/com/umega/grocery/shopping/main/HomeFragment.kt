@@ -1,6 +1,5 @@
 package com.umega.grocery.shopping.main
 
-import ImageHandle
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,15 +18,15 @@ import com.umega.grocery.databinding.HomePageBinding
 import com.umega.grocery.shopping.HomeViewModel
 import com.umega.grocery.shopping.HomeViewModelFactory
 import com.umega.grocery.shopping.adapters.CategoryAdapter
-import com.umega.grocery.shopping.adapters.DealsAdapter
+import com.umega.grocery.shopping.adapters.DailyDealsAdapter
+import com.umega.grocery.shopping.adapters.StoreDealsAdapter
 
 
 class HomeFragment : Fragment() {
     lateinit var binding : HomePageBinding
     private val navController by lazy { findNavController() }
-    private val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(navController,requireContext()) }
+    private val viewModel: HomeViewModel by activityViewModels { HomeViewModelFactory(navController,requireContext()) }
     private lateinit var categoryAdapter: CategoryAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,13 +34,17 @@ class HomeFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_page,container,false)
         binding.viewModel = viewModel
-        categoryAdapter = CategoryAdapter(requireContext())
+        //category grid view handle and it button
+        categoryAdapter = CategoryAdapter(requireContext()) { category ->
+            viewModel.onCategoryItemClick(category)
+        }
        val gridView: GridView = binding.categoryMenuGridView
         gridView.adapter = categoryAdapter
 
         //TODO make them Static "No Connection is necessary for a static list"
         try{
             viewModel.getCategoriesList().observe(viewLifecycleOwner) { items -> categoryAdapter.submitList(items) }
+
         }catch (e:Exception){
             Log.i("lol",e.toString())
         }
@@ -54,14 +58,20 @@ class HomeFragment : Fragment() {
             }
             binding.categoryDropMenu.layoutParams = params
         }
-        val recyclerView: RecyclerView = binding.appMemberDealsRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = DealsAdapter(requireContext())
-        recyclerView.adapter = adapter
-        viewModel.getDealsList().observe(viewLifecycleOwner) {
-            items -> adapter.submitList(items) }
-
-
+        // daily deals recycle view handle
+        val appMemberDealsRecyclerView: RecyclerView = binding.appMemberDealsRecyclerView
+        appMemberDealsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val dailyAdapter = DailyDealsAdapter(requireContext())
+        appMemberDealsRecyclerView.adapter = dailyAdapter
+        viewModel.getDailyDealsList().observe(viewLifecycleOwner) {
+                items -> dailyAdapter.submitList(items) }
+        // store deals recycle view handle
+        val appDealsRecyclerView: RecyclerView = binding.appDealsRecyclerView
+        appDealsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val storeAdapter = StoreDealsAdapter(requireContext())
+        appDealsRecyclerView.adapter = storeAdapter
+        viewModel.getStoreDealsList().observe(viewLifecycleOwner) {
+                items -> storeAdapter.submitList(items) }
         return binding.root
     }
 }
