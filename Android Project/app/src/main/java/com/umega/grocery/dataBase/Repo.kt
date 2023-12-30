@@ -111,8 +111,15 @@ class Repo(context: Context) {
         try{
             runBlocking {
                 localDatabase.clearCategoriesAndSubCategories()
-                val allCategoriesFromRemote = remote.getCategories()
+                val allCategoriesFromRemote = listOf(Category(1,"HouseHold"),
+                    Category(2,"Grocery"),Category(3,"Drinks"),
+                    Category(4,"Chilled"),Category(5,"Beverages"),
+                    Category(6,"Pharmacy"),Category(7,"Frozen Food"),
+                    Category(8,"Vegetables"),Category(9,"Meat"),
+                    Category(10,"Fish"),Category(11,"HomeWare"),
+                    Category(12,"Fruits"))
                 val allSubCategoriesFromRemote = remote.getSubCategories()
+                Log.i("lolaliibrahim",allSubCategoriesFromRemote.toString())
                 localDatabase.insertCategories(allCategoriesFromRemote)
                 localDatabase.insertSubCategories(allSubCategoriesFromRemote)
             }
@@ -157,7 +164,6 @@ class Repo(context: Context) {
         runBlocking {
             val allDailyDealsFromRemote = remote.getDeals(DealsType.Daily)
             val allStoreDealsFromRemote = remote.getDeals(DealsType.Store)
-            Log.i("lolstoredeals",allStoreDealsFromRemote.toString())
             localDatabase.insertDailyDeals(allDailyDealsFromRemote)
             localDatabase.insertStoreDeals(allStoreDealsFromRemote)
             retrieveProductsRemotely(localDatabase.getDailyStoreProductIds())
@@ -201,23 +207,40 @@ class Repo(context: Context) {
             }
         }
     }
-    suspend fun insertOrder(order:MutableLiveData<Order>,orderItems:MutableLiveData<List<OrderItem>>){
+    suspend fun insertOrder(order:Order):Int{
+        var orderId: Int? = 0
         runBlocking{
-            localDatabase.insertOrder(order.value!!)
-            localDatabase.insertOrderItems(orderItems.value!!)
-            remote.placeOrder(userPreference.getUser(), order.value!!)
-          //  remote.it(userPreference.getUser(), order.value!!)
+            try{
+                //TODO add user preference id
+                orderId = remote.placeOrder(9, order)
+                Log.i("lolorder",orderId.toString())
+            }catch (e:Exception){
+                Log.i("lolplaceorder",orderId.toString())
+            }
+            order.id = orderId
+            localDatabase.insertOrder(order)
+        }
+        return orderId!!
+    }
+    suspend fun insertOrderItems(orderID:Int, orderItems: MutableList<OrderItem>){
+        runBlocking {
+            Log.i("lolorder",orderItems.toString())
+            remote.placeOrderItems(orderID,orderItems)
+            localDatabase.insertOrderItems(orderItems)
         }
     }
+
     // cart tables
     fun getAllCartItems(cartItems:MutableLiveData<List<CartItem>>){
-        cartItems.value = localDatabase.getAllCartItems()
+       // cartItems.value = localDatabase.getAllCartItems()
+        cartItems.value = listOf(CartItem("55",50.0,150.0,1,3,"ff",2.0))
     }
     fun insertCartItem(productID: Int, quantity: Int) {
         localDatabase.insertCartItem(productID,quantity)
     }
     fun updateCartItemQuantity(productID: Int, newQuantity: Int) {
         localDatabase.updateCartItemQuantity(productID,newQuantity)
+
     }
     fun deleteCartItem(productID: Int) {
         localDatabase.deleteCartItem(productID)

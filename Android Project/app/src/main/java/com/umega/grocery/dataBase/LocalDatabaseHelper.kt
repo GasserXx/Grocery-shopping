@@ -52,6 +52,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         const val Products_table_imgName ="imgName"
         const val Products_table_subcategoryId = "SubCategoriesId"
         const val Products_table_purchaseCount="purchaseCount"
+        const val Products_table_discount="discount"
         //define Brands_table
         const val  Brands_table_brandID ="BrandID"
         const val Brands_table_name  ="Name"
@@ -98,7 +99,10 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         $Products_table_brandId INTEGER,
         $Products_table_imgName TEXT,
         $Products_table_purchaseCount INTEGER, 
-        $Products_table_subcategoryId INTEGER
+        $Products_table_subcategoryId INTEGER,
+        $Products_table_discount REAL,
+        FOREIGN KEY ($Products_table_brandId) REFERENCES $brands_table($Brands_table_brandID),
+        FOREIGN KEY ($Products_table_subcategoryId) REFERENCES $subCategories_table($subCategories_table_subCategoryID)
     );
 """
     private val createTableCartItems = """
@@ -355,7 +359,8 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
               CI.$cartItems_table_quantity,
               P.$Products_table_price * CI.$cartItems_table_quantity AS totalPrice,
               P.$Products_table_productID,
-              P.$Products_table_imgName
+              P.$Products_table_imgName,
+              p.$Products_table_discount
        FROM $cartItems_table CI
        INNER JOIN $products_table P ON CI.$cartItems_table_productID = P.$Products_table_productID
     """
@@ -368,16 +373,16 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                     val totalPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("totalPrice"))
                     val productId = cursor.getInt(cursor.getColumnIndexOrThrow(Products_table_productID))
                     val imgName = cursor.getString(cursor.getColumnIndexOrThrow(Products_table_imgName))
-
+                    val discount = cursor.getDouble(cursor.getColumnIndexOrThrow(Products_table_discount))
                     val cartItem = CartItem(
                         itemName = itemName,
                         price = price,
                         itemQuantity = productQuantity,
                         totalPrice = totalPrice,
                         productId = productId,
-                        imgName = imgName
+                        imgName = imgName,
+                        discount = discount
                     )
-
                     cartItemsList.add(cartItem)
                 }
             }
@@ -523,6 +528,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return productList
     }
 
+    //TODO incolming
     fun getProducts(productIDs: MutableList<Int>, filter: Filter) :Pair<MutableList<Product>,MutableList<Int>> {
         val productList = mutableListOf<Product>()
         val missingProducts = mutableListOf<Int>()
