@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.umega.grocery.shopping.HomeViewModel" />
+    </data>
 
         <LinearLayout
             android:id="@+id/loginFragment"
@@ -13,30 +17,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/type_your_address"
+                    android:importantForAutofill="no"
+                    android:inputType="text" />
 
-            <ImageView
-                android:id="@+id/pin_image"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:src="@drawable/pin__1_"
-                android:contentDescription="@string/pin_description" />
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="8"
-                />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/change_address"
-                    android:layout_weight="1"
-                    android:textSize="14sp"
-                    android:textColor="#5974CA"/>
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
@@ -49,6 +37,7 @@
                 android:fontFamily="@font/roboto"
                 android:textColor="#3C3C3C"/>
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cartRecycleView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="12" >
@@ -85,6 +74,7 @@
                     android:fontFamily="@font/roboto"
                     android:textAllCaps="false"
                     android:textSize="14sp"
+                    android:onClick="@{()->viewModel.placeOrderClick()}"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     tools:ignore="RelativeOverlap" />
