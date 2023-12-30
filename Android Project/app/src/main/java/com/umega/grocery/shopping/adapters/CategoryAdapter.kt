@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.umega.grocery.R
 import com.umega.grocery.utill.Category
 
-class CategoryAdapter(private val context: Context) : BaseAdapter() {
+class CategoryAdapter(private val context: Context, private val clickListener: (Category) -> Unit) : BaseAdapter() {
     private var itemList: List<Category> = emptyList()
 
     fun submitList(newList: List<Category>) {
@@ -20,7 +20,6 @@ class CategoryAdapter(private val context: Context) : BaseAdapter() {
     override fun getCount(): Int = itemList.size
     override fun getItem(position: Int): Any = itemList[position]
     override fun getItemId(position: Int): Long = position.toLong()
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val category = getItem(position) as Category
         val inflater = LayoutInflater.from(parent?.context)
@@ -31,6 +30,10 @@ class CategoryAdapter(private val context: Context) : BaseAdapter() {
         val imageName = category.name.toLowerCase().replace(" ", "")
         val imageResourceId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
         categoryImageView.setImageResource(imageResourceId)
+        itemView.setOnClickListener {
+            // Invoke the click listener with the clicked category
+            clickListener.invoke(category)
+        }
         return itemView
     }
 }
