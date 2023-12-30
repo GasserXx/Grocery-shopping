@@ -16,6 +16,7 @@ import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.databinding.ResultPageContainerBinding
 import com.umega.grocery.shopping.result.ResultViewModel
 import com.umega.grocery.shopping.result.ResultViewModelFactory
+import com.umega.grocery.utill.Keys
 import kotlinx.coroutines.runBlocking
 import java.util.ArrayList
 
@@ -41,17 +42,20 @@ class ResultContainer : Fragment() {
         // Retrieve arguments
         val args = arguments
         if (args != null) {
-            val pageTitle = args.getString(title_bundle_key, "")
-            val ids: ArrayList<Int>? = args.getIntegerArrayList(ids_bundle_key)
+            val pageTitle = args.getString(Keys.result_title_bundle_key, "")
+            val ids: ArrayList<Int>? = args.getIntegerArrayList(Keys.result_ids_bundle_key)
             title = pageTitle
             productsIds = ids
+            ids!!.forEach { Log.i("lol","product id in the container result frag$it with title: $title") }
         }
         else
         {
             title = "error"
             productsIds = ArrayList()
         }
-
+        //init
+        viewModel.setRepoValue(Repo(requireContext()))
+        viewModel.initialization(title,productsIds)
         //fragments init
         filterFragment = FilterFragment(viewModel)
         resultFragment = ResultFragment(viewModel)
@@ -63,9 +67,6 @@ class ResultContainer : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.result_page_container,container,false)
         binding.viewModel = viewModel
-        //init
-        viewModel.setRepoValue(Repo(requireContext()))
-        viewModel.initialization(title,productsIds)
 
         // Example: Replace Result with Filter on a button click
         viewModel.filterFlag.observe(viewLifecycleOwner) {
@@ -81,9 +82,5 @@ class ResultContainer : Fragment() {
         }
 
         return binding.root
-    }
-    companion object{
-        const val title_bundle_key = "title_string"
-        const val ids_bundle_key = "products_ids"
     }
 }

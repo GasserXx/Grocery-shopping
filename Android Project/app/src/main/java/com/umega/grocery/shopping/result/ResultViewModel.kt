@@ -93,10 +93,12 @@ class ResultViewModel(private val navController: NavController) : ViewModel() {
         _pageNumber.value = _pageNumber.value?.plus(1)
     }
     private fun requestItems() {
+        if (productsIDs.size == 0)
+            return
         val pageNumber = _pageNumber.value!!
         val initPointer = (pageNumber - 1 )* 50
         val finalPointer = if ((pageNumber)* 50 < productsIDs.size) (pageNumber) * 50 - 1 else productsIDs.size - 1
-        val productsIdsToBeRequested:MutableList<Int> = productsIDs.subList(initPointer,finalPointer)
+        val productsIdsToBeRequested:MutableList<Int> = productsIDs.subList(initPointer,finalPointer+1)
         //no request the previous products from the repo
         repo!!.retrieveProducts(productsIdsToBeRequested, filter, products)
     }
