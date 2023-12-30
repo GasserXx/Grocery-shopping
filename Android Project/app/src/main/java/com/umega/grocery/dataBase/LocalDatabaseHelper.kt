@@ -278,7 +278,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                P.$Products_table_imgName,
                P.$Products_table_discount
         FROM $storeDeals_table SD
-        INNER JOIN $products_table P ON SD.$storeDeals_table_productID = P.$Products_table_productID
+        LEFT JOIN $products_table P ON SD.$storeDeals_table_productID = P.$Products_table_productID
         GROUP BY P.$Products_table_productID
     """
         try {
