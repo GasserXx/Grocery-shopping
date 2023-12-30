@@ -15,7 +15,7 @@
             <LinearLayout
                 android:id="@+id/category_drop_menu"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="160dp"
                 android:background="@color/white"
                 android:elevation="32dp"
                 android:orientation="vertical">
@@ -32,6 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:numColumns="4"
+                    android:background="@color/white"
                     android:horizontalSpacing="4dp"
                     android:verticalSpacing="4dp"
                     android:padding="4dp"/>
