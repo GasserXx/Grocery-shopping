@@ -44,12 +44,13 @@ class DealsAdapter(private val context: Context) :
         private val itemImageView: ImageView = itemView.findViewById(R.id.item_image)
         private val itemNameTextView: TextView = itemView.findViewById(R.id.itemName_text)
         private val itemPriceTextView: TextView = itemView.findViewById(R.id.itemPrice_text)
-        private val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantityValue_text)
+        //Since we deleted the KG badge
+//        private val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantityValue_text)
         private val imageHandle :ImageHandle = ImageHandle(context)
         @SuppressLint("SetTextI18n", "DiscouragedApi")
         fun bind(deal: DealsItemLocal) {
             itemNameTextView.text = deal.productName
-            val coroutineScope = CoroutineScope(Dispatchers.Main)
+            val coroutineScope = CoroutineScope(Dispatchers.IO)
             coroutineScope.launch {
                 val cachedFilePath = imageHandle.getCachedFilePath(deal.imgName)
                 if (cachedFilePath != null) {
@@ -61,7 +62,7 @@ class DealsAdapter(private val context: Context) :
                 }
             }
             itemPriceTextView.text = deal.productPriceAfterDiscount.toString()+" EGP"
-            itemQuantityTextView.text = "1KG"
+//            itemQuantityTextView.text = "1KG"
         }
     }
 }
