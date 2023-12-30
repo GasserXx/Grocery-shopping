@@ -7,5 +7,5 @@ data class Order(
     val voucher: String = "",
     val totalPrice:Double = 0.0,
     val address: String = "",
-    val date :Timestamp = Timestamp(System.currentTimeMillis())
+    val date: Timestamp? = Timestamp(System.currentTimeMillis())
 )
