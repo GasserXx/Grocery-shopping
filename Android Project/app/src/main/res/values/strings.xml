@@ -104,5 +104,8 @@
     <string name="_100_00">100.00</string>
     <string name="no_search_result_found">No search Result Found!</string>
     <string name="type_your_address">type your address</string>
+    <string name="order_1001">Order#1001</string>
+    <string name="rate_this_order">Rate this order</string>
+    <string name="sample_place_date_text">Placed on 24 Feb 2021</string>
 
 </resources>
