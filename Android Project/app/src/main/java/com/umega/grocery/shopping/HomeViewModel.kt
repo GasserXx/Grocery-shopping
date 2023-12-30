@@ -11,9 +11,9 @@ import com.umega.grocery.R
 import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.utill.CartItem
 import com.umega.grocery.utill.Category
-import com.umega.grocery.utill.DealsItemLocal
 import com.umega.grocery.utill.Order
 import com.umega.grocery.utill.OrderItem
+import com.umega.grocery.utill.Product
 import com.umega.grocery.utill.SubCategory
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -91,16 +91,16 @@ class HomeViewModel (private val navController: NavController,context:Context) :
         repo.getAllCategories(categoriesList)
     }
     // daily deals recycle view data handle
-    private val dailyDealsList = MutableLiveData<List<DealsItemLocal>>()
-    fun getDailyDealsList(): LiveData<List<DealsItemLocal>> {
+    private val dailyDealsList = MutableLiveData<List<Product>>()
+    fun getDailyDealsList(): LiveData<List<Product>> {
         return dailyDealsList
     }
     private fun getAllDailyDeals(){
         repo.getDailyDeals(dailyDealsList)
     }
     // store deals recycle view data handle
-    private val storeDealsList = MutableLiveData<List<DealsItemLocal>>()
-    fun getStoreDealsList(): LiveData<List<DealsItemLocal>> {
+    private val storeDealsList = MutableLiveData<List<Product>>()
+    fun getStoreDealsList(): LiveData<List<Product>> {
         return storeDealsList
     }
     private fun getAllStoreDeals(){

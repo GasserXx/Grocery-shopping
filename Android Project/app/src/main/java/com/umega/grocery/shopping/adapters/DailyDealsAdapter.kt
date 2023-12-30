@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.umega.grocery.R
-import com.umega.grocery.utill.DealsItemLocal
+import com.umega.grocery.utill.Product
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,10 +20,10 @@ import kotlinx.coroutines.launch
 class DailyDealsAdapter(private val context: Context) :
     RecyclerView.Adapter<DailyDealsAdapter.ViewHolder>() {
 
-    private var itemList: List<DealsItemLocal> = emptyList()
+    private var itemList: List<Product> = emptyList()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(newList: List<DealsItemLocal>) {
+    fun submitList(newList: List<Product>) {
         itemList = newList
         notifyDataSetChanged()
     }
@@ -47,8 +47,8 @@ class DailyDealsAdapter(private val context: Context) :
 //        private val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantityValue_text)
         private val imageHandle :ImageHandle = ImageHandle(context)
         @SuppressLint("SetTextI18n", "DiscouragedApi")
-        fun bind(deal: DealsItemLocal) {
-            itemNameTextView.text = deal.productName
+        fun bind(deal: Product) {
+            itemNameTextView.text = deal.name
             val coroutineScope = CoroutineScope(Dispatchers.IO)
             coroutineScope.launch {
                 val cachedFilePath = imageHandle.getCachedFilePath(deal.imgName)
@@ -61,7 +61,8 @@ class DailyDealsAdapter(private val context: Context) :
                    Log.i("lol9","aa")
                 }
             }
-            itemPriceTextView.text = deal.productPriceAfterDiscount.toString()+" EGP"
+            val productPriceAfterDiscount = deal.price - deal.discount
+            itemPriceTextView.text = "$productPriceAfterDiscount EGP"
 //            itemQuantityTextView.text = "1KG"
         }
     }
