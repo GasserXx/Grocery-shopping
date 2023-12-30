@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.umega.grocery.UserPreference
 import android.util.Log
 import com.umega.grocery.dataBase.remote.Remote
+import com.umega.grocery.utill.Brand
 import com.umega.grocery.utill.CartItem
 import com.umega.grocery.utill.Category
 import com.umega.grocery.utill.DealsItemLocal
@@ -59,6 +60,7 @@ class Repo(context: Context) {
             products = remote.getProducts(productsIDs, filter)
             Log.i("LOL",products.toString())
             cacheProductsImages(products)
+
             localDatabase.insertProducts(products)
         }
         return products
@@ -81,21 +83,21 @@ class Repo(context: Context) {
         }
         Log.i("LOL", "Got out of local db")
         if (missingProducts.isNotEmpty())
-
             runBlocking {
                 Log.i("LOL", "Entering Remote")
                 products.addAll(retrieveProductsRemotely(missingProducts, filter))
                 flag.value = products
-
                 Log.i("LOL", "Got out of remote db")
             }
         else
         //on change of the liveData it means that the required products are in the local DB
         //flag indicating all data retrieved
-            flag.value = products
-
-        Log.i("LOL", "going out without getting into the local DB")
-
+                flag.value = products
+    }
+    fun getBrandById(ids:MutableList<Int>): MutableList<Brand> {
+        val brands :MutableList<Brand> = mutableListOf()
+        ids.forEach { brands.add(localDatabase.getBrandById(it)!!)}
+        return brands
     }
 
     fun retrieveAllSearchedIds(){
@@ -176,7 +178,8 @@ class Repo(context: Context) {
     // brands table
     suspend fun refreshBrands(){
         withContext(Dispatchers.IO) {
-            localDatabase.insertBrands(remote.getBrands())
+            val brands = remote.getBrands()
+            localDatabase.insertBrands(brands)
         }
     }
 
@@ -226,9 +229,9 @@ class Repo(context: Context) {
             for(product in products){
                 val imageUrl = "https://grocceryshopping.000webhostapp.com/wp-content/uploads/2023/12/"+product.imgName
 
-                Log.i("LOL","Attempting Caching Image")
-                imageHandle.cacheImage(imageUrl,product.imgName)
-                Log.i("LOL","${imageHandle.cacheImage(imageUrl,product.imgName).toString()} cached image success")
+                Log.i("LOLO","Attempting Caching Image")
+                val response = imageHandle.cacheImage(imageUrl,product.imgName)
+                Log.i("LOLO","$response cached image callback")
             }
         }
     }

@@ -31,12 +31,14 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_page,container,false)
         binding.viewModel = viewModel
         categoryAdapter = CategoryAdapter(requireContext())
        val gridView: GridView = binding.categoryMenuGridView
         gridView.adapter = categoryAdapter
+
+        //TODO make them Static "No Connection is necessary for a static list"
         try{
             viewModel.getCategoriesList().observe(viewLifecycleOwner) { items -> categoryAdapter.submitList(items) }
         }catch (e:Exception){

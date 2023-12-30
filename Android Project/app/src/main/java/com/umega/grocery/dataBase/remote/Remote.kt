@@ -20,6 +20,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.sql.DriverManager
 import java.sql.ResultSet
+import java.sql.Timestamp
 
 /*
 * Remote Schema: https://showme.redstarplugin.com/d/d:bedz55fH
@@ -191,6 +192,7 @@ class Remote {
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
         }
+        Log.i("LOL", "Categories Retrived ${categories.size}")
         return categories
     }
 
@@ -211,6 +213,7 @@ class Remote {
         }catch (e:Exception) {
             Log.i(TAG, "$fnTAG $e")
         }
+        Log.i("LOL", "SubCategories Retrived ${subCategories.size}")
         return subCategories
     }
 
@@ -278,7 +281,7 @@ class Remote {
     }
 
     //Order Fns
-    suspend fun placeOrder(userID:Int, order:Order):Int{
+    suspend fun placeOrder(userID:Int, order:Order = Order()):Int{
         //* Place order ID = null when calling the function
 
         //response -> OrderID OK

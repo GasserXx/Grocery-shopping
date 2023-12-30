@@ -21,7 +21,7 @@ import com.umega.grocery.utill.SubCategory
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
         const val DATABASE_NAME = "GroceryShopping"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
         //define table names
         const val cartItems_table = "Cart_Items"
         const val products_table = "Products"
@@ -98,9 +98,7 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         $Products_table_brandId INTEGER,
         $Products_table_imgName TEXT,
         $Products_table_purchaseCount INTEGER, 
-        $Products_table_subcategoryId INTEGER, 
-        FOREIGN KEY ($Products_table_brandId) REFERENCES $brands_table($Brands_table_brandID),
-        FOREIGN KEY ($Products_table_subcategoryId) REFERENCES $subCategories_table($subCategories_table_subCategoryID)
+        $Products_table_subcategoryId INTEGER
     );
 """
     private val createTableCartItems = """
@@ -525,7 +523,6 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return productList
     }
 
-    //TODO incolming
     fun getProducts(productIDs: MutableList<Int>, filter: Filter) :Pair<MutableList<Product>,MutableList<Int>> {
         val productList = mutableListOf<Product>()
         val missingProducts = mutableListOf<Int>()
@@ -863,6 +860,13 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             db.execSQL("DELETE FROM $subCategories_table")
         }
     }
+
+    fun clearBrandsTable() {
+        writableDatabase.use { db ->
+            db.execSQL("DELETE FROM $brands_table")
+        }
+    }
+
 
 
 }
