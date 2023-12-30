@@ -16,19 +16,15 @@ import com.umega.grocery.utill.DealsItemLocal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
-class DealsAdapter(private val context: Context) :
-    RecyclerView.Adapter<DealsAdapter.ViewHolder>() {
-
+class StoreDealsAdapter(private val context: Context) :
+    RecyclerView.Adapter<StoreDealsAdapter.ViewHolder>() {
     private var itemList: List<DealsItemLocal> = emptyList()
-
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(newList: List<DealsItemLocal>) {
         itemList = newList
         notifyDataSetChanged()
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.result_item, parent, false)
@@ -37,15 +33,12 @@ class DealsAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val deal = itemList[position]
         holder.bind(deal)
-
     }
     override fun getItemCount(): Int = itemList.size
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val itemImageView: ImageView = itemView.findViewById(R.id.item_image)
         private val itemNameTextView: TextView = itemView.findViewById(R.id.itemName_text)
         private val itemPriceTextView: TextView = itemView.findViewById(R.id.itemPrice_text)
-        //Since we deleted the KG badge
-//        private val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantityValue_text)
         private val imageHandle :ImageHandle = ImageHandle(context)
         @SuppressLint("SetTextI18n", "DiscouragedApi")
         fun bind(deal: DealsItemLocal) {
@@ -53,16 +46,15 @@ class DealsAdapter(private val context: Context) :
             val coroutineScope = CoroutineScope(Dispatchers.IO)
             coroutineScope.launch {
                 val cachedFilePath = imageHandle.getCachedFilePath(deal.imgName)
+                Log.i("lolastoredap",cachedFilePath.toString())
                 if (cachedFilePath != null) {
                     Glide.with(context)
                         .load(cachedFilePath)
                         .into(itemImageView)
                 } else {
-                   Log.i("lol9","aa")
+                    Log.i("lol9","aa")
                 }
             }
-            itemPriceTextView.text = deal.productPriceAfterDiscount.toString()+" EGP"
-//            itemQuantityTextView.text = "1KG"
         }
     }
 }
