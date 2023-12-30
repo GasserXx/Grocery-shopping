@@ -20,7 +20,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.sql.DriverManager
 import java.sql.ResultSet
-import java.sql.Timestamp
 
 /*
 * Remote Schema: https://showme.redstarplugin.com/d/d:bedz55fH
@@ -260,6 +259,66 @@ class Remote {
         return orderItems
     }
 
+    suspend fun searchTexts(keyWord: String): MutableList<String> {
+        val fnTAG = "SearchTexts fn"
+        val limit = 30
+        val searchTexts = mutableListOf<String>()
+
+        val query = """
+            SELECT $productName_column_name AS result FROM $products_table WHERE Name ILIKE '%$keyWord%'
+            UNION
+            SELECT $brandName_column_name AS result FROM $brands_table WHERE Name ILIKE '%$keyWord%'
+            UNION
+            SELECT $categoryName_column_name AS result FROM $categories_table WHERE category ILIKE '%$keyWord%'
+            UNION
+            SELECT $subCategoriesName_column_name AS result FROM $subCategories_table WHERE name ILIKE '%$keyWord%'
+            LIMIT $limit;
+        """
+
+        val result = executeQuery(query)
+        //handling incoming resultSet
+        try {
+            while (result!!.next())
+                searchTexts.add(result.getString(1))
+        }catch (e:Exception) {
+            Log.i(TAG, "$fnTAG $e")
+        }
+        Log.i("LOL", "From search text retrieved ${searchTexts.size}, from keyword $keyWord")
+        return  searchTexts
+    }
+
+    suspend fun searchProducts(keyWord: String): ArrayList<Int>{
+        val fnTAG = "SearchTexts fn"
+        val ids = mutableListOf<Int>()
+
+        val query = """
+            SELECT $productID_column_name AS result FROM $products_table WHERE $productName_column_name ILIKE '%$keyWord%'
+            UNION
+            SELECT P.$productID_column_name AS result FROM $products_table P
+            JOIN $brands_table B ON P.$brandID_column_name = B.$brandID_column_name
+            WHERE B.$brandName_column_name ILIKE '%$keyWord%'
+            UNION
+            SELECT P.$productID_column_name AS result FROM $products_table P
+            JOIN $subCategories_table SC ON P.$subCategoriesID_column_name = SC.$subCategoriesID_column_name
+            JOIN $categories_table C ON SC.$categoriesID_column_name = C.$categoriesID_column_name
+            WHERE C.$categoryName_column_name ILIKE '%$keyWord%'
+            UNION
+            SELECT P.$productID_column_name AS result FROM $products_table P
+            JOIN $subCategories_table SC ON P.$subCategoriesID_column_name = SC.$subCategoriesID_column_name
+            WHERE SC.$subCategoriesName_column_name ILIKE '%$keyWord%';
+        """
+        val result = executeQuery(query)
+        //handling incoming resultSet
+        try {
+            while (result!!.next())
+                ids.add(result.getInt(1))
+        }catch (e:Exception) {
+            Log.i(TAG, "$fnTAG $e")
+        }
+        Log.i("LOL", "From Products retrieved ${ids.size}, from keyword $keyWord")
+        return java.util.ArrayList(ids)
+    }
+
     //Functions
     //base fn
     private suspend fun functionCall(query: String, fnTAG:String):Int{
@@ -314,6 +373,7 @@ class Remote {
         return functionCall(query, fnTAG)
     }
 
+
     //Auth Fns
     suspend fun getUserID(email:String):Int{
         //response -> UserID OK
@@ -325,7 +385,6 @@ class Remote {
         """
         return functionCall(query, fnTAG)
     }
-
 
     suspend fun registerUser(user: User):Int{
         //response -> 200 OK
@@ -439,7 +498,12 @@ class Remote {
         const val quantity_column_name = "quantity"
         const val purchase_count_column_name = "purchase_count"
         const val brandID_column_name = "brandID"
+        const val brandName_column_name = "name"
         const val price_column_name = "price"
+        const val categoryName_column_name = "category"
+        const val subCategoriesName_column_name = "name"
+        const val subCategoriesID_column_name = "subcategory_id"
+        const val categoriesID_column_name = "category_id"
 
 
         //Functions

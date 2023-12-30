@@ -235,4 +235,19 @@ class Repo(context: Context) {
             }
         }
     }
+
+    fun searchText(keyWord: String, searchResults: MutableLiveData<MutableList<String>>) {
+        runBlocking {
+            withContext(Dispatchers.Unconfined){
+                    searchResults.postValue(remote.searchTexts(keyWord))
+            }
+        }
+    }
+    fun searchProducts(keyWord: String, searchResults: MutableLiveData<ArrayList<Int>>) {
+        runBlocking {
+            withContext(Dispatchers.Unconfined){
+                searchResults.postValue(remote.searchProducts(keyWord))
+            }
+        }
+    }
 }
