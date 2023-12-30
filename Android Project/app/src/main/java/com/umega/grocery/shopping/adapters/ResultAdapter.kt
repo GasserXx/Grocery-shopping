@@ -2,7 +2,9 @@ package com.umega.grocery.shopping.adapters
 import ImageHandle
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,7 +14,8 @@ import com.umega.grocery.utill.Product
 import kotlinx.coroutines.runBlocking
 
 
-class ResultAdapter (private val context: Context, private val products: MutableList<Product>) :
+class ResultAdapter (private val context: Context, private var products: MutableList<Product>,
+                     private val navigateToDetail: (product: Product) -> Unit) :
     RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
     private val imageHandle :ImageHandle = ImageHandle(context)
 
@@ -25,7 +28,9 @@ class ResultAdapter (private val context: Context, private val products: Mutable
 
     private fun getImage(fileName:String, holder:ViewHolder) {
         runBlocking {
+            //TODO find-out why image aren't to be retrieved
             val filePath = imageHandle.getCachedFilePath(fileName)
+            Log.i("LOL", "with image path of $filePath, with filename: $fileName")
             //getting the image
             if (filePath != null) {
                 // Use Glide or another image loading library to load the image into ImageView
@@ -43,14 +48,45 @@ class ResultAdapter (private val context: Context, private val products: Mutable
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = products[position]
         holder.binding.itemNameText.text = product.name // Replace with actual data
+
+        //discount check
+        if (product.discount == 0.0)
         //Building String For Price
         holder.binding.itemPriceText.text = buildString {
         append(product.price)
             //on Multiple Currencies modify the following
         append(" EGP")
     }
+        else
+        {
+            //Building String For Price
+            holder.binding.itemPriceText.text = buildString {
+                append(product.price - product.discount)
+                //on Multiple Currencies modify the following
+                append(" EGP")
+            }
+            val beforePriceText = holder.binding.pricebefore
+            beforePriceText.text = buildString {
+                append(product.price)
+                //on Multiple Currencies modify the following
+                append(" EGP")
+            }
+            beforePriceText.visibility = View.VISIBLE
+        }
+
+        holder.binding.isFavorite = false
+
+        holder.binding.loveButtonImage.setOnClickListener {
+            holder.binding.isFavorite = holder.binding.isFavorite xor true
+            holder.binding.loveButtonImage.setImageResource(
+                if (holder.binding.isFavorite)R.drawable.dark_love else R.drawable.love)
+        }
+
         getImage(product.imgName,holder)
+
+        holder.binding.itemCardView.setOnClickListener{ navigateToDetail(product) }
     }
+
 
     override fun getItemCount(): Int = products.size
 
