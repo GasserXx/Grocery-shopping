@@ -24,6 +24,10 @@
         <action
             android:id="@+id/action_mainPageContainer_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mainPageContainer_to_detailItemFragment"
+            app:destination="@id/detailItemFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/detailItemFragment"
