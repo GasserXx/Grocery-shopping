@@ -96,5 +96,11 @@
     <string name="construction_image_description">A Working man holds a shovel directed to sand indicating undergoing work</string>
     <string name="mobile_phone">Mobile Phone</string>
     <string name="sort_price">Sort Price</string>
+    <string name="sort_name">Sort Name</string>
+    <string name="brand_nationality">Brand Nationality</string>
+    <string name="_1">1</string>
+    <string name="previous_page">previous page</string>
+    <string name="next_page">next page</string>
+    <string name="_100_00">100.00</string>
 
 </resources>
