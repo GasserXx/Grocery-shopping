@@ -25,10 +25,11 @@
         <ImageView
             android:id="@+id/backButton_image"
             android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_height="match_parent"
             android:contentDescription="@string/back_image"
             android:src="@drawable/back"
             app:layout_constraintStart_toStartOf="parent"
+            android:onClick="@{()->viewModel.navigateUp()}"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -37,7 +38,8 @@
             android:layout_height="match_parent"
             android:textSize="24sp"
             android:gravity="center"
-            android:text="@string/coffee"
+            android:text="@{viewModel.title}"
+            android:hint="@string/sample_category_title"
             android:textColor="@color/white"
             android:layout_marginStart="60dp"
             android:textStyle="bold"
@@ -56,16 +58,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.appcompat.widget.Toolbar>
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/result_nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/result"
-        tools:layout="@layout/result_page"
-        tools:layout_editor_absoluteX="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/myToolbar"/>
+
+        <FrameLayout
+            android:id="@+id/container_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myToolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
