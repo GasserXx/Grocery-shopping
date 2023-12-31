@@ -23,6 +23,12 @@ import java.io.IOException
 import java.sql.Timestamp
 
 class HomeViewModel (private val navController: NavController,context:Context) : ViewModel() {
+    private val _logOut = MutableLiveData<Boolean>(false)
+    val logOut: LiveData<Boolean> get() = _logOut
+
+    private val _sideItemVisible = MutableLiveData<Boolean>(false)
+    val sideItemVisible: LiveData<Boolean> get() = _sideItemVisible
+
     private var repo = Repo(context)
     //handle cart items
     private val cartItemsList = MutableLiveData<List<CartItem>>()
@@ -193,8 +199,32 @@ class HomeViewModel (private val navController: NavController,context:Context) :
         navController.navigate(R.id.action_homeFragment_to_resultFragment,bundle)
     }
 
-    fun navigateToResultPageUsingSearchButton(){
-        navController.navigate(R.id.action_categoryDetailFragment_to_resultContainer)
+    fun navigateToSearch(){
+        navController.navigate(R.id.action_mainPageContainer_to_searchFragment)
+    }
+    fun mainListCallBack(option:Int){
+        when (option){
+            //to order History
+            0->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            1->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            2->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            3->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            4->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            5->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            6->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            7->logOut()
+        }
+    }
+    private fun logOut(){
+        repo.clearPreference()
+        _logOut.value = true
+    }
+    fun hideSideITem(){
+        _sideItemVisible.value = false
+    }
+    fun showSideITem(){
+        Log.i("LOL","WE got a HITTTTTT")
+        _sideItemVisible.value = true
     }
     init {
         refreshCategoriesAndSubCategories()

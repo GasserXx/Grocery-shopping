@@ -57,7 +57,6 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/icon_2"
                 android:background="@color/transparent"
-                android:onClick="@{()->viewModel.navigateToResultPageUsingSearchButton()}"
                 android:layout_alignParentEnd="true"
                 android:paddingHorizontal="20dp"
                 android:contentDescription="@string/search_button_description"/>
