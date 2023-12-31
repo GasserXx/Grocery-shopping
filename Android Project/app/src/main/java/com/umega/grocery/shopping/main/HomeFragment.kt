@@ -61,14 +61,24 @@ class HomeFragment : Fragment() {
         // daily deals recycle view handle
         val appMemberDealsRecyclerView: RecyclerView = binding.appMemberDealsRecyclerView
         appMemberDealsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val dailyAdapter = DailyDealsAdapter(requireContext())
+        val dailyAdapter = DailyDealsAdapter(requireContext()) { product ->
+            val bundle = Bundle()
+            bundle.putParcelable("productKey", product)
+            Log.i("lolsend",product.toString())
+            navController.navigate(R.id.action_mainPageContainer_to_detailItemFragment,bundle)
+        }
         appMemberDealsRecyclerView.adapter = dailyAdapter
         viewModel.getDailyDealsList().observe(viewLifecycleOwner) {
                 items -> dailyAdapter.submitList(items) }
         // store deals recycle view handle
         val appDealsRecyclerView: RecyclerView = binding.appDealsRecyclerView
         appDealsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val storeAdapter = StoreDealsAdapter(requireContext())
+        val storeAdapter = StoreDealsAdapter(requireContext()) { product ->
+            val bundle = Bundle()
+            bundle.putParcelable("productKey", product)
+            Log.i("lolsend",product.toString())
+            navController.navigate(R.id.action_mainPageContainer_to_detailItemFragment,bundle)
+        }
         appDealsRecyclerView.adapter = storeAdapter
         viewModel.getStoreDealsList().observe(viewLifecycleOwner) {
                 items -> storeAdapter.submitList(items) }

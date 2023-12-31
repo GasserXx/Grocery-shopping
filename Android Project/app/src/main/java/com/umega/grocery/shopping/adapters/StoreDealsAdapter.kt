@@ -17,14 +17,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class StoreDealsAdapter(private val context: Context) :
-    RecyclerView.Adapter<StoreDealsAdapter.ViewHolder>() {
+class StoreDealsAdapter(private val context: Context,
+private val onItemClick: (Product) -> Unit
+) : RecyclerView.Adapter<StoreDealsAdapter.ViewHolder>() {
     private var itemList: List<Product> = emptyList()
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(newList: List<Product>) {
         itemList = newList
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.result_item, parent, false)
@@ -44,6 +46,9 @@ class StoreDealsAdapter(private val context: Context) :
 
         fun bind(deal: Product) {
             itemNameTextView.text = deal.name
+            itemView.setOnClickListener {
+                onItemClick(deal)
+            }
             val coroutineScope = CoroutineScope(Dispatchers.IO)
             coroutineScope.launch {
                 val cachedFilePath = imageHandle.getCachedFilePath(deal.imgName)
@@ -56,6 +61,8 @@ class StoreDealsAdapter(private val context: Context) :
                     Log.i("lol9","aa")
                 }
             }
+            val productPriceAfterDiscount = deal.price - deal.discount
+            itemPriceTextView.text = "$productPriceAfterDiscount EGP"
         }
     }
 }

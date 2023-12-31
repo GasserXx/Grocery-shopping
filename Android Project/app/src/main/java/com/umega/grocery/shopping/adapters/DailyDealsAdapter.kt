@@ -17,7 +17,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DailyDealsAdapter(private val context: Context) :
+class DailyDealsAdapter(private val context: Context,
+                        private val onItemClick: (Product) -> Unit
+) :
     RecyclerView.Adapter<DailyDealsAdapter.ViewHolder>() {
 
     private var itemList: List<Product> = emptyList()
@@ -49,6 +51,9 @@ class DailyDealsAdapter(private val context: Context) :
         @SuppressLint("SetTextI18n", "DiscouragedApi")
         fun bind(deal: Product) {
             itemNameTextView.text = deal.name
+            itemView.setOnClickListener {
+                onItemClick(deal)
+            }
             val coroutineScope = CoroutineScope(Dispatchers.IO)
             coroutineScope.launch {
                 val cachedFilePath = imageHandle.getCachedFilePath(deal.imgName)
