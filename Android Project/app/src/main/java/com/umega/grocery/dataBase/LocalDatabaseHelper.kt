@@ -20,7 +20,7 @@ import com.umega.grocery.utill.SubCategory
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
         const val DATABASE_NAME = "GroceryShopping"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
         //define table names
         const val cartItems_table = "Cart_Items"
         const val products_table = "Products"

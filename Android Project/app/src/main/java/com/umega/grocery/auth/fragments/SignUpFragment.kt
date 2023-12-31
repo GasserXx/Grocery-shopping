@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.umega.grocery.R
 import com.umega.grocery.auth.LoginViewModel
-import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.databinding.SignupPageBinding
 
 class SignUpFragment : Fragment() {
@@ -48,7 +47,6 @@ class SignUpFragment : Fragment() {
         viewModel.phoneNumberError.observe(viewLifecycleOwner){
             binding.editTextPhone.error = it
         }
-        viewModel.setRepo(Repo(requireContext()))
         return binding.root
     }
 
