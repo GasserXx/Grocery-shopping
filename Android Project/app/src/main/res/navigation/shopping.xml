@@ -27,12 +27,20 @@
         <action
             android:id="@+id/action_mainPageContainer_to_detailItemFragment"
             app:destination="@id/detailItemFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_resultFragment"
+            app:destination="@id/resultContainer" />
+
 
     </fragment>
     <fragment
         android:id="@+id/detailItemFragment"
         android:name="com.umega.grocery.shopping.DetailItemFragment"
-        android:label="DetailItemFragment" />
+        android:label="DetailItemFragment" >
+        <action
+            android:id="@+id/action_detailItemFragment_to_mainPageContainer"
+            app:destination="@id/mainPageContainer" />
+    </fragment>
     <fragment
         android:id="@+id/underConstructionFragment"
         android:name="com.umega.grocery.shopping.UnderConstructionFragment"
@@ -40,11 +48,13 @@
     <fragment
         android:id="@+id/categoryDetailFragment"
         android:name="com.umega.grocery.shopping.CategoryDetailFragment"
-        android:label="category_detail_page"
-        tools:layout="@layout/category_detail_page" >
+        android:label="categoryDetailFragment">
         <action
             android:id="@+id/action_categoryDetailFragment_to_resultContainer"
             app:destination="@id/resultContainer" />
+        <action
+            android:id="@+id/action_categoryDetailFragment_to_mainPageContainer"
+            app:destination="@id/mainPageContainer" />
     </fragment>
     <fragment
         android:id="@+id/resultContainer"
