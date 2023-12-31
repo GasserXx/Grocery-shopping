@@ -2,6 +2,11 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.umega.grocery.shopping.HomeViewModel" />
+    </data>
     <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <!--TODO replace all Xs-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/menu"
+                android:onClick="@{()->viewModel.showSideITem()}"
                 android:background="@color/transparent"
                 android:paddingHorizontal="20dp"
                 android:layout_alignParentStart="true"
@@ -46,6 +51,7 @@
                 android:src="@drawable/icon_2"
                 android:background="@color/transparent"
                 android:layout_toStartOf="@id/alertButton"
+                android:onClick="@{()->viewModel.navigateToSearch()}"
                 android:paddingHorizontal="10dp"
                 android:contentDescription="@string/search_button_description"/>
             <ImageButton
@@ -89,41 +95,43 @@
 
         </LinearLayout>
 
+
         <LinearLayout
-            android:id="@+id/side_list"
+            android:id="@+id/side_list_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@color/white"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:layout_alignParentTop="true"
+            android:background="#46595977"
+            android:visibility="gone">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/white">
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon"
-                    android:background="@color/transparent"
-                    android:padding="18dp"
-                    android:contentDescription="@string/x_btn_description" />
+                    android:id="@+id/x_button"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/grey_x"
+                    android:onClick="@{()->viewModel.hideSideITem()}"
+                    android:background="@color/white"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/grocery_shopping"
-                    android:textSize="24sp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    android:paddingHorizontal="20dp"/>
+                    android:text="@string/grocery_shopin"
+                    android:padding="8dp"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="28sp"
+                    android:textColor="@color/black"/>
             </LinearLayout>
-            <ListView
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/side_list_items"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:background="@drawable/lower_rounded_corners"
+                android:paddingBottom="40dp" />
+        </LinearLayout>
 </RelativeLayout>
 </layout>

@@ -107,5 +107,6 @@
     <string name="order_1001">Order#1001</string>
     <string name="rate_this_order">Rate this order</string>
     <string name="sample_place_date_text">Placed on 24 Feb 2021</string>
+    <string name="grocery_shopin">Grocery Shopping</string>
 
 </resources>
