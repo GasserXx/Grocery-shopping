@@ -70,7 +70,6 @@ class Remote {
            WHERE $productID_column_name IN ( ${productsIDs.joinToString(", ")} )
            $filterQuery
         """
-
         val result = executeQuery(query)
 
         //handling incoming resultSet
@@ -90,6 +89,26 @@ class Remote {
             Log.i(TAG, "$fnTAG $e")
         }
         return products
+    }
+    suspend fun getProductsBySubCategoryID(subCategoryID:Int):MutableList<Int> {
+        val fnTAG = "getProductsBySubCategoryID Fn:"
+        val ids = mutableListOf<Int>()
+        val query  = """
+           SELECT $productID_column_name
+           FROM $products_table
+           WHERE $subCategoriesID_column_name = $subCategoryID;
+        """
+        val result = executeQuery(query)
+
+        //handling incoming resultSet
+        try {
+            while (result!!.next())
+                ids.add(result.getInt(1))
+
+        }catch (e:Exception) {
+            Log.i(TAG, "$fnTAG $e")
+        }
+        return ids
     }
 
     private fun filterQueryBuilder(filter: Filter): String {
