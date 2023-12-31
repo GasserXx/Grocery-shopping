@@ -16,6 +16,7 @@ import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.Product
 import com.umega.grocery.utill.SubCategory
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.sql.Timestamp
 
@@ -23,23 +24,28 @@ class HomeViewModel (private val navController: NavController,context:Context) :
     private var repo = Repo(context)
     //handle cart items
     private val cartItemsList = MutableLiveData<List<CartItem>>()
-    fun getCartItemsList(): LiveData<List<CartItem>> {
-        return cartItemsList
-    }
-    fun getAllCartItems(){
-        repo.getAllCartItems(cartItemsList)
-        val total = cartItemsList.value?.sumByDouble { it.totalPrice }
-        _totalPrice.value = total.toString()+" EGP"
-    }
+
     private val _totalPrice = MutableLiveData("0.00 EGP")
     val totalPrice: LiveData<String> get() = _totalPrice
+
+    private val _address = MutableLiveData<String>()
+    private val address: LiveData<String> get() = _address
+
+    private val orderItems = mutableListOf<OrderItem>()
+    private var orderId = 0
+
+
+    private val _logOut = MutableLiveData<Boolean>(false)
+    val logOut: LiveData<Boolean> get() = _logOut
+
+    private val _sideItemVisible = MutableLiveData<Boolean>(false)
+    val sideItemVisible: LiveData<Boolean> get() = _sideItemVisible
+
+
     fun updateTotalPrice() {
         val total = cartItemsList.value?.sumByDouble { it.totalPrice }
         _totalPrice.value = total.toString()+" EGP"
     }
-    private val _address = MutableLiveData<String>()
-    private val address: LiveData<String> get() = _address
-    private var orderId = 0
     private  suspend fun placeOrder(){
         viewModelScope.launch {
             val total = cartItemsList.value?.sumByDouble { it.totalPrice }
@@ -49,7 +55,6 @@ class HomeViewModel (private val navController: NavController,context:Context) :
             ))
         }
     }
-    val orderItems = mutableListOf<OrderItem>()
     private suspend fun placeOrderItems(){
         viewModelScope.launch {
 
@@ -66,6 +71,15 @@ class HomeViewModel (private val navController: NavController,context:Context) :
             placeOrder()
             placeOrderItems()
         }
+    }
+
+    fun getCartItemsList(): LiveData<List<CartItem>> {
+        return cartItemsList
+    }
+    fun getAllCartItems(){
+        repo.getAllCartItems(cartItemsList)
+        val total = cartItemsList.value?.sumByDouble { it.totalPrice }
+        _totalPrice.value = total.toString()+" EGP"
     }
 
     //handle sub categories list view data
@@ -139,13 +153,39 @@ class HomeViewModel (private val navController: NavController,context:Context) :
         //navController.navigate(R.id.action_homeFragment_to_resultFragment)
         Log.i("lolalhos","hey")
     }
+    fun navigateToSearch(){
+        navController.navigate(R.id.action_mainPageContainer_to_searchFragment)
+    }
+    fun mainListCallBack(option:Int){
+        when (option){
+            //to order History
+            0->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            1->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            2->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            3->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            4->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            5->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            6->navController.navigate(R.id.action_mainPageContainer_to_underConstructionFragment)
+            7->logOut()
+        }
+    }
+    private fun logOut(){
+        repo.clearPreference()
+        _logOut.value = true
+    }
+    fun hideSideITem(){
+        _sideItemVisible.value = false
+    }
+    fun showSideITem(){
+        Log.i("LOL","WE got a HITTTTTT")
+        _sideItemVisible.value = true
+    }
     init {
         refreshCategoriesAndSubCategories()
         getAllCategories()
         refreshAllDeals()
         getAllDailyDeals()
         getAllStoreDeals()
-
     }
 
 }
