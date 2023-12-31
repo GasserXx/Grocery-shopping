@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-class UserPreference(private val context: Context) {
+class UserPreference private constructor(private val context: Context) {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "UserPreference")
     private val userKey = intPreferencesKey("UserID")
@@ -53,7 +53,25 @@ class UserPreference(private val context: Context) {
         storeUserID(-1)
         storeEmail("")
     }
-    companion object{
+
+
+
+    companion object {
+
         const val TAG = "USER PREFERENCE CLASS"
+        private var instance: UserPreference? = null
+
+        // Initialize the singleton instance with a context
+        fun initialize(context: Context) {
+            if (instance == null) {
+                instance = UserPreference(context)
+            }
+        }
+
+        // Access the singleton instance
+        fun getInstance(): UserPreference {
+            return instance
+                ?: throw IllegalStateException("UserPreference has not been initialized.")
+        }
     }
 }

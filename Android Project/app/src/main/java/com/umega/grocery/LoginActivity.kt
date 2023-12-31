@@ -21,9 +21,14 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+    private val repo:Repo by lazy { Repo(applicationContext) }
     private val viewModel: LoginViewModel by viewModels { LoginViewModelFactory(navController) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //init userPreference
+        UserPreference.initialize(this)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
         val navHostFragment =
@@ -32,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         //init repo
-        viewModel.setRepo(Repo(context = applicationContext))
+        viewModel.setRepo(repo)
 
         //check if userSigned out
         checkLog()

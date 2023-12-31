@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 class Repo(context: Context) {
     private val remote = Remote()
     private val localDatabase = LocalDatabaseHelper(context)
-    private val userPreference = UserPreference(context)
+    private val userPreference = UserPreference.getInstance()
     private val imageHandle = ImageHandle(context)
     fun authentication(user: User, response:MutableLiveData<Int>){
         runBlocking {
@@ -65,6 +65,11 @@ class Repo(context: Context) {
         return products
     }
 
+    fun clearPreference(){
+        runBlocking {
+            userPreference.clearPreference()
+        }
+    }
     //request products from cached
     fun retrieveProducts(
         productsIDs: MutableList<Int>,
@@ -166,7 +171,9 @@ class Repo(context: Context) {
             Log.i("loldaily",allDailyDealsFromRemote.toString())
             localDatabase.insertDailyDeals(allDailyDealsFromRemote)
             localDatabase.insertStoreDeals(allStoreDealsFromRemote)
-            retrieveProductsRemotely(localDatabase.getDailyStoreProductIds())
+            val lol = localDatabase.getDailyStoreProductIds()
+            retrieveProductsRemotely(lol)
+
             localDatabase.updateProductDiscounts(allDailyDealsFromRemote,allStoreDealsFromRemote)
 
         }
