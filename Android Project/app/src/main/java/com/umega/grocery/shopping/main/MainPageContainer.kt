@@ -9,25 +9,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.umega.grocery.databinding.HomePageContainerBinding
 import com.umega.grocery.R
-
+import com.umega.grocery.shopping.HomeViewModel
+import com.umega.grocery.shopping.HomeViewModelFactory
+import com.umega.grocery.shopping.adapters.MainMenuAdapter
 
 class MainPageContainer : Fragment() {
 
     private lateinit var icons :MutableList<Drawable?>
     private lateinit var binding: HomePageContainerBinding
     private lateinit var drawableArray: TypedArray
-    private lateinit var view: View
     private lateinit var viewPager: ViewPager2
     private lateinit var fragments: List<Fragment>
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     private lateinit var tabLayout: TabLayout
+
+    private val navController by lazy { findNavController() }
+    private val viewModel: HomeViewModel by activityViewModels { HomeViewModelFactory(navController,requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,14 +46,15 @@ class MainPageContainer : Fragment() {
         icons = mutableListOf()
 
         binding = HomePageContainerBinding.inflate(inflater, container, false)
-        view = binding.root
+        binding.viewModel = viewModel
 
-        viewPager = view.findViewById(R.id.viewpager)
-        tabLayout = view.findViewById(R.id.tab_layout)
+        viewPager = binding.viewpager
+        tabLayout = binding.tabLayout
 
         val supportFragment = this.childFragmentManager
 
-
+        binding.sideListItems.adapter = MainMenuAdapter(resources = resources, navigateOnClick = viewModel::mainListCallBack)
+        binding.sideListItems.layoutManager =  LinearLayoutManager(requireContext())
 
         viewPagerAdapter = ViewPagerAdapter(supportFragment,lifecycle)
         viewPager.adapter = viewPagerAdapter
@@ -79,8 +87,16 @@ class MainPageContainer : Fragment() {
         }.attach()
 
         drawableArray.recycle()
-        return view
+
+        //handle sidebar visibility
+        viewModel.sideItemVisible.observe(viewLifecycleOwner){
+            binding.sideListLayout.visibility =
+                if(it) View.VISIBLE else View.GONE
+        }
+
+        return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
