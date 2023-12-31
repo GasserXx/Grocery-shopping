@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.main
+package com.umega.grocery.shopping.main.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -9,17 +9,17 @@ import android.view.ViewGroup
 import android.widget.GridView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umega.grocery.R
 import com.umega.grocery.databinding.HomePageBinding
-import com.umega.grocery.shopping.HomeViewModel
-import com.umega.grocery.shopping.HomeViewModelFactory
+import com.umega.grocery.shopping.main.HomeViewModelFactory
 import com.umega.grocery.shopping.adapters.CategoryAdapter
 import com.umega.grocery.shopping.adapters.DailyDealsAdapter
 import com.umega.grocery.shopping.adapters.StoreDealsAdapter
+import com.umega.grocery.shopping.main.HomeViewModel
+import com.umega.grocery.utill.Keys
 
 
 class HomeFragment : Fragment() {
@@ -27,6 +27,7 @@ class HomeFragment : Fragment() {
     private val navController by lazy { findNavController() }
     private val viewModel: HomeViewModel by activityViewModels { HomeViewModelFactory(navController,requireContext()) }
     private lateinit var categoryAdapter: CategoryAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +45,6 @@ class HomeFragment : Fragment() {
         //TODO make them Static "No Connection is necessary for a static list"
         try{
             viewModel.getCategoriesList().observe(viewLifecycleOwner) { items -> categoryAdapter.submitList(items) }
-
         }catch (e:Exception){
             Log.i("lol",e.toString())
         }
@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
         appMemberDealsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val dailyAdapter = DailyDealsAdapter(requireContext()) { product ->
             val bundle = Bundle()
-            bundle.putParcelable("productKey", product)
+            bundle.putParcelable(Keys.product_detail_bundle_key, product)
             navController.navigate(R.id.action_mainPageContainer_to_detailItemFragment,bundle)
         }
         appMemberDealsRecyclerView.adapter = dailyAdapter
@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
         appDealsRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         val storeAdapter = StoreDealsAdapter(requireContext()) { product ->
             val bundle = Bundle()
-            bundle.putParcelable("productKey", product)
+            bundle.putParcelable(Keys.product_detail_bundle_key, product)
             navController.navigate(R.id.action_mainPageContainer_to_detailItemFragment,bundle)
         }
         appDealsRecyclerView.adapter = storeAdapter

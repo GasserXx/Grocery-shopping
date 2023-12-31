@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.main
+package com.umega.grocery.shopping.main.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.umega.grocery.R
 import com.umega.grocery.databinding.CartPageBinding
-import com.umega.grocery.shopping.HomeViewModel
-import com.umega.grocery.shopping.HomeViewModelFactory
+import com.umega.grocery.shopping.main.HomeViewModelFactory
 import com.umega.grocery.shopping.adapters.CartAdapter
+import com.umega.grocery.shopping.main.HomeViewModel
 
 
 class CartFragment : Fragment() {
@@ -25,7 +25,7 @@ class CartFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.cart_page, container, false)
         binding.viewModel = viewModel
@@ -39,6 +39,13 @@ class CartFragment : Fragment() {
         }
         viewModel.totalPrice.observe(viewLifecycleOwner) { totalPrice ->
             binding.totalPriceText.text = totalPrice
+        }
+        viewModel.navigate_to_result.observe(viewLifecycleOwner){
+            if (it) {
+                viewModel.hideLoading()
+                viewModel.showMessage("Order Placed")
+                viewModel.navigateToDetailOrder()
+            }
         }
         cartRecycleView.adapter = cartAdapter
         return binding.root

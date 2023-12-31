@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.main
+package com.umega.grocery.shopping.main.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

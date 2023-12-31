@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping
+package com.umega.grocery.shopping.main
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.umega.grocery.shopping.main
+package com.umega.grocery.shopping.main.fragments
 
 import android.content.res.TypedArray
 import android.graphics.Color
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -19,9 +20,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.umega.grocery.databinding.HomePageContainerBinding
 import com.umega.grocery.R
-import com.umega.grocery.shopping.HomeViewModel
-import com.umega.grocery.shopping.HomeViewModelFactory
+import com.umega.grocery.shopping.main.HomeViewModelFactory
 import com.umega.grocery.shopping.adapters.MainMenuAdapter
+import com.umega.grocery.shopping.main.HomeViewModel
 
 class MainPageContainer : Fragment() {
 
@@ -92,6 +93,21 @@ class MainPageContainer : Fragment() {
         viewModel.sideItemVisible.observe(viewLifecycleOwner){
             binding.sideListLayout.visibility =
                 if(it) View.VISIBLE else View.GONE
+        }
+        viewModel.toastMessage.observe(viewLifecycleOwner){
+            if (it != "")
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.loading.observe(viewLifecycleOwner){
+            if (it){
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.loadingProgressBar.visibility = View.VISIBLE
+            }
+            else {
+                    binding.loadingOverlay.visibility = View.GONE
+                    binding.loadingProgressBar.visibility = View.GONE
+                }
         }
 
         return binding.root
