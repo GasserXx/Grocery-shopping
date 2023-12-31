@@ -134,6 +134,13 @@ class Repo(context: Context) {
     fun getAllSubCategoriesByCategory(categoryId:Int,categories:MutableLiveData<List<SubCategory>>){
         categories.value = localDatabase.getAllSubcategoriesByCategory(categoryId)
     }
+    suspend fun getAllProductsIdsBySubCategoryId(subCategoryId: Int):List<Int>{
+        var productsIds:List<Int>
+        runBlocking {
+             productsIds =remote.getProductsBySubCategoryID(subCategoryId)
+        }
+        return productsIds
+    }
     /*TODO make function to get products from remote by subCategory id*/
 
     // favourite table
@@ -157,8 +164,14 @@ class Repo(context: Context) {
             remote.removeFavorite(userPreference.getUser(), favourite.value!!.productID)
         }
     }
-
     // Daily and store Deals table
+    fun getDealsProductIds(type:DealsType,ids:MutableLiveData<List<Int>>){
+        if(type == DealsType.Daily){
+            ids.value = localDatabase.getDailyDealsProductsIds()
+        }else{
+            ids.value = localDatabase.getStoreDealsProductsIds()
+        }
+    }
     suspend fun refreshDailyStoreDeals(){
         runBlocking {
             val allDailyDealsFromRemote = remote.getDeals(DealsType.Daily)
@@ -234,18 +247,19 @@ class Repo(context: Context) {
 
     // cart tables
     fun getAllCartItems(cartItems:MutableLiveData<List<CartItem>>){
-       // cartItems.value = localDatabase.getAllCartItems()
-        cartItems.value = listOf(CartItem("55",50.0,150.0,1,3,"ff",2.0))
+        cartItems.value = localDatabase.getAllCartItems()
     }
     fun insertCartItem(productID: Int, quantity: Int) {
         localDatabase.insertCartItem(productID,quantity)
     }
     fun updateCartItemQuantity(productID: Int, newQuantity: Int) {
         localDatabase.updateCartItemQuantity(productID,newQuantity)
-
     }
     fun deleteCartItem(productID: Int) {
         localDatabase.deleteCartItem(productID)
+    }
+    fun deleteAllCArtItems(){
+        localDatabase.deleteAllCartItems()
     }
     //TODO Address table function
     //download download images

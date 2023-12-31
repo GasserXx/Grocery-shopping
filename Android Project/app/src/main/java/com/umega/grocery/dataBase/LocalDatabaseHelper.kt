@@ -208,8 +208,36 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         Log.i("lolids",resultList.toString())
         return resultList
     }
-
-
+    fun getDailyDealsProductsIds():List<Int>{
+        val resultList = mutableListOf<Int>()
+        val query = """
+        SELECT $dailyDeals_table_productID AS productID FROM $dailyDeals_table
+    """
+        readableDatabase.use { db ->
+            db.rawQuery(query, null)?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow("productID"))
+                    resultList.add(productId)
+                }
+            }
+        }
+        return resultList
+    }
+    fun getStoreDealsProductsIds():List<Int>{
+        val resultList = mutableListOf<Int>()
+        val query = """
+        SELECT $storeDeals_table_productID AS productID FROM $storeDeals_table
+    """
+        readableDatabase.use { db ->
+            db.rawQuery(query, null)?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val productId = cursor.getInt(cursor.getColumnIndexOrThrow("productID"))
+                    resultList.add(productId)
+                }
+            }
+        }
+        return resultList
+    }
 
     fun insertDailyDeals(dailyDeals: List<DealsItem>) {
         writableDatabase.beginTransaction()
@@ -456,6 +484,11 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             val whereClause = "$cartItems_table_productID = ?"
             val whereArgs = arrayOf(productID.toString())
             db.delete(cartItems_table, whereClause, whereArgs)
+        }
+    }
+    fun deleteAllCartItems() {
+        writableDatabase.use { db ->
+            db.delete(cartItems_table, null, null)
         }
     }
     // categories and subCategories table queries
