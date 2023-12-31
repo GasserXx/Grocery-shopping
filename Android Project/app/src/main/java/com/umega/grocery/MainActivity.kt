@@ -8,12 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import com.umega.grocery.auth.LoginViewModel
-import com.umega.grocery.auth.LoginViewModelFactory
-import com.umega.grocery.dataBase.LocalDatabaseHelper
 import com.umega.grocery.databinding.ActivityMainBinding
-import com.umega.grocery.shopping.HomeViewModel
-import com.umega.grocery.shopping.HomeViewModelFactory
+import com.umega.grocery.shopping.main.HomeViewModel
+import com.umega.grocery.shopping.main.HomeViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 

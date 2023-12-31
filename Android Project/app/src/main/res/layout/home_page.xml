@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.umega.grocery.shopping.HomeViewModel" />
+            type="com.umega.grocery.shopping.main.HomeViewModel" />
     </data>
 
     <LinearLayout

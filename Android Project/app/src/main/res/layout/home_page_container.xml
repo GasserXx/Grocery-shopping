@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.umega.grocery.shopping.HomeViewModel" />
+            type="com.umega.grocery.shopping.main.HomeViewModel" />
     </data>
     <RelativeLayout
     android:layout_width="match_parent"
@@ -133,5 +133,21 @@
                 android:background="@drawable/lower_rounded_corners"
                 android:paddingBottom="40dp" />
         </LinearLayout>
-</RelativeLayout>
+
+        <View
+            android:id="@+id/loadingOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <!-- Loading ProgressBar -->
+        <ProgressBar
+            android:id="@+id/loadingProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 </layout>

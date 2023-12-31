@@ -18,6 +18,7 @@ import com.umega.grocery.R
 import com.umega.grocery.databinding.DetailItemPageBinding
 import com.umega.grocery.shopping.result.ResultViewModel
 import com.umega.grocery.shopping.result.ResultViewModelFactory
+import com.umega.grocery.utill.Keys
 import com.umega.grocery.utill.Product
 import kotlinx.coroutines.runBlocking
 
@@ -36,7 +37,7 @@ class DetailItemFragment : Fragment() {
         imageHandle  = ImageHandle(requireContext())
         binding = DataBindingUtil.inflate(inflater, R.layout.detail_item_page,container,false)
         binding.viewModel = viewModel
-        val product = arguments?.getParcelable<Product>("productKey")
+        val product = arguments?.getParcelable<Product>(Keys.product_detail_bundle_key)
         viewModel.initialization(product!!)
         viewModel.productLiveData.observe(viewLifecycleOwner) { product ->
             binding.product = product

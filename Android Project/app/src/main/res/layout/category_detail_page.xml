@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.umega.grocery.shopping.HomeViewModel" />
+            type="com.umega.grocery.shopping.main.HomeViewModel" />
     </data>
 
 
@@ -17,7 +17,9 @@
         android:background="@color/off_white">
 
     <ImageView
+        android:id="@+id/background_image"
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
         android:src="@drawable/rectangle19"
         android:scaleType="centerCrop"
@@ -34,10 +36,8 @@
                 android:background="@color/transparent"
                 android:padding="30dp"
                 android:layout_alignParentStart="true"
-                android:clickable="true"
-                android:onClick="@{()->viewModel.navigateCategoryDetailToHome()}"
-                android:contentDescription="@string/back_arrow"
-                android:focusable="true" />
+                android:onClick="@{()->viewModel.navigateUp()}"
+                android:contentDescription="@string/back_arrow" />
 
             <TextView
                 android:id="@+id/title_text"
@@ -58,16 +58,17 @@
                 android:src="@drawable/icon_2"
                 android:background="@color/transparent"
                 android:layout_alignParentEnd="true"
+                android:onClick="@{()->viewModel.navigateSubCategoryToSearch()}"
                 android:paddingHorizontal="20dp"
                 android:contentDescription="@string/search_button_description"/>
         </RelativeLayout>
 
             <ListView
+                android:layout_alignParentTop="true"
                 android:id="@+id/subCategoriesList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
-                android:paddingTop="190dp">
+                android:layout_marginTop="190dp">
             </ListView>
 
     </RelativeLayout>

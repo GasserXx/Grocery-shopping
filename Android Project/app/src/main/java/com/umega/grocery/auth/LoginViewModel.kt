@@ -64,7 +64,7 @@ class LoginViewModel(private val navController: NavController) : ViewModel() {
     }
 
     //Are we still signed in
-    fun checkUserIdStorage():Boolean = repo!!.getUserID() != -1
+    fun checkUserIdStorage():Boolean = repo!!.getUserID() > 0
 
     //Validation
     private fun isEmailValid(signIn: Boolean): Boolean = if (email.isBlank()) {
