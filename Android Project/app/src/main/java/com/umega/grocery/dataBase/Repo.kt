@@ -104,10 +104,8 @@ class Repo(context: Context) {
         return brands
     }
 
-    fun retrieveAllSearchedIds(){
-        //On search retrieve all Ids of the products
-        //retrieve 40 product of the searched items and store it in the local database
-        //prepare the items once reached some elements
+    fun getAllStoredOrders():MutableList<Order>{
+        return localDatabase.getAllOrders()
     }
 
     // refresh categories and sub categories
@@ -234,7 +232,7 @@ class Repo(context: Context) {
         runBlocking{
             try{
                 //TODO add user preference id
-                orderId = remote.placeOrder(9, order)
+                orderId = remote.placeOrder(userPreference.getUser(), order)
                 Log.i("lolorder",orderId.toString())
             }catch (e:Exception){
                 Log.i("lolplaceorder",orderId.toString())
@@ -246,7 +244,7 @@ class Repo(context: Context) {
     }
     suspend fun insertOrderItems(orderID:Int, orderItems: MutableList<OrderItem>){
         runBlocking {
-            Log.i("lolorder",orderItems.toString())
+            Log.i("LOL","orderitems size ${orderItems.size}")
             remote.placeOrderItems(orderID,orderItems)
             localDatabase.insertOrderItems(orderItems)
         }
@@ -274,7 +272,7 @@ class Repo(context: Context) {
         runBlocking {
             for(product in products){
                 Log.i("LOLO",product.imgName)
-                val imageUrl = "https://grocceryshopping.000webhostapp.com/wp-content/uploads/2023/12/"+product.imgName
+                val imageUrl = "https://raw.githubusercontent.com/GasserXx/Grocery-shopping/main/UI%20Design/Images/webp/"+product.imgName
 
                 Log.i("LOLO","Attempting Caching Image")
                 val response = imageHandle.cacheImage(imageUrl,product.imgName)
@@ -282,7 +280,12 @@ class Repo(context: Context) {
             }
         }
     }
-
+    fun getOrderByID(orderId:Int):Order{
+        return localDatabase.getOrderById(orderId)!!
+    }
+    fun getOrderItems(orderId:Int): MutableList<OrderItem> {
+        return localDatabase.getOrderItemsByOrderId(orderId = orderId)
+    }
     fun searchText(keyWord: String, searchResults: MutableLiveData<MutableList<String>>) {
         runBlocking {
             withContext(Dispatchers.Unconfined){

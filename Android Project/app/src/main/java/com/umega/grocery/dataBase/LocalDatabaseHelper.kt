@@ -16,11 +16,12 @@ import com.umega.grocery.utill.OrderItem
 import com.umega.grocery.utill.Product
 import com.umega.grocery.utill.ResultItem
 import com.umega.grocery.utill.SubCategory
+import java.sql.Timestamp
 
 class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
         const val DATABASE_NAME = "GroceryShopping"
-        const val DATABASE_VERSION = 3
+        const val DATABASE_VERSION = 5
         //define table names
         const val cartItems_table = "Cart_Items"
         const val products_table = "Products"
@@ -164,15 +165,14 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     """
     private val createTableOrderItem = """
     CREATE TABLE IF NOT EXISTS $orderItem_table (
-        $orderItem_table_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        $orderItem_table_orderID INTEGER,
-        $orderItem_table_productID INTEGER,
-        $orderItem_table_quantity INTEGER,
-        $orderItem_table_discount INTEGER,
-        $orderItem_table_fullPrice REAL,
-        FOREIGN KEY ($orderItem_table_orderID) REFERENCES $order_table($order_table_orderId),
-        FOREIGN KEY ($orderItem_table_productID) REFERENCES $products_table($Products_table_productID)
-    );
+    $orderItem_table_ID INTEGER PRIMARY KEY,
+    $orderItem_table_orderID INTEGER,
+    $orderItem_table_productID INTEGER,
+    $orderItem_table_quantity INTEGER,
+    $orderItem_table_discount INTEGER,
+    $orderItem_table_fullPrice REAL,
+    CONSTRAINT pk_order_item PRIMARY KEY ($orderItem_table_orderID, $orderItem_table_productID)
+);
     """
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(createTableCategories)
@@ -878,41 +878,75 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     fun insertOrders(orders: List<Order>) {
         writableDatabase.use { db ->
             db.beginTransaction()
+            Log.i("LOL", "order id to be inserted: ${orders[0].id}")
             try {
                 for (order in orders) {
                     val values = ContentValues().apply {
+                        put(order_table_orderId, order.id)
                         put(order_table_voucher, order.voucher)
                         put(order_table_totalPrice, order.totalPrice)
                         put(order_table_address, order.address)
                         put(order_table_date, order.date.toString()) // Assuming date is a String
                     }
-                    val orderId = db.insert(order_table, null, values)
-                    order.id = orderId.toInt()
+                    db.insert(order_table, null, values)
                 }
                 db.setTransactionSuccessful()
             } finally {
                 db.endTransaction()
             }
         }
+    }
+    fun getAllOrders(): MutableList<Order> {
+        val orders = mutableListOf<Order>()
+
+        readableDatabase.use { db ->
+            val cursor = db.query(
+                order_table,
+                null, // null for all columns
+                null, // null for selection
+                null, // null for selectionArgs
+                null, // null for groupBy
+                null, // null for having
+                null  // null for orderBy
+            )
+
+            while (cursor.moveToNext()) {
+                val orderId = cursor.getInt(cursor.getColumnIndexOrThrow(order_table_orderId))
+                val voucher = cursor.getString(cursor.getColumnIndexOrThrow(order_table_voucher))
+                val totalPrice = cursor.getDouble(cursor.getColumnIndexOrThrow(order_table_totalPrice))
+                val address = cursor.getString(cursor.getColumnIndexOrThrow(order_table_address))
+                val dateString = cursor.getString(cursor.getColumnIndexOrThrow(order_table_date))
+                val date = Timestamp.valueOf(dateString)
+
+                val order = Order(orderId, voucher, totalPrice, address, date)
+                orders.add(order)
+            }
+            Log.i("LOL", "from get all orders local db size: ${orders.size}")
+            cursor.close()
+        }
+
+        return orders
     }
     fun insertOrder(order: Order) {
         writableDatabase.use { db ->
             db.beginTransaction()
             try {
                 val values = ContentValues().apply {
+                    put(order_table_orderId, order.id)
                     put(order_table_voucher, order.voucher)
                     put(order_table_totalPrice, order.totalPrice)
                     put(order_table_address, order.address)
                     put(order_table_date, order.date.toString()) // Assuming date is a String
                 }
-                val orderId = db.insert(order_table, null, values)
-                order.id = orderId.toInt()
+                db.insert(order_table, null, values)
+
                 db.setTransactionSuccessful()
             } finally {
                 db.endTransaction()
             }
         }
     }
+
     // TODO function to get back orders
     // order items table
     fun insertOrderItems(orderItems: List<OrderItem>) {
@@ -933,8 +967,77 @@ class LocalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             } finally {
                 db.endTransaction()
             }
+            Log.i("LOL", "123HIT ${orderItems.size}")
         }
     }
+
+    fun getOrderItemsByOrderId(orderId: Int): MutableList<OrderItem> {
+        val orderItems = mutableListOf<OrderItem>()
+
+        readableDatabase.use { db ->
+            val selection = "$orderItem_table_orderID = ?"
+            val selectionArgs = arrayOf(orderId.toString())
+
+            val cursor = db.query(
+                orderItem_table,
+                null,       // null for all columns
+                selection,
+                selectionArgs,
+                null,       // null for groupBy
+                null,       // null for having
+                null        // null for orderBy
+            )
+
+            while (cursor.moveToNext()) {
+                val orderItemId = cursor.getInt(cursor.getColumnIndexOrThrow(orderItem_table_orderID))
+                val productId = cursor.getInt(cursor.getColumnIndexOrThrow(orderItem_table_productID))
+                val quantity = cursor.getInt(cursor.getColumnIndexOrThrow(orderItem_table_quantity))
+                val discount = cursor.getDouble(cursor.getColumnIndexOrThrow(orderItem_table_discount))
+                val fullPrice = cursor.getDouble(cursor.getColumnIndexOrThrow(orderItem_table_fullPrice))
+
+                val orderItem = OrderItem(orderId, productId, fullPrice, discount, quantity)
+                orderItems.add(orderItem)
+            }
+
+            cursor.close()
+        }
+
+        return orderItems
+    }
+    fun getOrderById(orderId: Int): Order? {
+        var order: Order? = null
+
+        readableDatabase.use { db ->
+            val selection = "$order_table_orderId = ?"
+            val selectionArgs = arrayOf(orderId.toString())
+
+            val cursor = db.query(
+                order_table,
+                null,       // null for all columns
+                selection,
+                selectionArgs,
+                null,       // null for groupBy
+                null,       // null for having
+                null        // null for orderBy
+            )
+
+            if (cursor.moveToFirst()) {
+                val voucher = cursor.getString(cursor.getColumnIndexOrThrow(order_table_voucher))
+                val totalPrice = cursor.getDouble(cursor.getColumnIndexOrThrow(order_table_totalPrice))
+                val address = cursor.getString(cursor.getColumnIndexOrThrow(order_table_address))
+                val dateInMillis = cursor.getLong(cursor.getColumnIndexOrThrow(order_table_date))
+                val date = if (dateInMillis > 0) Timestamp(dateInMillis) else null
+
+                order = Order(orderId, voucher, totalPrice, address, date)
+            }
+
+            cursor.close()
+        }
+
+        return order
+    }
+
+
     //TODO Adress table
     //clear functions
     fun clearCategoriesAndSubCategories() {

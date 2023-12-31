@@ -369,7 +369,7 @@ class Remote {
 
         val fnTAG = "PlaceOrder Fn:"
         val query  = """
-           SELECT $placeOrder_function($userID, '${order.voucher}', ${order.totalPrice}, '${order.address}');
+           SELECT $placeOrder_function($userID, '', ${order.totalPrice}, '${order.address}');
         """
         return functionCall(query, fnTAG)
     }
@@ -380,15 +380,14 @@ class Remote {
         val fnTAG = "PlaceOrderItems Fn:"
         var items = ""
         var countQuery = ""
-        orderItems.forEach {orderItem-> items += "(${orderItem.productID}, ${orderItem.price}, ${orderItem.discount}, ${orderItem.quantity}),\n" ;countQuery+="SELECT increment_purchase_count(${orderItem.productID})\n;"}
-        orderItems.dropLast(1)
-
+        orderItems.forEach {orderItem-> items += "(${orderID}, ${orderItem.productID}, ${orderItem.price}, ${orderItem.discount}, ${orderItem.quantity}),\n" ;countQuery+="SELECT increment_purchase_count(${orderItem.productID})\n;"}
         val query  = """
            INSERT INTO $orderItem_table ($orderID_column_name, $productID_column_name, $unitPrice_column_name, $discount_column_name, $quantity_column_name)
            VALUES 
-           $items;
+           ${items.dropLast(2)};
            $countQuery
         """
+        Log.i("Lol", "Order ITem placing queries $query with orderItems size: ${orderItems.size}")
         return functionCall(query, fnTAG)
     }
 
