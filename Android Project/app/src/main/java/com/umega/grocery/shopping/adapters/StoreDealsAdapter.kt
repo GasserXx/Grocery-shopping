@@ -50,10 +50,10 @@ private val onItemClick: (Product) -> Unit
             itemView.setOnClickListener {
                 onItemClick(deal)
             }
-            val coroutineScope = CoroutineScope(Dispatchers.IO)
+            val coroutineScope = CoroutineScope(Dispatchers.Main)
             coroutineScope.launch {
                 val cachedFilePath = imageHandle.getCachedFilePath(deal.imgName)
-                Log.i("lolastoredap",cachedFilePath.toString())
+                Log.i("LOL",cachedFilePath.toString())
                 if (cachedFilePath != null) {
                     Glide.with(context)
                         .load(cachedFilePath)
@@ -62,7 +62,7 @@ private val onItemClick: (Product) -> Unit
                     itemImageView.setImageResource(R.drawable.corrupt)
                 }
             }
-            val productPriceAfterDiscount = deal.price - deal.discount
+            val productPriceAfterDiscount = String.format("%.2f", deal.price - deal.discount)
             itemPriceTextView.text = "$productPriceAfterDiscount EGP"
             itemPriceBeforeTextView.visibility = View.VISIBLE
             itemPriceBeforeTextView.text = "${deal.price} EGP"

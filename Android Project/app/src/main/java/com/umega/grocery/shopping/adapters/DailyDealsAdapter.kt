@@ -68,7 +68,7 @@ class DailyDealsAdapter(private val context: Context,
                     itemImageView.setImageResource(R.drawable.corrupt)
                 }
             }
-            val productPriceAfterDiscount = deal.price - deal.discount
+            val productPriceAfterDiscount = String.format("%.2f", deal.price - deal.discount)
             itemPriceTextView.text = "$productPriceAfterDiscount EGP"
             itemPriceBeforeTextView.visibility = View.VISIBLE
             itemPriceBeforeTextView.text = "${deal.price} EGP"

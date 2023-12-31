@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.umega.grocery.R
 import com.umega.grocery.dataBase.Repo
 import com.umega.grocery.databinding.CartItemBinding
-import com.umega.grocery.shopping.HomeViewModel
+import com.umega.grocery.shopping.main.HomeViewModel
 import com.umega.grocery.utill.CartItem
 import kotlinx.coroutines.runBlocking
 
@@ -90,7 +90,7 @@ class CartAdapter(private val context: Context,private val viewModel: HomeViewMo
                 val newQuantity = if (increase) currentItem.itemQuantity + 1 else currentItem.itemQuantity - 1
                 // Update the item quantity
                 currentItem.itemQuantity = newQuantity
-                currentItem.totalPrice = (newQuantity* currentItem.price)
+                currentItem.totalPrice = String.format("%.2f", newQuantity * currentItem.price).toDouble()
                 adapter.viewModel.updateTotalPrice()
                 adapter.repo.updateCartItemQuantity(currentItem.productId,newQuantity)
                 adapter.notifyItemChanged(currentPosition)
