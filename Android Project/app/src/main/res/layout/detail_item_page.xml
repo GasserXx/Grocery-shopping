@@ -2,6 +2,14 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.umega.grocery.shopping.DetailItemViewModel" />
+        <variable
+            name="product"
+            type="com.umega.grocery.utill.Product" />
+    </data>
 
 <LinearLayout
 
@@ -55,6 +63,7 @@
             android:id="@+id/item_image"
             android:layout_width="235dp"
             android:layout_height="218dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/item_image"
             android:src="@drawable/rectangle166"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,40 +71,29 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/quantityValue_text"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
-            android:background="@drawable/rounded_corner"
-            android:gravity="center"
-            android:text="@string/one_kilo"
-            android:textColor="#7f848e"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_image" />
-
-        <TextView
             android:id="@+id/itemName_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
-            android:text="@string/itemNameExample"
+            android:text="@{product.name}"
             android:textSize="24sp"
             android:textColor="#4e4f5b"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/quantityValue_text" />
+            app:layout_constraintTop_toBottomOf="@+id/item_image" />
+
 
         <TextView
             android:id="@+id/itemPrice_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/itemPriceExample"
-            android:textSize="19sp"
+            android:layout_marginTop="16dp"
+            android:text="@{String.valueOf(product.price-product.discount)}"
             android:textColor="#4e4f5b"
+            android:textSize="19sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/itemName_text" />
 
@@ -103,22 +101,20 @@
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:scaleX="0.7"
-            android:scaleY="0.6"
-            android:stepSize="0.1"
+            android:scaleX=".7"
+            android:scaleY=".6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemPrice_text" />
+            app:layout_constraintTop_toBottomOf="@+id/priceBefore_text" />
 
         <TextView
             android:id="@+id/quantity_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="8dp"
             android:text="@string/quantity"
             android:textColor="#8d9198"
             android:textSize="20sp"
@@ -132,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/number"
+            android:text="@{String.valueOf(viewModel.productQuantity)}"
             android:textColor="#4e4f5b"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -141,7 +137,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/quantity_text"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.104" />
 
         <ImageView
             android:id="@+id/plus_image"
@@ -150,6 +146,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="@string/plus_description"
             android:src="@drawable/plus"
+            android:onClick="@{() -> viewModel.increaseQuantity()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.425"
@@ -164,6 +161,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="@string/minus_description"
             android:src="@drawable/minus"
+            android:onClick="@{() -> viewModel.decreaseQuantity()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cartQuantity_text"
             app:layout_constraintHorizontal_bias="0.585"
@@ -172,32 +170,41 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/buyNow_button"
-            android:layout_width="130dp"
+            android:id="@+id/addToCart_button"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="28dp"
-            android:text="@string/buy_now"
+            android:text="@string/add_to_cart"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="@{()->viewModel.addToCart()}"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cartQuantity_text" />
 
         <TextView
-            android:id="@+id/addToCart_button"
-            android:layout_width="130dp"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:text="@string/add_to_cart"
-            android:textColor="#28c27e"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/priceBefore_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foreground="@drawable/stroke"
+            android:text="@{String.valueOf(product.price)}"
+            android:textColor="#4e4f5a"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buyNow_button"
-            app:layout_constraintVertical_bias="0.0" />
-
+            app:layout_constraintTop_toBottomOf="@+id/itemPrice_text" />
+        <TextView
+            android:id="@+id/purchaseCount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{String.format("(%d)", product.purchaseCount)}'
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/plus_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/rating"
+            app:layout_constraintTop_toBottomOf="@+id/item_image"
+            app:layout_constraintVertical_bias="0.671" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

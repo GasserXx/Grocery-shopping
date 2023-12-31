@@ -85,7 +85,7 @@
                         android:paddingHorizontal="8dp"
                         android:layout_marginTop="2dp"
                         android:clickable="true"
-                        android:onClick="@{()->viewModel.navigateToResultPage"
+                        android:onClick="@{()->viewModel.navigateToResultPageFromDailyDeals()}"
                         android:contentDescription="@string/rounded_arrow_description"
                         android:focusable="true" />
                 </LinearLayout>
@@ -137,7 +137,7 @@
                         android:paddingHorizontal="8dp"
                         android:layout_marginTop="2dp"
                         android:clickable="true"
-                        android:onClick="@{()->viewModel.navigateToResultPage"
+                        android:onClick="@{()->viewModel.navigateToResultPageFromStoreDeals()}"
                         android:contentDescription="@string/rounded_arrow_description"
                         android:focusable="true" />
                 </LinearLayout>
