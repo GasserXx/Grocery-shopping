@@ -64,7 +64,6 @@ class HomeFragment : Fragment() {
         val dailyAdapter = DailyDealsAdapter(requireContext()) { product ->
             val bundle = Bundle()
             bundle.putParcelable("productKey", product)
-            Log.i("lolsend",product.toString())
             navController.navigate(R.id.action_mainPageContainer_to_detailItemFragment,bundle)
         }
         appMemberDealsRecyclerView.adapter = dailyAdapter
@@ -76,7 +75,6 @@ class HomeFragment : Fragment() {
         val storeAdapter = StoreDealsAdapter(requireContext()) { product ->
             val bundle = Bundle()
             bundle.putParcelable("productKey", product)
-            Log.i("lolsend",product.toString())
             navController.navigate(R.id.action_mainPageContainer_to_detailItemFragment,bundle)
         }
         appDealsRecyclerView.adapter = storeAdapter

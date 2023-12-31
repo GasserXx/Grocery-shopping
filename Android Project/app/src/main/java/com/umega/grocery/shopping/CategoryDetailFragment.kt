@@ -13,12 +13,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.umega.grocery.R
 import com.umega.grocery.auth.LoginViewModel
 import com.umega.grocery.databinding.CategoryDetailPageBinding
 import com.umega.grocery.shopping.adapters.CategoryAdapter
 import com.umega.grocery.shopping.adapters.SubCategoryAdapter
+import kotlinx.coroutines.launch
 
 class CategoryDetailFragment : Fragment() {
     lateinit var binding : CategoryDetailPageBinding
@@ -33,7 +35,11 @@ class CategoryDetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.category_detail_page,container,false)
         binding.viewModel = viewModel
         val listView: ListView = binding.subCategoriesList
-        subCategoryAdapter = SubCategoryAdapter()
+        subCategoryAdapter = SubCategoryAdapter { subCategory ->
+            viewModel.viewModelScope.launch {
+                viewModel.navigateCategoryDetailToResultPage(subCategory)
+            }
+        }
         listView.adapter = subCategoryAdapter
         try{
             viewModel.getSubCategoriesList().observe(viewLifecycleOwner) { items -> subCategoryAdapter.submitList(items) }

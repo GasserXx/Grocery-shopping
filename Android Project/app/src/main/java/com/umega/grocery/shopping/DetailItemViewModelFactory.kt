@@ -10,7 +10,7 @@ class DetailItemViewModelFactory (private val navController: NavController, priv
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DetailItemViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return HomeViewModel(navController,context) as T
+            return DetailItemViewModel(navController,context) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
