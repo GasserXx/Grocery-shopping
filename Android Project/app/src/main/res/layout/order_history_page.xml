@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.umega.grocery.shopping.result.ResultViewModel" />
+            type="com.umega.grocery.shopping.orders.history.OrderHistoryViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
         android:layout_height="match_parent"

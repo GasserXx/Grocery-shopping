@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.umega.grocery.shopping.orders.detail.OrderDetailViewModel" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/myToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="#fff"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Your Toolbar contents go here -->
+            <ImageView
+                android:id="@+id/backButton_image"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="10dp"
+                android:contentDescription="@string/back_image"
+                android:src="@drawable/back"
+                app:layout_constraintStart_toStartOf="parent"
+                android:onClick="@{()->viewModel.navigateUp()}"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:hint="@string/order_1000"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/white"
+                android:layout_marginStart="40dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/item_image"
+                app:layout_constraintStart_toEndOf="@+id/backButton_image"
+                app:layout_constraintEnd_toStartOf="@+id/searchButton_image" />
+        </androidx.appcompat.widget.Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="25dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/order_no"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/placed_on"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.id.toString()}"
+                    android:hint="@string/_1000"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.date.toString()}"
+                    android:textSize="14sp"
+                    android:hint="@string/_24_feb_2021"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@drawable/rounded_corner">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.shipmentTitle}"
+                    android:textSize="25sp"
+                    android:hint="@string/shipment_3_items"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:paddingVertical="5dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delivered_by_grocery_shopping"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto" />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/delivery"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:src="@drawable/greendeliveryline"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:drawableLeft="@drawable/deliver"
+                    android:text="@string/delivering_on_10_january_2024"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="10sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_rounded_corners"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delivery_address"
+                        android:textSize="14sp"
+                        android:paddingVertical="4dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/roboto" />
+                    <TextView
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.address}"
+                        android:hint="@string/egypt_japan_university_of_science_and_technology_borg_el_arab_alexandria"
+                        android:textSize="10sp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/roboto" />
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/buy_again"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.itemsCount}"
+                android:hint="@string/_3_items"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:paddingVertical="3dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/items_recycle_view"
+                android:layout_width="match_parent"
+                android:layout_height="330dp"
+                android:background="@drawable/rounded_corner"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/summary_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingVertical="4dp"
+            android:text="@string/shipment_summary"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/subTotal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/subtotle"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@id/summary_text"
+            app:layout_constraintTop_toBottomOf="@id/summary_text" />
+
+        <TextView
+            android:id="@+id/delivery_fees_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/delivery_fees"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@id/subTotal_text"
+            app:layout_constraintTop_toBottomOf="@id/subTotal_text" />
+
+
+        <TextView
+            android:id="@+id/shipment_total_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/shipment_total_inc_vat"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/delivery_fees_text"
+            app:layout_constraintTop_toBottomOf="@id/delivery_fees_text" />
+
+
+        <TextView
+            android:id="@+id/subTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/roboto"
+            android:text="@{viewModel.orderPriceText}"
+            android:hint="@string/egp_619_2"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summary_text" />
+
+        <TextView
+            android:id="@+id/delivery_fees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/egp_20"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="@id/subTotal"
+            app:layout_constraintTop_toBottomOf="@id/subTotal" />
+
+
+        <TextView
+            android:id="@+id/shipment_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto"
+            android:text="@{viewModel.priceAfterTaxText}"
+            android:hint="@string/egp_740"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/delivery_fees"
+            app:layout_constraintTop_toBottomOf="@id/delivery_fees" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+
+</layout>
