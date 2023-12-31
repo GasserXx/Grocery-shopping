@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainPageContainer"
-        android:name="com.umega.grocery.shopping.main.MainPageContainer"
+        android:name="com.umega.grocery.shopping.main.fragments.MainPageContainer"
         android:label="MainPageContainer" >
         <action
             android:id="@+id/action_mainPageContainer_to_underConstructionFragment2"
@@ -27,6 +27,12 @@
         <action
             android:id="@+id/action_mainPageContainer_to_detailItemFragment"
             app:destination="@id/detailItemFragment" />
+        <action
+            android:id="@+id/action_mainPageContainer_to_orderHistoryFragment"
+            app:destination="@id/orderHistoryFragment" />
+        <action
+            android:id="@+id/action_mainPageContainer_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
         <action
             android:id="@+id/action_homeFragment_to_resultFragment"
             app:destination="@id/resultContainer" />
@@ -55,6 +61,9 @@
         <action
             android:id="@+id/action_categoryDetailFragment_to_mainPageContainer"
             app:destination="@id/mainPageContainer" />
+        <action
+            android:id="@+id/action_categoryDetailFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/resultContainer"
@@ -71,6 +80,22 @@
         <action
             android:id="@+id/action_searchFragment_to_resultContainer"
             app:destination="@id/resultContainer" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.umega.grocery.shopping.orders.detail.OrderDetailFragment"
+        android:label="OrderDetailFragment" >
+        <action
+            android:id="@+id/action_orderDetailFragment_to_detailItemFragment"
+            app:destination="@id/detailItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.umega.grocery.shopping.orders.history.OrderHistoryFragment"
+        android:label="OrderHistoryFragment" >
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
     </fragment>
 
 </navigation>

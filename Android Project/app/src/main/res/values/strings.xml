@@ -53,7 +53,7 @@
     <string name="enter_email"><![CDATA[Enter email & password to continue]]></string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="coffee">Coffee</string>
-    <string name="nescafe_gold">Nescafe Gold</string>
+    <string name="nescafe_gold">Nescafe Gold </string>
     <string name="_47_00_egp">47.00 EGP</string>
     <string name="your_shopping_cart">Your shopping Cart</string>
     <string name="total">Total-</string>
@@ -109,5 +109,27 @@
     <string name="sample_place_date_text">Placed on 24 Feb 2021</string>
     <string name="_120_00_egp">120.00 EGP</string>
     <string name="grocery_shopin">Grocery Shopping</string>
+    <string name="order_1000">Order#1000</string>
+    <string name="order_no">Order no.</string>
+    <string name="placed_on">Placed On</string>
+    <string name="_1000">1000</string>
+    <string name="_24_feb_2021">24 Feb 2021</string>
+    <string name="shipment_3_items">Shipment (3 Items)</string>
+    <string name="delivered_by_grocery_shopping">Delivered by Grocery-Shopping</string>
+    <string name="delivering_on_10_january_2024">Delivering on 10 January 2024, 12:00 PM</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="egypt_japan_university_of_science_and_technology_borg_el_arab_alexandria">Egypt Japan University of Science and Technology, Borg El-arab, Alexandria</string>
+    <string name="buy_again">Buy Again</string>
+    <string name="_3_items">3 Items</string>
+    <string name="shipment_summary">Shipment summary</string>
+    <string name="subtotle">Subtotal</string>
+    <string name="delivery_fees">Delivery Fees</string>
+    <string name="shipment_total_inc_vat">Shipment Total (inc.VAT)</string>
+    <string name="egp_619_2">EGP 619.2</string>
+    <string name="egp_20">EGP 20</string>
+    <string name="egp_740">EGP 740</string>
+    <string name="_150_egp">- 150 EGP</string>
+    <string name="quantity_2">Quantity: 2</string>
+    <string name="_340_00_egp">340.00 EGP</string>
 
 </resources>
