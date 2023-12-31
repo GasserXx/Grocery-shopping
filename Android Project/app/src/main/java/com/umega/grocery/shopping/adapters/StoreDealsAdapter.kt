@@ -42,6 +42,7 @@ private val onItemClick: (Product) -> Unit
         private val itemNameTextView: TextView = itemView.findViewById(R.id.itemName_text)
         private val itemPriceTextView: TextView = itemView.findViewById(R.id.itemPrice_text)
         private val imageHandle :ImageHandle = ImageHandle(context)
+        private val itemPriceBeforeTextView:TextView = itemView.findViewById(R.id.pricebefore)
         @SuppressLint("SetTextI18n", "DiscouragedApi")
 
         fun bind(deal: Product) {
@@ -58,11 +59,13 @@ private val onItemClick: (Product) -> Unit
                         .load(cachedFilePath)
                         .into(itemImageView)
                 } else {
-                    Log.i("lol9","aa")
+                    itemImageView.setImageResource(R.drawable.corrupt)
                 }
             }
             val productPriceAfterDiscount = deal.price - deal.discount
             itemPriceTextView.text = "$productPriceAfterDiscount EGP"
+            itemPriceBeforeTextView.visibility = View.VISIBLE
+            itemPriceBeforeTextView.text = "${deal.price} EGP"
         }
     }
 }

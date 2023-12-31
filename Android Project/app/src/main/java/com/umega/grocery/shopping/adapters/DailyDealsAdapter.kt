@@ -3,6 +3,7 @@ package com.umega.grocery.shopping.adapters
 import ImageHandle
 import android.annotation.SuppressLint
 import android.content.Context
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,7 @@ class DailyDealsAdapter(private val context: Context,
         private val itemImageView: ImageView = itemView.findViewById(R.id.item_image)
         private val itemNameTextView: TextView = itemView.findViewById(R.id.itemName_text)
         private val itemPriceTextView: TextView = itemView.findViewById(R.id.itemPrice_text)
+        private val itemPriceBeforeTextView:TextView = itemView.findViewById(R.id.pricebefore)
         //Since we deleted the KG badge
 //        private val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantityValue_text)
         private val imageHandle :ImageHandle = ImageHandle(context)
@@ -63,11 +65,13 @@ class DailyDealsAdapter(private val context: Context,
                         .load(cachedFilePath)
                         .into(itemImageView)
                 } else {
-                   Log.i("lol9","aa")
+                    itemImageView.setImageResource(R.drawable.corrupt)
                 }
             }
             val productPriceAfterDiscount = deal.price - deal.discount
             itemPriceTextView.text = "$productPriceAfterDiscount EGP"
+            itemPriceBeforeTextView.visibility = View.VISIBLE
+            itemPriceBeforeTextView.text = "${deal.price} EGP"
 //            itemQuantityTextView.text = "1KG"
         }
     }

@@ -12,7 +12,7 @@ import com.umega.grocery.R
 import com.umega.grocery.utill.Category
 import com.umega.grocery.utill.SubCategory
 
-class SubCategoryAdapter () : BaseAdapter() {
+class SubCategoryAdapter (private val onItemClick:  (SubCategory) -> Unit): BaseAdapter() {
     private var itemList: List<SubCategory> = emptyList()
 
     fun submitList(newList: List<SubCategory>) {
@@ -29,6 +29,10 @@ class SubCategoryAdapter () : BaseAdapter() {
         val itemView: View = convertView ?: inflater.inflate(R.layout.category_list_item, parent, false)
         val subCategoryNameTextView: TextView = itemView.findViewById(R.id.item_name_text)
         subCategoryNameTextView.text = subCategory.name
+        itemView.setOnClickListener {
+            // Call the onItemClick listener, passing the selected subCategory
+            onItemClick(subCategory)
+        }
         return itemView
     }
 }

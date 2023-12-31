@@ -96,11 +96,14 @@ class CartAdapter(private val context: Context,private val viewModel: HomeViewMo
                 adapter.notifyItemChanged(currentPosition)
             }
         }
+        @SuppressLint("NotifyDataSetChanged")
         private fun handleDeleteItem() {
             val currentPosition = adapterPosition
             if (currentPosition != RecyclerView.NO_POSITION) {
-                adapter.handleDeleteItem(currentPosition)
                 adapter.repo.deleteCartItem(adapter.cartItems[currentPosition].productId)
+                adapter.handleDeleteItem(currentPosition)
+                adapter.notifyDataSetChanged()
+                adapter.viewModel.totalPrice.value = "0.00 EGP"
             }
         }
     }
